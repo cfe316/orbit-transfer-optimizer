@@ -5,6 +5,9 @@ MinimizeSingleMin::usage =
 
 Begin["`Private`"]
 
+MinimizeSingleMin[func_, ilow_, ihigh_, tol_] := 
+  TernarySearch[func_, ilow_, ihigh_, tol_]
+
 (* The algorithm starts by evaluating f(low), f(high), and two points in
 between low and high. It then throws out the highest portions of the
 interval. The new interval is 2/3 the size of the old (if the min of
@@ -15,7 +18,7 @@ Each subsequent iteration, 2 more points are evaluated.*)
 math. It works out that the minimum found should be within tol of the
 actual min.*)
 
-MinimizeSingleMin[func_, ilow_, ihigh_, tol_] :=
+TernarySearch[func_, ilow_, ihigh_, tol_] :=
  Block[{low, high, third, twothirds, res, ordering},
   low = ilow; high = ihigh;
   {third, twothirds} = {low + (high - low)/3, high - (high - low)/3};
