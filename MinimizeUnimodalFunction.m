@@ -1,11 +1,11 @@
-BeginPackage["MinimizeSingleMin`"]
+BeginPackage["MinimizeUnimodalFunction`"]
 
-MinimizeSingleMin::usage =
+MinimizeUnimodalFunction::usage =
     "Finds the local min of the function between 'low' and 'high' to tolerance 'tol'. Only works if there is one local min in the interval. Output is min and then f(min)."
 
 Begin["`Private`"]
 
-MinimizeSingleMin[func_, ilow_, ihigh_, tol_] := 
+MinimizeUnimodalFunction[func_, ilow_, ihigh_, tol_] := 
   TernarySearch[func_, ilow_, ihigh_, tol_]
 
 (* The algorithm starts by evaluating f(low), f(high), and two points in
