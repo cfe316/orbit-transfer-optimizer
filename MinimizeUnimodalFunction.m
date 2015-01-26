@@ -1,12 +1,32 @@
-BeginPackage["MinimizeUnimodalFunction`"]
+(* ::Package:: *)
 
-MinimizeUnimodalFunction::usage =
-    "Finds the local min of the function between 'low' and 'high' to tolerance 'tol'. Only works if there is one local min in the interval. Output is min and then f(min)."
+(* ::Section:: *)
+(* Minimize Unimodal Function package: Title and comments *)
 
-Begin["`Private`"]
+
+(* :Title: MinimizeUnimodalFunction *)
+(* :Context: MinimizeUnimodalFunction` *)
+(* :Author: Jacob Schwartz (thesquarerootofjacob@gmail.com) *)
+
+
+(* ::Section:: *)
+(* Begin package and help *)
+
+
+BeginPackage["MinimizeUnimodalFunction`"];
+
+Unprotect@"`*";
+ClearAll@"`*";
+
+MinimizeUnimodalFunction::usage = 
+	"Finds the local min of the function between 'low' and 'high' 
+	to tolerance 'tol'. Only works if there is one local min in
+	the interval. Output is min and then f(min).";
+
+Begin["`Private`"];
 
 MinimizeUnimodalFunction[func_, ilow_, ihigh_, tol_] := 
-  TernarySearch[func_, ilow_, ihigh_, tol_]
+	TernarySearch[func, ilow, ihigh, tol]
 
 (* The algorithm starts by evaluating f(low), f(high), and two points in
 between low and high. It then throws out the highest portions of the
@@ -19,40 +39,42 @@ math. It works out that the minimum found should be within tol of the
 actual min.*)
 
 TernarySearch[func_, ilow_, ihigh_, tol_] :=
- Block[{low, high, third, twothirds, res, ordering},
-  low = ilow; high = ihigh;
-  {third, twothirds} = {low + (high - low)/3, high - (high - low)/3};
-  (* Evaluate function at all four points to begin with *)
-  res = func[#] & /@ {low, third, twothirds, high};
-  While[high - low > 2 tol,
-   ordering = Ordering[res];
-   Switch[ordering[[1]],
-    1,
-    high = third;
-    res[[4]] = res[[2]];,
-    2,
-    high = twothirds;
-    res[[4]] = res[[3]];,
-    3,
-    low = third;
-    res[[1]] = res[[2]];,
-    4,
-    low = twothirds;
-    res[[1]] = res[[3]];
-    ];
-   {third, twothirds} = {low + (high - low)/3, high - (high - low)/3};
-   (* Re-evaluate the function at the new middle points
-        since the interval has shrunk. *)
-   res[[2 ;; 3]] = func[#] & /@ {third, twothirds};
-   ];
-  Switch[ordering[[1]],
-   1, {low, res[[1]]},
-   2, {third, res[[2]]},
-   3, {twothirds, res[[3]]},
-   4, {high, res[[4]]}
-   ]
-  ]
+	Block[{low, high, third, twothirds, res, ordering},
+	low = ilow; high = ihigh;
+	{third, twothirds} = {low + (high - low)/3, high - (high - low)/3};
+	(* Evaluate function at all four points to begin with *)
+	res = func[#] & /@ {low, third, twothirds, high};
+	While[high - low > 2 tol,
+		ordering = Ordering[res];
+		Switch[ordering[[1]],
+			1,
+			high = third;
+			res[[4]] = res[[2]];,
+			2,
+			high = twothirds;
+			res[[4]] = res[[3]];,
+			3,
+			low = third;
+			res[[1]] = res[[2]];,
+			4,
+			low = twothirds;
+			res[[1]] = res[[3]];
+		];
+		{third, twothirds} = {low + (high - low)/3, high - (high - low)/3};
+		(* Re-evaluate the function at the new middle points
+		since the interval has shrunk. *)
+		res[[2 ;; 3]] = func[#] & /@ {third, twothirds};
+	];
+	Switch[ordering[[1]],
+		1, {low, res[[1]]},
+		2, {third, res[[2]]},
+		3, {twothirds, res[[3]]},
+		4, {high, res[[4]]}
+	]
+]
 
-End[ ]
+End[ ];
 
-EndPackage[ ]
+SetAttributes[#, {Protected}]& /@ Names["`*"];
+
+EndPackage[ ];
