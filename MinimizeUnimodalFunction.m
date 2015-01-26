@@ -40,13 +40,13 @@ actual min.*)
 
 TernarySearch[func_, ilow_, ihigh_, tol_] :=
 	Block[{low, high, third, twothirds, res, ordering},
-	low = ilow; high = ihigh;
+	low = N[ilow]; high = N[ihigh];
 	{third, twothirds} = {low + (high - low)/3, high - (high - low)/3};
 	(* Evaluate function at all four points to begin with *)
 	res = func[#] & /@ {low, third, twothirds, high};
-	While[high - low > 2 tol,
-		ordering = Ordering[res];
-		Switch[ordering[[1]],
+	While[high - low > 2.5 tol,
+		ordering = Ordering[res,1][[1]];
+		Switch[ordering,
 			1,
 			high = third;
 			res[[4]] = res[[2]];,
@@ -65,7 +65,7 @@ TernarySearch[func_, ilow_, ihigh_, tol_] :=
 		since the interval has shrunk. *)
 		res[[2 ;; 3]] = func[#] & /@ {third, twothirds};
 	];
-	Switch[ordering[[1]],
+	Switch[ordering,
 		1, {low, res[[1]]},
 		2, {third, res[[2]]},
 		3, {twothirds, res[[3]]},
