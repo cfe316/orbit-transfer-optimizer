@@ -26,7 +26,7 @@ MinimizeUnimodalFunction::usage =
 Begin["`Private`"];
 
 MinimizeUnimodalFunction[func_, ilow_, ihigh_, tol_] := 
-	TernarySearch[func, ilow, ihigh, tol]
+	GoldenRatioSearch[func, ilow, ihigh, tol]
 
 (* The algorithm starts by evaluating f(low), f(high), and two points in
 between low and high. It then throws out the highest portions of the
@@ -73,8 +73,46 @@ TernarySearch[func_, ilow_, ihigh_, tol_] :=
 	]
 ]
 
+(* This Golden Ratio search has been adapted from http://mathfaculty.fullerton.edu/mathews/n2003/GoldenRatioSearchMod.html *)
+(* This is about 1.5 times faster than the Ternary Search *)
+GoldenRatioSearch[func_, ilow_, ihigh_, tol_] :=
+	Block[{ low = N[ilow], high = N[ihigh], c, d, h, r1, r2, Ya, Yb, Yc, Yd, p, Yp},
+	r1 = (Sqrt[5.] - 1.)/2.;
+	r2 = r1^2;
+	h = high - low;
+	Ya = func[high];
+	Yb = func[low];
+	c = low + r2 h;
+	d = low + r1 h;
+	Yc = func[c];
+	Yd = func[d];
+	While[ h > tol,
+		If[ Yc < Yd,
+			high = d;
+			Yb = Yd;
+			d = c;
+			Yd = Yc;
+			h = high - low;
+			c = low + r2 h;
+			Yc = func[c];
+			,
+			low = c;
+			Ya = Yc;
+			c = d;
+			Yc = Yd;
+			h = high - low;
+			d = low + r1 h;
+			Yd = func[d];
+		];
+	];
+	p = low;
+	Yp = Ya;
+	If [ Yb < Ya, p=high; Yp=Yb];
+	{p,Yp}
+]
+
 End[ ];
 
-SetAttributes[#, {Protected}]& /@ Names["`*"];
+SetAttributes[#, {Protected,ReadProtected}]& /@ Names["`*"];
 
 EndPackage[ ];
