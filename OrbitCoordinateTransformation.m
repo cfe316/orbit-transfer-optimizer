@@ -140,27 +140,27 @@ CartesianPlanarsFromCartesians[
 	cart2_?(AssociationQ[#] && KeyExistsQ[#,"Coordinate"] && #["Coordinate"] == "Cartesian" &)] := Module[{M, p1, p2},
 
 	{p1, p2} = #["Position"]& /@ {cart1, cart2};
-	M = Orthogonalize[p1, p2, (p1 \[Cross] p2)]; 
+	M = Orthogonalize[{p1, p2, (p1 \[Cross] p2)}]; 
 
 	{cartpl1, cartpl2} = Table[<| "Coordinate"->"CartesianPlanar" |>, {t, 0, 1}];
 
-	cart1["Position"] = M.cartpl1["Position"][[1;;2]];
-	cart2["Position"] = M.cartpl2["Position"][[1;;2]];
+	cartpl1["Position"] = (M.cart1["Position"])[[1;;2]];
+	cartpl2["Position"] = (M.cart2["Position"])[[1;;2]];
 
-	cart1["Velocity"] = M.cartpl1["Velocity"];
-	cart2["Velocity"] = M.cartpl2["Velocity"];
+	cartpl1["Velocity"] = M.cart1["Velocity"];
+	cartpl2["Velocity"] = M.cart2["Velocity"];
 	
 	Return[{M, cartpl1, cartpl2}];
 ];
 
-PolarFromCartesianPlanar[cartpl_?(AssociationQ[#] && KeyExistsQ[#,"Coordinate"] && #["Coordinate"] == "CartesianPlanar" &)] := Module[{p, vel, x, y, r, th, vr, vth},
+PolarFromCartesianPlanar[cartpl_?(AssociationQ[#] && KeyExistsQ[#,"Coordinate"] && #["Coordinate"] == "CartesianPlanar" &)] := Module[{p, vel, x, y, r, th, vr, vth, vz},
 	p   = Append[cartpl["Position"],0]; (* Useful for cross products *)
 	vel = cartpl["Velocity"];
 	r   = Sqrt[ p[[1]]^2 + p[[2]]^2 ];
 	th  = Mod[ArcTan[p[[1]], p[[2]]], 2\[Pi]];
-	vr  = vel.Normalize[pos];
-	vth = Normalize[{0, 0, 1} \[Cross] pos].vel;
-	vz  = cartpl["Position"];
+	vr  = vel.Normalize[p];
+	vth = Normalize[{0, 0, 1} \[Cross] p].vel;
+	vz  = vel[[3]]; 
 	Return[<| "Coordinate"->"Polar", "Position"->{r,th}, "Velocity"->{vr, vth, vz} |>];
 ];
 
@@ -184,7 +184,7 @@ CartesianFromCartesianPlanar[M_?MatrixQ, cartpl_?(AssociationQ[#] && KeyExistsQ[
 	cart = <| "Coordinate"->"Cartesian" |>;
 	(* Add a zero to convert from {x, y} to {x, y, z} *)
 	cart["Position"] = M.(Append[cartpl["Position"],0]);
-	(cart[#] = M.cartpl[#] &) /@ {"Velocity", "VelocityChange"};
+	If[KeyExistsQ[cartpl,#],(cart[#] = M.cartpl[#])] & /@ {"Velocity", "VelocityChange"};
 
 	Return[cart];
 ];
