@@ -77,14 +77,16 @@ Polar coordinate format:
 <|
 	\"Coordinate\"->\"Polar\",
 	\"Position\"->{r, \[Theta]},
-	\"Velocity\"->{vr, v\[Theta], vz}
+	\"Velocity\"->{vr, v\[Theta], vz},
+	(optional) \"VelocityChange\" -> {vr, v\[Theta], vz}
 |>
 
 CartesianPlanar coordinate format:
 <|
 	\"Coordinate\"->\"CartesianPlanar\",
 	\"Position\"->{x, y},
-	\"Velocity\"->{vx, vy, vz}
+	\"Velocity\"->{vx, vy, vz},
+	(optional) \"VelocityChange\" -> {vx, vy, vz}
 |>
 ";
 
@@ -94,7 +96,8 @@ CartesianPlanar coordinate format:
 <|
 	\"Coordinate\"->\"CartesianPlanar\",
 	\"Position\"->{x, y},
-	\"Velocity\"->{vx, vy, vz}
+	\"Velocity\"->{vx, vy, vz},
+	(optional) \"VelocityChange\" -> {vx, vy, vz}
 |>
 
 Cartesian Coordinate Format:
@@ -102,6 +105,7 @@ Cartesian Coordinate Format:
 	\"Coordinate\"->\"Cartesian\",
 	\"Position\" -> {X, Y, Z},
 	\"Velocity\" -> {vX, vY, vZ}
+	(optional) \"VelocityChange\" -> {vX, vY, vZ}
 |>
 ";
 
