@@ -31,6 +31,14 @@ Output format:
 Where the first is the Interval acceptable for if the orbit is counterclockwise (sign of h is +1) and the second is for if the orbit is clockwise (sign of h is -1).
 ";
 
+eIsPositiveInterval::usage = "Gives the interval of argument of periapsis \[Omega] over which eccentricity e is positive.
+Input format:
+{r1, \[Theta]1}, {r2, \[Theta]2}: the initial and final points (in polar coordinates) that the orbit goes through.
+
+Output format:
+Interval[{...}]
+";
+
 Begin["`Private`"];
 
 (* ::Text:: *)
@@ -58,7 +66,7 @@ eIs1c = Compile[{{r1,_Real},{th1,_Real},{r2,_Real},{th2,_Real}},
 CompilationTarget->"C",RuntimeOptions->"Speed"];
 
 (*Returns the interval of \[Omega] over which e is positive.*)
-eIsPositiveInt[{r1_, th1_}, {r2_, th2_}] := Block[{asymp1, asymps, eIs1}, 
+eIsPositiveInterval[{r1_, th1_}, {r2_, th2_}] := Block[{asymp1, asymps, eIs1}, 
 	asymp1 = Mod[ArcTan[-r1 Sin[th1]+r2 Sin[th2], r1 Cos[th1]-r2 Cos[th2]], \[Pi]];
 	asymps = {asymp1, asymp1+\[Pi]};
 
