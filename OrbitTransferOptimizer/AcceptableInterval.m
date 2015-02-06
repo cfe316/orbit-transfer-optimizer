@@ -28,16 +28,14 @@ Output format:
 	{-1, Interval[{...}]},
 }
 
-Where the first is the Interval acceptable for if the orbit is counterclockwise (sign of h is +1) and the second is for if the orbit is clockwise (sign of h is -1).
-";
+Where the first is the Interval acceptable for if the orbit is counterclockwise (sign of h is +1) and the second is for if the orbit is clockwise (sign of h is -1).";
 
 eIsPositiveInterval::usage = "Gives the interval of argument of periapsis \[Omega] over which eccentricity e is positive.
 Input format:
 {r1, \[Theta]1}, {r2, \[Theta]2}: the initial and final points (in polar coordinates) that the orbit goes through.
 
 Output format:
-Interval[{...}]
-";
+Interval[{...}]";
 
 Begin["`Private`"];
 
