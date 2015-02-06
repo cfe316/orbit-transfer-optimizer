@@ -3,15 +3,12 @@
 (* ::Section:: *)
 (* Keplerian to Cartesian Elements package: Title and comments *)
 
-
 (* :Title: OrbitTransferOptimizer *)
 (* :Context: OrbitTransferOptimizer` *)
 (* :Author: Jacob Schwartz (thesquarerootofjacob@gmail.com) *)
 
-
 (* ::Section:: *)
 (* Begin package and help *)
-
 
 BeginPackage["OrbitTransferOptimizer`", {"MinimizeUnimodalFunction`"}];
 

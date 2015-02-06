@@ -20,7 +20,7 @@ Acceptable\[Omega]Interval::usage = "For two points in the plane r1 != r2 and \[
 \[Omega] is acceptable if p is positive (orbit is not on the wrong branch of a hyperbola) and if e>1 (it's a hyperbola) then it has to reach 'point 2' after 'point 1'.
 
 Input format:
-{r1, \[Theta]1}, {r2, \[Theta]2}: the initial and final points that the orbit goes through.
+{r1, \[Theta]1}, {r2, \[Theta]2}: the initial and final points (in polar coordinates) that the orbit goes through.
 
 Output format:
 {
@@ -42,15 +42,10 @@ getInequalityForPoint[a_Interval,p_] := Module[{s},
 ]
 
 
-
 (* ::Section:: *)
 (*Constraints on what \[Omega] are acceptable to be tested for the lowest \[CapitalDelta]v.*)
 
-
-(* ::Text:: *)
 (*Returns the two angles of \[Omega] for which e is equal to 1.*)
-
-
 eIs1l[{r1_,th1_},{r2_,th2_}] := eIs1c[r1,th1,r2,th2];
 eIs1c = Compile[{{r1,_Real},{th1,_Real},{r2,_Real},{th2,_Real}},
 	Block[{pts},pts = {
@@ -62,12 +57,7 @@ eIs1c = Compile[{{r1,_Real},{th1,_Real},{r2,_Real},{th2,_Real}},
 	Sort[ Mod[ Select[ pts, Abs[-((r1-r2)/(r1 Cos[th1-#1]-r2 Cos[th2-#1]))-1.] < 1/10^10 &],2 \[Pi]]]],
 CompilationTarget->"C",RuntimeOptions->"Speed"];
 
-
-
-(* ::Text:: *)
 (*Returns the interval of \[Omega] over which e is positive.*)
-
-
 eIsPositiveInt[{r1_, th1_}, {r2_, th2_}] := Block[{asymp1, asymps, eIs1}, 
 	asymp1 = Mod[ArcTan[-r1 Sin[th1]+r2 Sin[th2], r1 Cos[th1]-r2 Cos[th2]], \[Pi]];
 	asymps = {asymp1, asymp1+\[Pi]};
@@ -79,12 +69,7 @@ eIsPositiveInt[{r1_, th1_}, {r2_, th2_}] := Block[{asymp1, asymps, eIs1},
 	]
 ];
 
-
-
-(* ::Text:: *)
 (*Returns the interval of \[Omega] over which p, the semi-latus rectum, is positive. If p is negative, we're on the wrong branch of a hyperbola.*)
-
-
 pIsPositiveInt[{r1_, th1_}, {r2_, th2_}] := Block[ {asymptote, intersect, derivativeAtIntersectIsPositive, condition1, condition2},
 	asymptote = Mod[ArcTan[-r1 Sin[th1]+r2 Sin[th2],r1 Cos[th1]-r2 Cos[th2]],\[Pi]];
 	intersect = Mod[ArcTan[Sin[th2]-Sin[th1],Cos[th1]-Cos[th2]],\[Pi]];
@@ -106,42 +91,29 @@ pIsPositiveInt[{r1_, th1_}, {r2_, th2_}] := Block[ {asymptote, intersect, deriva
 ];
 
 
-(* ::Text:: *)
 (*A helper function... given two 'points' between two 'asymptotes', it returns the set of intervals which are between the 'asymptotes' but outside the 'points'.*)
-
-
-createIntervalsFromPointsBetweenAsymptotes[p_,a_] := 
-If[ p[[2]] > a[[2]],
-	If[ p[[1]] > a[[2]],
-		Interval[{ a[[2]], p[[1]] }, { p[[2]], a[[1]] + 2\[Pi] }],
-		Interval[{ p[[1]], a[[1]] }, { a[[2]], p[[2]] }]],
-	If[ p[[1]] > a[[1]],
-		Interval[ {a[[1]] ,p[[1]] }, { p[[2]], a[[2]] }],
-		Interval[ {p[[2]] ,a[[1]] }, { a[[2]], p[[1]] + 2\[Pi] }]
+createIntervalsFromPointsBetweenAsymptotes[{p1_, p2_}, {a1_, a2_}] := 
+If[ p2 > a2,
+	If[ p1 > a2,
+		Interval[{a2, p1}, {p2, a1 + 2\[Pi]}],
+		Interval[{p1, a1}, {a2, p2}]],
+	If[ p1 > a1,
+		Interval[{a1, p1}, {p2, a2}],
+		Interval[{p2, a1}, {a2, p1 + 2\[Pi]}]
 	]
 ];
 
-
-
-(* ::Text:: *)
 (*Returns the interval of \[Omega] over which e is greater than 1, i.e. the orbit is hyperbolic.*)
+eIsGt1Int[{r1_, th1_}, {r2_, th2_}]:=Block[{asymp1, asymps, eIs1, i},
+	asymp1 = Mod[ArcTan[-r1 Sin[th1]+r2 Sin[th2], r1 Cos[th1]-r2 Cos[th2]], \[Pi]];
+	asymps = {asymp1, asymp1+\[Pi]};
 
-
-eIsGt1Int[{r1_,th1_},{r2_,th2_}]:=Block[{asymp1,asymps,eIs1,i},
-	asymp1 = Mod[ArcTan[-r1 Sin[th1]+r2 Sin[th2],r1 Cos[th1]-r2 Cos[th2]],\[Pi]];
-	asymps = {asymp1,asymp1+\[Pi]};
-
-	eIs1 = eIs1l[{r1,th1},{r2,th2}];
-	i = createIntervalsFromPointsBetweenAsymptotes[eIs1,asymps];
-	IntervalUnion[i-2\[Pi],i,i+2\[Pi]]
+	eIs1 = eIs1l[{r1, th1}, {r2, th2}];
+	i = createIntervalsFromPointsBetweenAsymptotes[eIs1, asymps];
+	IntervalUnion[i-2\[Pi], i, i+2\[Pi]]
 ];
 
-
-
-(* ::Text:: *)
 (*Returns the interval of \[Omega] over which e is less than than 1, i.e. the orbit is elliptical.*)
-
-
 eIsLt1Int[{r1_, th1_}, {r2_, th2_}] := Block[{asymp1, asymps, eIs1, i}, 
 	eIs1 = eIs1l[{r1, th1}, {r2, th2}];
 	i = If[eIs1[[2]]-eIs1[[1]] < \[Pi],
@@ -151,12 +123,7 @@ eIsLt1Int[{r1_, th1_}, {r2_, th2_}] := Block[{asymp1, asymps, eIs1, i},
 	IntervalUnion[i-2\[Pi],i,i+2\[Pi]]
 ];
 
-
-
-(* ::Text:: *)
 (*Returns the interval over which (for a hyperbolic orbit with positive angular momentum h) the 'Point 2' is reached after 'Point 1'*)
-
-
 pt2FollowsPt1ForPoshInt[th1_, th2_]:=Module[{landing1, landing2, th1m, th2m, i}, 
 	th1m = Mod[th1, 2\[Pi]];
 	th2m = Mod[th2, 2\[Pi]];
@@ -169,12 +136,7 @@ pt2FollowsPt1ForPoshInt[th1_, th2_]:=Module[{landing1, landing2, th1m, th2m, i},
 	IntervalUnion[i, i+2\[Pi]]
 ];
 
-
-
-(* ::Text:: *)
 (*Same thing but for negative angular momentum hyperbolic orbits*)
-
-
 pt2FollowsPt1ForNeghInt[th1_, th2_]:=Module[{i}, 
 	i = If[th1 < th2,
 		Interval[{th1,th2}],
