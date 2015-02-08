@@ -199,7 +199,7 @@ geneAngGeneRad[pol1_, pol2_] := Module[
 
 		(*if the initial angular momenta are in different directions, look for solutions in each direction*)
 		{wrange1, wrange2} = getInequalityForPoint[wInt[[#, 2]], wstart] & /@ Range[2];
-		m1 = MinimizeUnimodalFunction[\[CapitalDelta]V[pol1, pol1, #, -1] &, wrange1[[1]] + wstep/10, wrange1[[3]] - wstep/10, wstep];
+		m1 = MinimizeUnimodalFunction[\[CapitalDelta]V[pol1, pol2, #, -1] &, wrange1[[1]] + wstep/10, wrange1[[3]] - wstep/10, wstep];
 		m2 = MinimizeUnimodalFunction[\[CapitalDelta]V[pol1, pol2, #,  1] &, wrange2[[1]] + wstep/10, wrange2[[3]] - wstep/10, wstep];
 		{m, sh} = If[ m1[[2]] < m2[[2]], {m1, -1}, {m2, 1}];
 	];
