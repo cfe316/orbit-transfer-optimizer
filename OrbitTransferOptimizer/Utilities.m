@@ -19,6 +19,31 @@ angleBetweenTwoAroundCircle::usage = "Find an angle 'in between' two angles on a
 
 orderTwoAnglesAroundCircle::usage = "Determine which of two points around a circle is 'leading' the other (ccw). Return either 1 or 2."
 
+restrict\[Nu]Range::usage = "Ensure that an Orbit's range of \[Nu] does not allow the wrong hyperbola branch.
+
+Input:
+<| \"Orbit\"->\"Nondegenerate\",
+	\"a\"->semimajoraxis,
+	\"e\"->eccentricity,
+	\"i\"->inclination
+	\"\[CapitalOmega]\"->longitudeOfAscendingNode
+	\"\[CurlyPi]\"->longitudeOfPeriapsis
+|>
+With an optional key \"\[Nu]Range\"->{\[Nu]Min,\[Nu]Max} to specify that only some regions of each orbit should be searched. If no \[Nu]Range is specified, the default is -\[Pi] to \[Pi].
+
+Output:
+<| \"Orbit\"->\"Nondegenerate\",
+	\"a\"->semimajoraxis,
+	\"e\"->eccentricity,
+	\"i\"->inclination
+	\"\[CapitalOmega]\"->longitudeOfAscendingNode
+	\"\[CurlyPi]\"->longitudeOfPeriapsis
+	\"\[NuRange]\"->{\[Nu]Min,\[Nu]Max}
+|>
+
+";
+
+
 Begin["`Private`"];
 
 angleBetweenTwoAroundCircle[th1_, th2_] := 
@@ -46,7 +71,16 @@ Block[{mth1, mth2, o},
 	];
 	Return[o];
 ]
-
+(*Needs work*)
+restrict\[Nu]Range[o_]:= Block[{},
+	If[ e > 1,
+		(* Hyperbolic orbits have negative a *)
+		If[ a > 0, a = -1 a];
+		(* Limit v to the correct hyperbola branch. 0.99 is to prevent evaluating at distance \[Infinity] *)
+		vLimit = 0.99 ArcCos[-1/e];
+		outputKep["\[Nu]"] = Clip[kep["\[Nu]"], {- vLimit, vLimit}];
+	]; 
+]
 End[];
 
 (*SetAttributes[#, {Protected,ReadProtected}]& /@ Names["`*"];*)
