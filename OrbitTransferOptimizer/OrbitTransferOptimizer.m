@@ -24,7 +24,7 @@ OrbitTransferOptimizer::usage = "Finds the best set of two burns to transfer bet
 	\"\[CapitalOmega]\"->longitudeOfAscendingNode
 	\"\[CurlyPi]\"->longitudeOfPeriapsis
 |>
-With an optional key \"\[Nu]Range\"->{\[Nu]Min,\[Nu]Max} to specify that only some regions of each orbit should be searched. If no \[Nu]Range is specified, the default is 0 to 2\[Pi].
+With an optional key \"\[Nu]Range\"->{\[Nu]Min,\[Nu]Max} to specify that only some regions of each orbit should be searched. If no \[Nu]Range is specified, the default is -\[Pi] to \[Pi].
 
 Output is in the format:
 <|
