@@ -109,6 +109,27 @@ Cartesian Coordinate Format:
 |>
 ";
 
+PlanarKeplerianFromPolar::usage = "Given a polar coordinate point,
+
+Polar coordinate format:
+<|
+	\"Coordinate\"->\"Polar\",
+	\"Position\"->{r, \[Theta]},
+	\"Velocity\"->{vr, v\[Theta], vz},
+	(optional) \"VelocityChange\" -> {vr, v\[Theta], vz}
+|>
+
+Output Format:
+<|	\"Coordinate\" -> \"PlanarKeplerian\",
+	\"a\" -> a, (* Could be undefined i.e. if orbit is parabolic *)
+	\"e\" -> e,
+	\"w\" -> w,
+	\"p\" -> p,
+	\"\[ScriptCapitalE]\" -> \[ScriptCapitalE] (* energy *)
+	\"h\" -> h (* orbital angular momentum: positive if ccw *)
+|>
+";
+
 ConstrainKeplerian::usage = "Make sure that a Keplerian coordinate has correct and nondegenerate values.";
 
 Begin["`Private`"];
@@ -168,7 +189,8 @@ PolarFromCartesianPlanar[cartpl_?(AssociationQ[#] && KeyExistsQ[#,"Coordinate"] 
 	Return[<| "Coordinate"->"Polar", "Position"->{r,th}, "Velocity"->{vr, vth, vz} |>];
 ];
 
-CartesianPlanarFromPolar[polar_?(AssociationQ[#] && KeyExistsQ[#,"Coordinate"] && #["Coordinate"] == "Polar" &)] := Module[{cartpl, r, th, transform, vr, vth, vz, vx, vy},
+CartesianPlanarFromPolar[polar_?(AssociationQ[#] && KeyExistsQ[#,"Coordinate"] && #["Coordinate"] == "Polar" &)] :=
+Module[{cartpl, r, th, transform, vr, vth, vz, vx, vy},
 	cartpl = <| "Coordinate"->"CartesianPlanar" |>;
 	{r, th} = polar["Position"];
 	(* Define tranform from {r,th} to {x, y} *)
@@ -213,6 +235,41 @@ ConstrainKeplerian[kep_?(AssociationQ[#] && KeyExistsQ[#,"Coordinate"] && #["Coo
 	outputKep["e"] = e;
 	Return[outputKep];
 ];
+
+PlanarKeplerianFromPolar[pol_?(AssociationQ[#] && KeyExistsQ[#,"Coordinate"] && #["Coordinate"] == "Polar" &)] := Module[
+{r, th, vr, vth, vz,
+ a, h, p, e, w, \[ScriptCapitalE]},
+	{r, th} = pol["Position"];
+	{vr, vth, vz} = pol["Velocity"];
+
+	h = r vth;
+	\[ScriptCapitalE] = 1/2 (vr^2 + vth^2) - 1/r;
+	a = If[\[ScriptCapitalE] == 0, \[Infinity], -1/(2 \[ScriptCapitalE])];
+	p = h^2;
+	e = Sqrt[1 - p/a];
+
+	(*get the non-trivial formula for w by inverting
+	r=h^2/(1+eCos[th-w]) with some corrections for \
+	the direction of the orbit *)
+	w = Mod[If[e == 0,
+			0,
+			If[vr == 0,
+				If[(r < a && \[ScriptCapitalE] < 0) || \[ScriptCapitalE] >= 0,
+					th,
+					\[Pi] + th
+				],
+				th - Sign[vr]*Sign[vth]*ArcCos[(h^2 - r)/(r e)]
+			]
+		], 2 \[Pi]];
+
+	If[e == 0, e = Sign[h] $MachineEpsilon];
+
+	<| "Coordinate"->"KeplerianPlanar",
+		"p" -> p, "e" -> e,
+		"w" -> w, "h" -> h,
+		"a" -> a, "\[ScriptCapitalE]" -> \[ScriptCapitalE]
+	|>
+]
 
 End[];
 

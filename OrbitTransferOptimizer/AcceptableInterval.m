@@ -37,13 +37,15 @@ Input format:
 Output format:
 Interval[{...}]";
 
+getInequalityForPoint::usage = "Helper function that takes an interval (which may have multiple ... spans?) and a point, and returns one part of that interval, as an inequality for \[Omega].";
+
 Begin["`Private`"];
 
 (* ::Text:: *)
 (*helper function that takes an interval (which may have multiple ... spans?) and a point, and returns one part of that interval, as an inequality for \[Omega].*)
 
-getInequalityForPoint[a_Interval,p_] := Module[{s},
-	s = Select[ Table[ Interval[ a[[i]]], {i, 1, Length[a]}], IntervalMemberQ[#, p] & ][[1,1]];
+getInequalityForPoint[a_Interval, p_] := Module[{s},
+	s = Select[ Table[ Interval[ a[[i]]], {i, 1, Length[a]}], IntervalMemberQ[#, p] & ][[1, 1]];
 	s[[1]] < \[Omega] < s[[2]]
 ]
 
@@ -52,7 +54,7 @@ getInequalityForPoint[a_Interval,p_] := Module[{s},
 (*Constraints on what \[Omega] are acceptable to be tested for the lowest \[CapitalDelta]v.*)
 
 (*Returns the two angles of \[Omega] for which e is equal to 1.*)
-eIs1l[{r1_,th1_},{r2_,th2_}] := eIs1c[r1,th1,r2,th2];
+eIs1l[{r1_, th1_}, {r2_, th2_}] := eIs1c[r1, th1, r2, th2];
 eIs1c = Compile[{{r1,_Real},{th1,_Real},{r2,_Real},{th2,_Real}},
 	Block[{pts},pts = {
 		-ArcCos[1/(r1^2+r2^2-2 r1 r2 Cos[th1-th2]) (-r1^2 Cos[th1]+r1 r2 Cos[th1]+r1 r2 Cos[th2]-r2^2 Cos[th2]-2 \[Sqrt](r1^3 r2 Sin[th1]^2 Sin[th1/2-th2/2]^2-2 r1^2 r2^2 Sin[th1] Sin[th1/2-th2/2]^2 Sin[th2]+r1 r2^3 Sin[th1/2-th2/2]^2 Sin[th2]^2))],
