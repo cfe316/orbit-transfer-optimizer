@@ -215,27 +215,6 @@ CartesianFromCartesianPlanar[M_?MatrixQ, cartpl_?(AssociationQ[#] && KeyExistsQ[
 	Return[cart];
 ];
 
-ConstrainKeplerian[kep_?(AssociationQ[#] && KeyExistsQ[#,"Coordinate"] && #["Coordinate"] == "Keplerian" &)] := Module[{outputKep, a,e},
-	outputKep = <| "Coordinate"->"Keplerian" |>;
-	outputKep["i"] = Mod[kep["i"],\[Pi]];
-	Map[(outputKep[#] = Mod[kep[#],2\[Pi]]) &,{"\[CapitalOmega]", "\[CurlyPi]", "\[Nu]"}];
-
-	(* No parabolic orbits. Converting them to an elliptic orbit is my judgement call. Later an error could be implemented instead. *)
-	a = kep["a"];
-	e = kep["e"];
-	If[ e == 1 , e = 0.999; ];
-	If[ e > 1,
-		(* Hyperbolic orbits have negative a *)
-		If[ a > 0, a = -1 a];
-		(* Limit v to the correct hyperbola branch. 0.99 is to prevent evaluating at distance \[Infinity] *)
-		vLimit = 0.99 ArcCos[-1/e];
-		outputKep["\[Nu]"] = Clip[kep["\[Nu]"], {- vLimit, vLimit}];
-	]; 
-	outputKep["a"] = a;
-	outputKep["e"] = e;
-	Return[outputKep];
-];
-
 PlanarKeplerianFromPolar[pol_?(AssociationQ[#] && KeyExistsQ[#,"Coordinate"] && #["Coordinate"] == "Polar" &)] := Module[
 {r, th, vr, vth, vz,
  a, h, p, e, w, \[ScriptCapitalE]},
@@ -270,6 +249,28 @@ PlanarKeplerianFromPolar[pol_?(AssociationQ[#] && KeyExistsQ[#,"Coordinate"] && 
 		"a" -> a, "\[ScriptCapitalE]" -> \[ScriptCapitalE]
 	|>
 ]
+
+ConstrainKeplerian[kep_?(AssociationQ[#] && KeyExistsQ[#,"Coordinate"] && #["Coordinate"] == "Keplerian" &)] := Module[{outputKep, a,e},
+	outputKep = <| "Coordinate"->"Keplerian" |>;
+	outputKep["i"] = Mod[kep["i"],\[Pi]];
+	Map[(outputKep[#] = Mod[kep[#],2\[Pi]]) &,{"\[CapitalOmega]", "\[CurlyPi]", "\[Nu]"}];
+
+	(* No parabolic orbits. Converting them to an elliptic orbit is my judgement call. Later an error could be implemented instead. *)
+	a = kep["a"];
+	e = kep["e"];
+	If[ e == 1 , e = 0.999; ];
+	If[ e > 1,
+		(* Hyperbolic orbits have negative a *)
+		If[ a > 0, a = -1 a];
+		(* Limit v to the correct hyperbola branch. 0.99 is to prevent evaluating at distance \[Infinity] *)
+		vLimit = 0.99 ArcCos[-1/e];
+		outputKep["\[Nu]"] = Clip[kep["\[Nu]"], {- vLimit, vLimit}];
+	]; 
+	outputKep["a"] = a;
+	outputKep["e"] = e;
+	Return[outputKep];
+];
+
 
 End[];
 
