@@ -47,7 +47,7 @@ cart2_?(AssociationQ[#] && KeyExistsQ[#, "Coordinate"] && #["Coordinate"] == "Ca
 
 	{p1, p2} = #["Position"] & /@ {cart1, cart2};
 	(* If positions are in a line or not *)
-	bt = If[ p1 \[Cross] p2 == {0, 0, 0},
+	bt = If[ Norm[p1 \[Cross] p2] < $MachineEpsilon,
 		(* Positions are collinear *)
 		If[ p1 . p2 > 0,
 			(* Positions are on the same side *)
