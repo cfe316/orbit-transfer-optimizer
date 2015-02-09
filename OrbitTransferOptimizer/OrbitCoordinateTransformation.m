@@ -225,7 +225,7 @@ PlanarKeplerianFromPolar[pol_?(AssociationQ[#] && KeyExistsQ[#,"Coordinate"] && 
 	\[ScriptCapitalE] = 1/2 (vr^2 + vth^2) - 1/r;
 	a = If[\[ScriptCapitalE] == 0, \[Infinity], -1/(2 \[ScriptCapitalE])];
 	p = h^2;
-	e = Sqrt[1 - p/a];
+	e = Re[Sqrt[1 - p/a]];
 
 	(*get the non-trivial formula for w by inverting
 	r=h^2/(1+eCos[th-w]) with some corrections for \
@@ -270,7 +270,6 @@ ConstrainKeplerian[kep_?(AssociationQ[#] && KeyExistsQ[#,"Coordinate"] && #["Coo
 	outputKep["e"] = e;
 	Return[outputKep];
 ];
-
 
 End[];
 
