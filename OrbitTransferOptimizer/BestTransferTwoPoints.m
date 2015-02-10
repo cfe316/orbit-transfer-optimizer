@@ -155,11 +155,11 @@ geneAng[cart1_, cart2_] := Module[{M, cartpl1, cartpl2, pol1, pol2, r, tdv, burn
 
 (* Choose the place where e is lowest and positive.*)
 startingOmega[pol1_, pol2_] := Module[{r1, th1, r2, th2, wstart1, wstart2, ewInt},
-	{r1, th1} = pol1["Position"];
+	{r1, th1} = {pol1["Position"][[1]], 0};
 	{r2, th2} = pol2["Position"];
 	{wstart1, wstart2} = Mod[{
-		ArcTan[-r1 Cos[th1] + r2 Cos[th2], -r1 Sin[th1] + r2 Sin[th2]], 
-		ArcTan[ r1 Cos[th1] - r2 Cos[th2],  r1 Sin[th1] - r2 Sin[th2]]
+		ArcTan[-r1 + r2 Cos[th2], + r2 Sin[th2]], 
+		ArcTan[ r1 - r2 Cos[th2], - r2 Sin[th2]]
 	}, 2 \[Pi]];
 	ewInt = eIsPositiveInterval[{r1, th1}, {r2, th2}];
 	wstart = If[IntervalMemberQ[ewInt, wstart1],
@@ -182,9 +182,9 @@ geneAngGeneRad[pol1_, pol2_] := Module[
 
 	(* Figure out the starting w. *)
 	wstart = startingOmega[pol1, pol2];
-	(* Unpackage the coordinates *)
-	{r1, th1} = pol1["Position"]; v1 = pol1["Velocity"]; {vr1, vth1, vz1} = v1;
-	{r2, th2} = pol2["Position"]; v2 = pol2["Velocity"]; {vr2, vth2, vz2} = v2;
+	(* Unpackage the coordinates. th1 should be within numerical errors of 0. Set it to zero explicity. *)
+	{r1, th1} = {pol1["Position"][[1]],0}; v1 = pol1["Velocity"]; {vr1, vth1, vz1} = v1;
+	{r2, th2} =  pol2["Position"];         v2 = pol2["Velocity"]; {vr2, vth2, vz2} = v2;
 
 	(* Interval for omega *)
 	wInt = Acceptable\[Omega]Interval[{r1, th1}, {r2, th2}];
@@ -228,8 +228,8 @@ geneAngSameRad[pol1_, pol2_] := Module[
  bestw, bestsh, beste},
 
 	(* Unpackage the coordinates *)
-	{r1, th1} = pol1["Position"]; {vr1, vth1, vz1} = pol1["Velocity"];
-	{r2, th2} = pol2["Position"]; {vr2, vth2, vz2} = pol2["Velocity"];
+	{r1, th1} = {pol1["Position"][[1]],0}; {vr1, vth1, vz1} = pol1["Velocity"];
+	{r2, th2} =  pol2["Position"];         {vr2, vth2, vz2} = pol2["Velocity"];
 
 	wb = angleBetweenTwoAroundCircle[th1, th2];
 	wf = Mod[(wb + \[Pi]), 2 \[Pi]];
