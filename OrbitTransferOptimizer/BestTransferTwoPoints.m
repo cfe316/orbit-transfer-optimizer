@@ -47,14 +47,13 @@ cart2_?(AssociationQ[#] && KeyExistsQ[#, "Coordinate"] && #["Coordinate"] == "Ca
 
 	{p1, p2} = #["Position"] & /@ {cart1, cart2};
 	(* If positions are in a line or not *)
-	bt = If[ Norm[p1 \[Cross] p2] < $MachineEpsilon,
+	bt = If[ Norm[p1 \[Cross] p2] < 10 $MachineEpsilon,
 		(* Positions are collinear *)
 		If[ p1 . p2 > 0,
 			(* Positions are on the same side *)
 			If[ Norm[p1] == Norm[p2],
-				(* Positions are at the same radius: positions are equal *)
+				(* Positions are at the same radius: positions are directly across from each other *)
 				sameRadSameAng[cart1, cart2],
-				(* Positions are equal except for radii *)
 				geneRadSameAng[cart1, cart2]
 			],
 			(* Positions are on opposite sides *)
@@ -65,6 +64,7 @@ cart2_?(AssociationQ[#] && KeyExistsQ[#, "Coordinate"] && #["Coordinate"] == "Ca
 			]
 		],
 		(* Positions are not collinear. *)
+		Print["Hey"];
 		geneAng[cart1, cart2]
 	];
 	tDV = bt["Total \[CapitalDelta]V"];
@@ -85,24 +85,33 @@ tdv = Norm[vc];
 	"Burn 2"-> <|	"Coordinate"->"Cartesian",
 			"Position"->cart2["Position"], 
 			"Velocity"-> cart2["Velocity"],
-			"VelocityChange" -> {0,0,0}
+			"VelocityChange" -> {0.,0.,0.}
 		|>
 |>
 ]
 
+
 (* Like bestOrbitTwoPointsSameTheta *)
 (* needs work *)
 geneRadSameAng[cart1_, cart2_] := Module[{
- p1, p2, v1, v2,
- p1p, p2p, v1p, v2p,
- zpole, prograde, p1norm, M,
- r1, th1, vr1, vth1, vz1,
- r2, th2, vr2, vth2, vz2,
- fDV, minvr, maxvr, vrstep, b, tDV, cv1, cv2},
-(* Do transformation into frame where v is in the xy plane. *)
+ M, cpl1, cpl2, pol1, pol2,
+ r1, vr1, vth1, vz1,
+ r2, vr2, vth2, vz2,
+ fDV, minvr, maxvr, vrstep, b, tDV, cv1, cv2,
+ burn1, burn2, c1, c2},
 
-	vrstep = 0.0001;
+	(* Rotate into the correct frame. *)
+	{M, cpl1, cpl2} = CartesianPlanarsFromCartesians[cart1, cart2];
+	{pol1, pol2} = PolarFromCartesianPlanar[#]& /@ {cpl1, cpl2};
+
+	(* Unpack coordinates *)
+	{r1, r2} = #["Position"][[1]] & /@ {pol1, pol2};
+	{vr1, vth1, vz1} = pol1["Velocity"];
+	{vr2, vth2, vz2} = pol2["Velocity"];
+
+	vrstep = 0.0001; (* Velocity space accuracy goal. *)
 	If[r1 < r2, 
+		(* The function to be minimized: the radial burn will occur at the lower point in the gravity well. *)
 		fDV = Sqrt[vth1^2 + vz1^2 + (vr1 - #)^2] + Sqrt[ vth2^2 + vz2^2 + (Abs[vr2] - Sqrt[#^2 - 2 (1/r1 - 1/r2)])^2] &;
 		minvr = Sqrt[2 (1/r1 - 1/r2)];
 		maxvr = 2.*Max[vr1, Sqrt[vr2^2 + 2 (1/r1 - 1/r2)]];
@@ -115,23 +124,22 @@ geneRadSameAng[cart1_, cart2_] := Module[{
 			MinimizeUnimodalFunction[fDV, 0, maxvr, vrstep],
 			MinimizeUnimodalFunction[fDV, -maxvr, 0, vrstep]
 		];
-		cv2 = {vr2 - Sqrt[b[[1]]^2 + 2 (1/r2 - 1/r1)], vth2, vz2}, 
-	]
+		cv2 = {vr2 - Sqrt[b[[1]]^2 + 2 (1/r2 - 1/r1)], vth2, vz2};
+	];
 	cv1 = {b[[1]] - vr1, -vth1, -vz1};
-	tDV = b[[2]];
+	tDV = b[[2]]; (* Total delta V *)
 
-	<|	"Total \[CapitalDelta]V" -> tDV, 
-		"Burn 1"-> <|	"Coordinate" -> "Cartesian",
-				"Position" -> p1,
-				"Velocity" -> v1,
-				"VelocityChange" -> cv1,
-			|>
-		"Burn 2"-> <|	"Coordinate" -> "Cartesian",
-				"Position" -> p2,
-				"Velocity" -> (cv2 - cart2["Velocity"]),
-				"VelocityChange" -> cv2,
-			|>
-	|>
+	{burn1, burn2} = ConstantArray[<| "Coordinate"->"Polar" |>, {2}];
+	burn1["Position"] = pol1["Position"];
+	burn2["Position"] = pol2["Position"];
+	burn1["Velocity"] = pol1["Velocity"];
+	burn2["Velocity"] = pol2["Velocity"] - cv2;
+	burn1["VelocityChange"] = cv1;
+	burn2["VelocityChange"] = cv2; 
+
+	{cpl1, cpl2} = CartesianPlanarFromPolar[#] & /@ {burn1, burn2};
+	{c1, c2} = CartesianFromCartesianPlanar[Inverse[M], #] & /@ {cpl1, cpl2};
+	Return[<|"Total \[CapitalDelta]V"->tDV, "Burn 1"->c1, "Burn 2"->c2 |>];
 ]
 
 (* tough case. Possibly requires a 2d parameter search. *)
@@ -181,7 +189,7 @@ geneAng[cart1_, cart2_] := Module[{M, cartpl1, cartpl2, pol1, pol2, r, tdv, burn
 	Return[<|"Total \[CapitalDelta]V"->tdv, "Burn 1"->c1, "Burn 2"->c2 |>];
 ]
 
-(* Choose the place where e is lowest and positive.*)
+(* Used for geneAngGeneRad. Choose the place where e is lowest and positive.*)
 startingOmega[pol1_, pol2_] := Module[{r1, th1, r2, th2, wstart1, wstart2, ewInt},
 	{r1, th1} = {pol1["Position"][[1]], 0};
 	{r2, th2} = pol2["Position"];

@@ -167,19 +167,19 @@ CartesianPlanarsFromCartesians[
 	{p1, p2} = #["Position"]& /@ {cart1, cart2};
 	{v1, v2} = #["Velocity"]& /@ {cart1, cart2};
 	p1Crossp2 = (p1 \[Cross] p2);
-	M = If[ Norm[ p1Crossp2 ] > 2 $MachineEpsillon,
+	M = If[ Norm[ p1Crossp2 ] > 10 $MachineEpsilon,
 		(* Typical case: p1 and p2 are not collinear.
 		   Rotate so that p1 and p2 lie in a plane. *)
-		Orthogonalize[{p1, p2, (p1 \[Cross] p2)}];
+		Orthogonalize[{p1, p2, p1Crossp2}]
 		,
 		(* Unusual case: p1 and p2 are lined up radially.
 		   Choose a frame of reference where p1 and v1 are in the xy plane. *)
 		orbNorm = p1 \[Cross] v1;
-		prograde = zpole \[Cross] p1;
-		Orthogonalize[{p1, prograde, orbNorm}];
+		prograde = orbNorm \[Cross] p1;
+		Orthogonalize[{p1, prograde, orbNorm}]
 	];
 	
-	{cartpl1, cartpl2} = Table[<| "Coordinate"->"CartesianPlanar" |>, {t, 0, 1}];
+	{cartpl1, cartpl2} = ConstantArray[<| "Coordinate"->"CartesianPlanar" |>, {2}];
 
 	cartpl1["Position"] = (M.p1)[[1;;2]];
 	cartpl2["Position"] = (M.p2)[[1;;2]];
