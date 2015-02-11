@@ -162,18 +162,30 @@ Block[{ a=kep["a"], e=kep["e"], i=kep["i"], Om=kep["\[CapitalOmega]"], \[CurlyPi
 
 CartesianPlanarsFromCartesians[
 	cart1_?(AssociationQ[#] && KeyExistsQ[#,"Coordinate"] && #["Coordinate"] == "Cartesian" &), 
-	cart2_?(AssociationQ[#] && KeyExistsQ[#,"Coordinate"] && #["Coordinate"] == "Cartesian" &)] := Module[{M, p1, p2},
+	cart2_?(AssociationQ[#] && KeyExistsQ[#,"Coordinate"] && #["Coordinate"] == "Cartesian" &)] := Module[{M, p1, p2, v1, v2, p1Crossp2, orbNorm, prograde},
 
 	{p1, p2} = #["Position"]& /@ {cart1, cart2};
-	M = Orthogonalize[{p1, p2, (p1 \[Cross] p2)}]; 
-
+	{v1, v2} = #["Velocity"]& /@ {cart1, cart2};
+	p1Crossp2 = (p1 \[Cross] p2);
+	M = If[ Norm[ p1Crossp2 ] > 2 $MachineEpsillon,
+		(* Typical case: p1 and p2 are not collinear.
+		   Rotate so that p1 and p2 lie in a plane. *)
+		Orthogonalize[{p1, p2, (p1 \[Cross] p2)}];
+		,
+		(* Unusual case: p1 and p2 are lined up radially.
+		   Choose a frame of reference where p1 and v1 are in the xy plane. *)
+		orbNorm = p1 \[Cross] v1;
+		prograde = zpole \[Cross] p1;
+		Orthogonalize[{p1, prograde, orbNorm}];
+	];
+	
 	{cartpl1, cartpl2} = Table[<| "Coordinate"->"CartesianPlanar" |>, {t, 0, 1}];
 
-	cartpl1["Position"] = (M.cart1["Position"])[[1;;2]];
-	cartpl2["Position"] = (M.cart2["Position"])[[1;;2]];
+	cartpl1["Position"] = (M.p1)[[1;;2]];
+	cartpl2["Position"] = (M.p2)[[1;;2]];
 
-	cartpl1["Velocity"] = M.cart1["Velocity"];
-	cartpl2["Velocity"] = M.cart2["Velocity"];
+	cartpl1["Velocity"] = M.v1;
+	cartpl2["Velocity"] = M.v2;
 	
 	Return[{M, cartpl1, cartpl2}];
 ];

@@ -91,19 +91,47 @@ tdv = Norm[vc];
 ]
 
 (* Like bestOrbitTwoPointsSameTheta *)
-geneRadSameAng[cart1_, cart2_] := Module[{},
-<|	"Total \[CapitalDelta]V" -> 1000000, 
-	"Burn 1"-> <|	"Coordinate"->"Cartesian",
-			"Position"->cart1["Position"],
-			"Velocity"->cart1["Velocity"],
-			"VelocityChange" -> {0,0,0}
-		|>
-	"Burn 2"-> <|	"Coordinate"->"Cartesian",
-			"Position"->cart2["Position"], 
-			"Velocity"-> cart2["Velocity"],
-			"VelocityChange" -> {0,0,0}
-		|>
-|>
+(* needs work *)
+geneRadSameAng[cart1_, cart2_] := Module[{
+ p1, p2, v1, v2,
+ p1p, p2p, v1p, v2p,
+ zpole, prograde, p1norm, M,
+ r1, th1, vr1, vth1, vz1,
+ r2, th2, vr2, vth2, vz2,
+ fDV, minvr, maxvr, vrstep, b, tDV, cv1, cv2},
+(* Do transformation into frame where v is in the xy plane. *)
+
+	vrstep = 0.0001;
+	If[r1 < r2, 
+		fDV = Sqrt[vth1^2 + vz1^2 + (vr1 - #)^2] + Sqrt[ vth2^2 + vz2^2 + (Abs[vr2] - Sqrt[#^2 - 2 (1/r1 - 1/r2)])^2] &;
+		minvr = Sqrt[2 (1/r1 - 1/r2)];
+		maxvr = 2.*Max[vr1, Sqrt[vr2^2 + 2 (1/r1 - 1/r2)]];
+		b = MinimizeUnimodalFunction[fDV, minvr, maxvr, vrstep];
+		cv2 = {vr2 + If[Sign[vr2] == 1, -1, 1]*Sqrt[b[[1]]^2 - 2 (1/r1 - 1/r2)], vth2, vz2}; 
+		,
+		fDV = Sqrt[vth1^2 + vz1^2 + (vr1 - #)^2] + Sqrt[ vth2^2 + vz2^2 + (vr2 + Sqrt[#^2 + 2 (1/r2 - 1/r1)])^2] &;
+		maxvr = (Abs[vr1] + Sqrt[2 (1/r2 - 1/r1)] + Abs[vr2]);
+		b = If[vr1 > 0, 
+			MinimizeUnimodalFunction[fDV, 0, maxvr, vrstep],
+			MinimizeUnimodalFunction[fDV, -maxvr, 0, vrstep]
+		];
+		cv2 = {vr2 - Sqrt[b[[1]]^2 + 2 (1/r2 - 1/r1)], vth2, vz2}, 
+	]
+	cv1 = {b[[1]] - vr1, -vth1, -vz1};
+	tDV = b[[2]];
+
+	<|	"Total \[CapitalDelta]V" -> tDV, 
+		"Burn 1"-> <|	"Coordinate" -> "Cartesian",
+				"Position" -> p1,
+				"Velocity" -> v1,
+				"VelocityChange" -> cv1,
+			|>
+		"Burn 2"-> <|	"Coordinate" -> "Cartesian",
+				"Position" -> p2,
+				"Velocity" -> (cv2 - cart2["Velocity"]),
+				"VelocityChange" -> cv2,
+			|>
+	|>
 ]
 
 (* tough case. Possibly requires a 2d parameter search. *)
