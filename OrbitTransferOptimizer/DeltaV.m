@@ -99,8 +99,8 @@ dVcs = Compile[{
 	vthB = Sign[h] vB Cos[alB];
 	vrB = Sign[h] vB Sin[alB];
 	
-	DV1 = {vthA - vth1, vrA - vr1, vz1};
-	DV2 = {vthB - vth2, vrB - vr2, vz2};
+	DV1 = {vrA - vr1, vthA - vth1, -vz1};
+	DV2 = {vrB - vr2, vthB - vth2, vz2};
 	{DV1, DV2}
 ];
 
@@ -121,8 +121,8 @@ dVcs = Compile[{
 	vrA = Sign[h] v Sin[alA];
 	vrB = -vrA;
 	
-	DV1 = {vth - vth1, vrA - vr1, vz1};
-	DV2 = {vth - vth2, vrB - vr2, vz2};
+	DV1 = {vrA - vr1, vthA - vth1, -vz1};
+	DV2 = {vrB - vr2, vthB - vth2, vz2};
 	{DV1, DV2}
 ];
 
