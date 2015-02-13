@@ -79,7 +79,7 @@ eIs1cth10 = Compile[{{r1,_Real},{r2,_Real},{th2,_Real}},
 		 ArcCos[p1 (p2 + p3)]
 	};
 	(* Select the solution that fits the equation correctly. *)
-	Sort[ Mod[ Select[ pts, Abs[-((r1-r2)/(r1 Cos[#1]-r2 Cos[th2-#1]))-1.] < 10.^(-10) &],2. \[Pi]]]],
+	DeleteDuplicates[Sort[ Mod[ Select[ pts, Abs[-((r1-r2)/(r1 Cos[#1]-r2 Cos[th2-#1]))-1.] < 10.^(-10) &],2. \[Pi]]], Abs[#1-#2] < 10^(-10) &]],
 CompilationTarget->"C",RuntimeOptions->"Speed"];
 
 (*Returns the interval of \[Omega] over which e is positive.*)
