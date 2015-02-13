@@ -38,6 +38,8 @@ Output is in the format:
 	|>
 |>
 "
+geneRadOppoAng::usage = "";
+geneAngGeneRad::usage = "";
 
 Begin["Private`"];
 
@@ -64,7 +66,6 @@ cart2_?(AssociationQ[#] && KeyExistsQ[#, "Coordinate"] && #["Coordinate"] == "Ca
 			]
 		],
 		(* Positions are not collinear. *)
-		Print["Hey"];
 		geneAng[cart1, cart2]
 	];
 	tDV = bt["Total \[CapitalDelta]V"];
@@ -149,7 +150,7 @@ sameRadOppoAng[cart1_, cart2_] := Module[{},
 			"Position"->cart1["Position"],
 			"Velocity"->cart1["Velocity"],
 			"VelocityChange" -> {0,0,0}
-		|>
+		|>,
 	"Burn 2"-> <|	"Coordinate"->"Cartesian",
 			"Position"->cart2["Position"], 
 			"Velocity"-> cart2["Velocity"],
@@ -165,7 +166,7 @@ geneRadOppoAng[cart1_, cart2_] := Module[{},
 			"Position"->cart1["Position"],
 			"Velocity"->cart1["Velocity"],
 			"VelocityChange" -> {0,0,0}
-		|>
+		|>,
 	"Burn 2"-> <|	"Coordinate"->"Cartesian",
 			"Position"->cart2["Position"], 
 			"Velocity"->cart2["Velocity"],
