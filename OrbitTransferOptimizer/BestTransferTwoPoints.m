@@ -59,11 +59,7 @@ cart2_?(AssociationQ[#] && KeyExistsQ[#, "Coordinate"] && #["Coordinate"] == "Ca
 				geneRadSameAng[cart1, cart2]
 			],
 			(* Positions are on opposite sides *)
-			If[ Norm[p1] == Norm[p2],
-				(* Positions are at the same radius: positions are directly across from each other *)
-				sameRadOppoAng[cart1, cart2],
-				geneRadOppoAng[cart1, cart2]
-			]
+			oppoAng[cart1, cart2]
 		],
 		(* Positions are not collinear. *)
 		geneAng[cart1, cart2]
@@ -144,7 +140,7 @@ geneRadSameAng[cart1_, cart2_] := Module[{
 ]
 
 (* tough case. Possibly requires a 2d parameter search. *)
-sameRadOppoAng[cart1_, cart2_] := Module[{},
+sameRadOppoAng[pol1_, pol2_] := Module[{},
 <|	"Total \[CapitalDelta]V" -> 1000000, 
 	"Burn 1"-> <|	"Coordinate"->"Cartesian",
 			"Position"->cart1["Position"],
@@ -159,21 +155,39 @@ sameRadOppoAng[cart1_, cart2_] := Module[{},
 |>
 ]
 
-(* tough case. Possibly requires a 2d parameter search. *)
-geneRadOppoAng[cart1_, cart2_] := Module[{},
-<|	"Total \[CapitalDelta]V" -> 1000000, 
-	"Burn 1"-> <|	"Coordinate"->"Cartesian",
-			"Position"->cart1["Position"],
-			"Velocity"->cart1["Velocity"],
-			"VelocityChange" -> {0,0,0}
-		|>,
-	"Burn 2"-> <|	"Coordinate"->"Cartesian",
-			"Position"->cart2["Position"], 
-			"Velocity"->cart2["Velocity"],
-			"VelocityChange" -> {0,0,0}
-		|>
-|>
+oppoAng[cart1_, cart2_] := Module[{p1, p2, v1, v2, h, M, cartpl1, cartpl2, pol1, pol2, r, tdv, burn1, burn2, c1, c2},
+
+	(* Invent a plane to solve in: *)
+	(* Pick the total angular momentum. This is generally not the best choice: sometimes it gives local maximum in Delta V*)
+	{p1, p2} = #["Position"] & /@ {cart1, cart2};
+	{v1, v2} = #["Velocity"] & /@ {cart1, cart2};
+
+	h = p1 \[Cross] v1 + p2 \[Cross] v2; 
+	If[ Norm[h] == 0, h = {0,0,1};];
+
+	pole = Normalize[h];
+	prog = pole \[Cross] p1;
+	M = Orthogonalize[{p1, prog, pole}];
+
+	{p1, p2, v1, v2} = M.# & /@ {p1, p2, v1, v2};
+	{cartpl1, cartpl2} = ConstantArray[<|"Coordinate" -> "CartesianPlanar"|>, {2}];
+	cartpl1["Position"] = p1[[1 ;; 2]]; cartpl2["Position"] = p2[[1 ;; 2]];
+	cartpl1["Velocity"] = v1; cartpl2["Velocity"] = v2;
+
+	{pol1, pol2} = PolarFromCartesianPlanar[#]& /@ {cartpl1, cartpl2};
+	r = If[pol1["Position"][[1]] == pol2["Position"][[1]],
+		sameRadOppoAng[pol1, pol2],
+		geneAngGeneRad[pol1, pol2]
+	];
+	tdv = r["Total \[CapitalDelta]V"];
+	burn1 = r["Burn 1"];
+	burn2 = r["Burn 2"];
+	{cartpl1, cartpl2} = CartesianPlanarFromPolar[#] & /@ {burn1, burn2};
+	{c1, c2} = CartesianFromCartesianPlanar[Inverse[M], #] & /@ {cartpl1, cartpl2};
+	Return[<|"Total \[CapitalDelta]V"->tdv, "Burn 1"->c1, "Burn 2"->c2 |>];
 ]
+
+geneRadOppoAng[pol1_, pol2_] := geneAngGeneRad[pol1, pol2];
 
 geneAng[cart1_, cart2_] := Module[{M, cartpl1, cartpl2, pol1, pol2, r, tdv, burn1, burn2, c1, c2},
 	{M, cartpl1, cartpl2} = CartesianPlanarsFromCartesians[cart1, cart2];
@@ -197,12 +211,12 @@ startingOmega[pol1_, pol2_] := Module[{r1, th1, r2, th2, wstart1, wstart2, ewInt
 	{wstart1, wstart2} = Mod[{
 		ArcTan[-r1 + r2 Cos[th2], + r2 Sin[th2]], 
 		ArcTan[ r1 - r2 Cos[th2], - r2 Sin[th2]]
-	}, 2 \[Pi]];
+	}, 2 Pi];
 	ewInt = eIsPositiveInterval[{r1, th1}, {r2, th2}];
 	wstart = If[IntervalMemberQ[ewInt, wstart1],
 			wstart1,
-			If[ IntervalMemberQ[ewInt, wstart1 + 2 \[Pi]],
-				wstart1 + 2 \[Pi],
+			If[ IntervalMemberQ[ewInt, wstart1 + 2 Pi],
+				wstart1 + 2 Pi,
 				wstart2
 			]
 		];
@@ -217,11 +231,16 @@ geneAngGeneRad[pol1_, pol2_] := Module[
  wrange, wrange1, wrange2,
  wstep, m, m1, m2},
 
-	(* Figure out the starting w. *)
-	wstart = startingOmega[pol1, pol2];
 	(* Unpackage the coordinates. th1 should be within numerical errors of 0. Set it to zero explicity. *)
 	{r1, th1} = {pol1["Position"][[1]],0}; v1 = pol1["Velocity"]; {vr1, vth1, vz1} = v1;
 	{r2, th2} =  pol2["Position"];         v2 = pol2["Velocity"]; {vr2, vth2, vz2} = v2;
+
+	(* Figure out the starting w. *)
+	If[Abs[th2 - Pi] < 10 $MachineEpsilon, 
+		th2 = Pi;
+		wstart = If[ r1 < r2, 0, Pi];,
+		wstart = startingOmega[pol1, pol2];
+	];
 
 	(* Interval for omega *)
 	wInt = Acceptable\[Omega]Interval[{r1, th1}, {r2, th2}];
@@ -269,7 +288,7 @@ geneAngSameRad[pol1_, pol2_] := Module[
 	{r2, th2} =  pol2["Position"];         {vr2, vth2, vz2} = pol2["Velocity"];
 
 	wb = angleBetweenTwoAroundCircle[th1, th2];
-	wf = Mod[(wb + \[Pi]), 2 \[Pi]];
+	wf = Mod[(wb + Pi), 2 Pi];
 
 	(* directions 1 and 2: represents either ccw (1) or cw (-1)*)
 	{d1, d2} = If[orderTwoAnglesAroundCircle[th1, th2] == 1, {1, -1}, {-1, 1}];

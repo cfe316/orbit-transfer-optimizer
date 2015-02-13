@@ -10,10 +10,13 @@
 (* ::Section:: *)
 (* Begin package and help *)
 
-BeginPackage["OrbitTransferOptimizer`OrbitCoordinateTransformation`"];
+BeginPackage["OrbitTransferOptimizer`OrbitCoordinateTransformation`", {"OrbitTransferOptimizer`Utilities`"}];
 
 Unprotect@"`*";
 ClearAll@"`*";
+
+CoordinateFromOrbit::usage = "Transform an Orbit into a Keplerian Coordinate with a specific true anomaly.";
+OrbitFromCoordinate::usage = "Transform an Keplerian Coordinate into an Orbit .";
 
 CartesianFromKeplerian::usage = 
 "Transform a Keplerian coordinate into a Cartesian coordinate. Does not support parabolic orbits. Assumes that \[Mu] = 1.
@@ -109,6 +112,8 @@ Cartesian Coordinate Format:
 |>
 ";
 
+KeplerianFromCartesian::usage = "Given a CartesianPoint...";
+
 PlanarKeplerianFromPolar::usage = "Given a polar coordinate point,
 
 Polar coordinate format:
@@ -132,7 +137,20 @@ Output Format:
 
 ConstrainKeplerian::usage = "Make sure that a Keplerian coordinate has correct and nondegenerate values.";
 
-Begin["`Private`"];
+Begin["Private`"];
+
+CoordinateFromOrbit[o_?(AssociationQ[#] && KeyExistsQ[#,"Orbit"] && #["Orbit"] == "Nondegenerate" &), \[Nu]_] := Block[{kep},
+	kep = KeyDrop[o, {"Orbit", "\[Nu]Range"}];
+	kep["Coordinate"] = "Keplerian";
+	kep["\[Nu]"] = \[Nu];
+	kep
+]
+
+OrbitFromCoordinate[k_?(AssociationQ[#] && KeyExistsQ[#,"Coordinate"] && #["Coordinate"] == "Keplerian" &)] := Block[{o},
+	o = KeyDrop[k, {"Coordinate", "\[Nu]"}];
+	o["Orbit"] = "Nondegenerate";
+	OrbitTransferOptimizer`Utilities`restrictOrbit[o]
+]
 
 (* Based on Bruce Shapiro's code:  http://biomathman.com/pair/orbit.nb *)
 CartesianFromKeplerian[kep_?(AssociationQ[#] && KeyExistsQ[#,"Coordinate"] && #["Coordinate"] == "Keplerian" &)] :=
@@ -194,7 +212,7 @@ PolarFromCartesianPlanar[cartpl_?(AssociationQ[#] && KeyExistsQ[#,"Coordinate"] 
 	p   = Append[cartpl["Position"],0]; (* Useful for cross products *)
 	vel = cartpl["Velocity"];
 	r   = Sqrt[ p[[1]]^2 + p[[2]]^2 ];
-	th  = Mod[ArcTan[p[[1]], p[[2]]], 2\[Pi]];
+	th  = Mod[ArcTan[p[[1]], p[[2]]], 2 Pi];
 	vr  = vel.Normalize[p];
 	vth = Normalize[{0, 0, 1} \[Cross] p].vel;
 	vz  = vel[[3]]; 
@@ -247,11 +265,11 @@ PlanarKeplerianFromPolar[pol_?(AssociationQ[#] && KeyExistsQ[#,"Coordinate"] && 
 			If[vr == 0,
 				If[(r < a && \[ScriptCapitalE] < 0) || \[ScriptCapitalE] >= 0,
 					th,
-					\[Pi] + th
+					Pi + th
 				],
 				th - Sign[vr]*Sign[vth]*ArcCos[(h^2 - r)/(r e)]
 			]
-		], 2 \[Pi]];
+		], 2 Pi];
 
 	If[e == 0, e = Sign[h] $MachineEpsilon];
 
@@ -264,13 +282,13 @@ PlanarKeplerianFromPolar[pol_?(AssociationQ[#] && KeyExistsQ[#,"Coordinate"] && 
 
 ConstrainKeplerian[kep_?(AssociationQ[#] && KeyExistsQ[#,"Coordinate"] && #["Coordinate"] == "Keplerian" &)] := Module[{outputKep, a,e},
 	outputKep = <| "Coordinate"->"Keplerian" |>;
-	outputKep["i"] = Mod[kep["i"],\[Pi]];
-	Map[(outputKep[#] = Mod[kep[#],2\[Pi]]) &,{"\[CapitalOmega]", "\[CurlyPi]", "\[Nu]"}];
+	outputKep["i"] = Mod[kep["i"], Pi];
+	Map[(outputKep[#] = Mod[kep[#],2 Pi]) &,{"\[CapitalOmega]", "\[CurlyPi]", "\[Nu]"}];
 
 	(* No parabolic orbits. Converting them to an elliptic orbit is my judgement call. Later an error could be implemented instead. *)
 	a = kep["a"];
 	e = kep["e"];
-	If[ e == 1 , e = 0.999; ];
+	If[ e == 1 , e = 1.001; ];
 	If[ e > 1,
 		(* Hyperbolic orbits have negative a *)
 		If[ a > 0, a = -1 a];
@@ -282,6 +300,55 @@ ConstrainKeplerian[kep_?(AssociationQ[#] && KeyExistsQ[#,"Coordinate"] && #["Coo
 	outputKep["e"] = e;
 	Return[outputKep];
 ];
+
+KeplerianFromCartesian[cart_?(AssociationQ[#] && KeyExistsQ[#,"Coordinate"] && #["Coordinate"] == "Cartesian" &)] := Module[
+ {x, y, z, vx, vy, vz, 
+  r, v, R, V, 
+  a, e, i, \[CapitalOmega], \[Omega], M, \[Theta], EA, eccVector, 
+  p, hVector, h, n, argLat },
+	{x,y,z} = cart["Position"];
+	{vx,vy,vz} = cart["Velocity"];
+	R = {x, y, z};
+	V = {vx, vy, vz};
+	{r, v} = Norm[#]& /@ {R, V};
+
+	(* calculate the eccentricity *) 
+	eccVector = (V.V - 1/r) R - (R.V) V;
+	e=Norm[eccVector];
+	(* normalize the eccentricity vector *)
+	eccVector = Normalize[eccVector];
+
+	(* angular momentum per unit mass *)
+	hVector = Cross[R, V];
+	h = Norm[hVector];
+	hVector = 1/h hVector;
+
+	(* compute the semimajor axis *) 
+	a = h^2/(1-e^2);
+
+	(* compute the inclination *) 
+	i = ArcCos[hVector[[3]]];
+
+	(* compute the right ascension of ascending node *) 
+	n = Normalize[ Cross[{0,0,1}, hVector]];
+	\[CapitalOmega]=ArcCos[n[[1]]];
+	If[n[[2]]<0, \[CapitalOmega]=2*Pi-\[CapitalOmega]]; 
+
+	(* compute the argument of perigee *) 
+	\[Omega] = ArcCos[n.eccVector];
+	If[eccVector[[3]]<0, \[Omega]=2*Pi - \[Omega]];
+
+	(* compute argument of Latitude *) 
+	argLat = ArcCos[n.(1/r R)];
+	If[z<0, argLat = 2*Pi - argLat];
+
+	(*compute the true anomaly *)
+	\[Theta] = argLat - \[Omega]; 
+
+	Return[<|"Coordinate"->"Keplerian", "a"->a, "e"->e, "i"->i, "\[CapitalOmega]"->\[CapitalOmega], 
+		"\[CurlyPi]"->(\[Omega] + \[CapitalOmega]),
+		"\[Nu]" -> \[Theta]|>];
+]
 
 End[];
 
