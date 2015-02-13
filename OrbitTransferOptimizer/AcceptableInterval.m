@@ -287,6 +287,23 @@ Acceptable\[Omega]Interval[{r1_, 0}, {r2_, th2_}] := Block[ {asymp1, asymps, int
 	{{1, IntervalIntersection[ppos, IntervalUnion[elt1, IntervalIntersection[egt1, hPosOk]]]}, {-1, IntervalIntersection[ppos, IntervalUnion[elt1, IntervalIntersection[egt1, hNegOk]]]}}
 ]
 
+Acceptable\[Omega]Interval[{r1_, 0}, {r2_, \[Pi]}] := Module[{lim,p1,p2, eIsLt1},
+	p1 = 1/(r1^2 + r2^2 + 2 r1 r2);
+	p2 = -r1^2 + r2^2;
+	lim = ArcCos[p1 p2];
+	If[ r1 < r2,
+		eIsLt1 = Interval[{-lim, lim}];
+		i1 = IntervalUnion[Interval[{0,  \[Pi]/2}], eIsLt1];
+		i2 = IntervalUnion[Interval[{-\[Pi]/2, 0}], eIsLt1];,
+
+		eIsLt1 = Interval[{lim, 2\[Pi] - lim}];
+		i1 = IntervalUnion[Interval[{\[Pi]/2, \[Pi]}], eIsLt1];
+		i2 = IntervalUnion[Interval[{\[Pi], 3\[Pi]/2}], eIsLt1];
+	];
+{{ 1, i1 },
+ {-1, i2 }
+}
+]
 End[];
 
 (*SetAttributes[#, {Protected,ReadProtected}]& /@ Names["`*"];*)
