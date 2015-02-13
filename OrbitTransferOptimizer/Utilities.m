@@ -43,6 +43,8 @@ Output:
 
 ";
 
+restrictOrbit::usage = "Same as restrict\[Nu]Range but also ensure that there are no parabolic orbits, and that a is negative for hyperbolics.";
+
 
 Begin["Private`"];
 
@@ -88,26 +90,17 @@ restrict\[Nu]Range[kep_?(AssociationQ[#] && KeyExistsQ[#,"Orbit"] && #["Orbit"] 
 	Return[outputKep];
 ]
 
-ConstrainKeplerian[kep_?(AssociationQ[#] && KeyExistsQ[#,"Coordinate"] && #["Coordinate"] == "Keplerian" &)] := Module[{outputKep, a,e},
-	outputKep = <| "Coordinate"->"Keplerian" |>;
-	outputKep["i"] = Mod[kep["i"],\[Pi]];
-	Map[(outputKep[#] = Mod[kep[#],2\[Pi]]) &,{"\[CapitalOmega]", "\[CurlyPi]", "\[Nu]"}];
-
-	(* No parabolic orbits. Converting them to an elliptic orbit is my judgement call. Later an error could be implemented instead. *)
-	a = kep["a"];
+restrictOrbit[kep_?(AssociationQ[#] && KeyExistsQ[#,"Orbit"] && #["Orbit"] == "Nondegenerate" &)]:= Block[{outputKep, e, a},
 	e = kep["e"];
-	If[ e == 1 , e = 0.999; ];
-	If[ e > 1,
-		(* Hyperbolic orbits have negative a *)
-		If[ a > 0, a = -1 a];
-		(* Limit v to the correct hyperbola branch. 0.99 is to prevent evaluating at distance \[Infinity] *)
-		vLimit = 0.99 ArcCos[-1/e];
-		outputKep["\[Nu]"] = Clip[kep["\[Nu]"], {- vLimit, vLimit}];
-	]; 
+	If[ e == 1 , e = 1.001; ];
+	a = kep["a"];
+	(* Limit v to the correct hyperbola branch. 0.99 is to prevent evaluating at distance \[Infinity] *)
+	If[ e > 1, nLimit = 0.99 ArcCos[-1/e]; a = -Abs[a];]; 
+	outputKep = kep;
 	outputKep["a"] = a;
 	outputKep["e"] = e;
-	Return[outputKep];
-];
+	Return[restrict\[Nu]Range[outputKep]];
+]
 
 End[];
 
