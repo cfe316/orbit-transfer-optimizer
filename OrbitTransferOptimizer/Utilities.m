@@ -45,6 +45,23 @@ Output:
 
 restrictOrbit::usage = "Same as restrict\[Nu]Range but also ensure that there are no parabolic orbits, and that a is negative for hyperbolics.";
 
+CoordinateAfterBurn::usage = "Take a coordinate and return a coordinate of the same type, with the velocity equal to the velocity after the burn happens.
+
+Input coordinate format:
+<|
+	\"Coordinate\"->\"[any type]\",
+	\"Position\"->{...},
+	\"Velocity\"->{...},
+	\"VelocityChange\" -> {...} 
+|>
+
+Output coordinate format:
+<|
+	\"Coordinate\"->\"[same type]\",
+	\"Position\"->{...},
+	\"Velocity\"->{...}
+|>
+";
 
 Begin["Private`"];
 
@@ -100,6 +117,14 @@ restrictOrbit[kep_?(AssociationQ[#] && KeyExistsQ[#,"Orbit"] && #["Orbit"] == "N
 	outputKep["a"] = a;
 	outputKep["e"] = e;
 	Return[restrict\[Nu]Range[outputKep]];
+]
+
+CoordinateAfterBurn[c_?(AssociationQ[#] && KeyExistsQ[#,"Coordinate"])] := 
+Block[{v, vc, t},
+	t = c["Coordinate"];
+	v = c["Velocity"];
+	vc = c["VelocityChange"];
+	<|"Coordinate" -> t, "Position" -> c["Position"], "Velocity" -> (v + vc)|>
 ]
 
 End[];
