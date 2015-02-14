@@ -300,8 +300,54 @@ ConstrainKeplerian[kep_?(AssociationQ[#] && KeyExistsQ[#,"Coordinate"] && #["Coo
 	outputKep["e"] = e;
 	Return[outputKep];
 ];
-
+(* From 
+http://www.mathworks.com/matlabcentral/fileexchange/35455-convert-keplerian-orbital-elements-to-a-state-vector but adapted a bit. *)
 KeplerianFromCartesian[cart_?(AssociationQ[#] && KeyExistsQ[#,"Coordinate"] && #["Coordinate"] == "Cartesian" &)] := Module[
+ {x, y, z, vx, vy, vz, 
+  r, v, rMag, vMag, 
+  a, e, i, \[CapitalOmega], \[Omega], M, nu, \[Theta], EA, eMag, 
+  p, h, hMag, n, nMag, argLat, truLon},
+	{x,y,z} = cart["Position"];
+	{vx,vy,vz} = cart["Velocity"];
+	r = {x, y, z};
+	v = {vx, vy, vz};
+	{rMag, vMag} = Norm[#]& /@ {r, v};
+
+	h = r \[Cross] v;
+	hMag = Norm[h];
+	n = {0,0,1} \[Cross] h;
+	nMag = Norm[n];
+	e = (vMag^2 -1/rMag) r - r.v v;
+	eMag = Norm[e];
+	zeta = vMag^2/2 - 1/rMag;
+
+	a = - 1/(2 zeta);
+
+	i = ArcCos[h[[3]]/hMag];
+	\[CapitalOmega] = If[ n[[1]]==0, 0, ArcCos[n[[1]]/nMag]];
+	\[Omega] = If[ n.e ==0, 0, ArcCos[n.e /(nMag * eMag)]];
+	lonPer = If[e[[1]]==0, 0, ArcCos[ e[[1]]/eMag]];
+	nu = If[ e.r == 0, 0, ArcCos[ e.r / (eMag * rMag)]];
+	argLat = If[ n.r == 0, 0, ArcCos[ n.r / (nMag * rMag)]];
+	truLon = ArcCos[r[[1]] / rMag];
+
+	If[ n[[2]] < 0, \[CapitalOmega] = 2 Pi - \[CapitalOmega]];
+	If[ e[[3]] < 0, \[Omega] = 2 Pi - \[Omega]];
+	If[ r.v < 0, nu = 2 Pi - nu];
+	If[ e[[2]] < 0, lonPer = 2 Pi - lonPer];
+	If[ r[[3]] < 0, argLat = 2 Pi - argLat];
+	If[ r[[2]] < 0, truLon = 2 Pi - truLon];
+
+	(* These two lines were added: my definition of omega is more expansive than Darin's.*)
+	If[ i == 0., \[Omega] = lonPer]; 
+	If[ Abs[i - Pi] < 10^(-10), \[Omega] = 2 Pi - lonPer];
+	
+	Return[<|"Coordinate"->"Keplerian", "a"->a, "e"->eMag, "i"->i, "\[CapitalOmega]"->\[CapitalOmega], 
+		"\[CurlyPi]"->(\[Omega] + \[CapitalOmega]),
+		"\[Omega]"-> \[Omega],
+		"\[Nu]" -> nu |>];
+]
+KeplerianFromCartesianBad[cart_?(AssociationQ[#] && KeyExistsQ[#,"Coordinate"] && #["Coordinate"] == "Cartesian" &)] := Module[
  {x, y, z, vx, vy, vz, 
   r, v, R, V, 
   a, e, i, \[CapitalOmega], \[Omega], M, \[Theta], EA, eccVector, 
@@ -347,6 +393,7 @@ KeplerianFromCartesian[cart_?(AssociationQ[#] && KeyExistsQ[#,"Coordinate"] && #
 
 	Return[<|"Coordinate"->"Keplerian", "a"->a, "e"->e, "i"->i, "\[CapitalOmega]"->\[CapitalOmega], 
 		"\[CurlyPi]"->(\[Omega] + \[CapitalOmega]),
+		"\[Omega]"->\[Omega],
 		"\[Nu]" -> \[Theta]|>];
 ]
 
