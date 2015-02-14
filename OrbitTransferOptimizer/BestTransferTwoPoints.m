@@ -38,8 +38,6 @@ Output is in the format:
 	|>
 |>
 "
-geneRadOppoAng::usage = "";
-geneAngGeneRad::usage = "";
 
 Begin["Private`"];
 
@@ -78,7 +76,7 @@ tdv = Norm[vc];
 			"Position"->cart1["Position"],
 			"Velocity"->cart1["Velocity"],
 			"VelocityChange" -> vc
-		|>
+		|>,
 	"Burn 2"-> <|	"Coordinate"->"Cartesian",
 			"Position"->cart2["Position"], 
 			"Velocity"-> cart2["Velocity"],
@@ -139,22 +137,6 @@ geneRadSameAng[cart1_, cart2_] := Module[{
 	Return[<|"Total \[CapitalDelta]V"->tDV, "Burn 1"->c1, "Burn 2"->c2 |>];
 ]
 
-(* tough case. Possibly requires a 2d parameter search. *)
-sameRadOppoAng[pol1_, pol2_] := Module[{},
-<|	"Total \[CapitalDelta]V" -> 1000000, 
-	"Burn 1"-> <|	"Coordinate"->"Cartesian",
-			"Position"->cart1["Position"],
-			"Velocity"->cart1["Velocity"],
-			"VelocityChange" -> {0,0,0}
-		|>,
-	"Burn 2"-> <|	"Coordinate"->"Cartesian",
-			"Position"->cart2["Position"], 
-			"Velocity"-> cart2["Velocity"],
-			"VelocityChange" -> {0,0,0}
-		|>
-|>
-]
-
 oppoAng[cart1_, cart2_] := Module[{p1, p2, v1, v2, h, M, cartpl1, cartpl2, pol1, pol2, r, tdv, burn1, burn2, c1, c2},
 
 	(* Invent a plane to solve in: *)
@@ -176,7 +158,7 @@ oppoAng[cart1_, cart2_] := Module[{p1, p2, v1, v2, h, M, cartpl1, cartpl2, pol1,
 
 	{pol1, pol2} = PolarFromCartesianPlanar[#]& /@ {cartpl1, cartpl2};
 	r = If[pol1["Position"][[1]] == pol2["Position"][[1]],
-		sameRadOppoAng[pol1, pol2],
+		geneAngSameRad[pol1, pol2],
 		geneAngGeneRad[pol1, pol2]
 	];
 	tdv = r["Total \[CapitalDelta]V"];
@@ -186,8 +168,6 @@ oppoAng[cart1_, cart2_] := Module[{p1, p2, v1, v2, h, M, cartpl1, cartpl2, pol1,
 	{c1, c2} = CartesianFromCartesianPlanar[Inverse[M], #] & /@ {cartpl1, cartpl2};
 	Return[<|"Total \[CapitalDelta]V"->tdv, "Burn 1"->c1, "Burn 2"->c2 |>];
 ]
-
-geneRadOppoAng[pol1_, pol2_] := geneAngGeneRad[pol1, pol2];
 
 geneAng[cart1_, cart2_] := Module[{M, cartpl1, cartpl2, pol1, pol2, r, tdv, burn1, burn2, c1, c2},
 	{M, cartpl1, cartpl2} = CartesianPlanarsFromCartesians[cart1, cart2];
@@ -286,6 +266,7 @@ geneAngSameRad[pol1_, pol2_] := Module[
 	(* Unpackage the coordinates *)
 	{r1, th1} = {pol1["Position"][[1]],0}; {vr1, vth1, vz1} = pol1["Velocity"];
 	{r2, th2} =  pol2["Position"];         {vr2, vth2, vz2} = pol2["Velocity"];
+	If[ Abs[th2 - Pi] < 10 $MachineEpsilon, th2 == Pi;];
 
 	wb = angleBetweenTwoAroundCircle[th1, th2];
 	wf = Mod[(wb + Pi), 2 Pi];
@@ -299,11 +280,18 @@ geneAngSameRad[pol1_, pol2_] := Module[
 	os = PlanarKeplerianFromPolar[#]& /@ {pol1, pol2};
 	maxoe = Max[#["e"] & /@ os];
 
-	cases = {{wb, d1, 1},
+	cases = If[th2 == Pi,
+		{{3 Pi/2, -1, Max[maxoe * 2, 1]},
+		 {3 Pi/2, 1, 1},
+		 {Pi/2, 1, Max[maxoe * 2, 1]},
+		 {Pi/2, -1, 1}
+		},
+		{{wb, d1, 1},
 		 {wb, d2, Max[maxoe*2, 1]},(* geometrically, there is no max e, but we need some upper bound to search at.*)
 		 {wf, d1, -1/Cos[th1 - wf]*0.999},(* e for which p becomes negative: wrong hyperbola branch *)
 		 {wf, d2, 1}
-		};
+		}
+	];
 	etol = 0.0001; (* tolerance for finding the optimal eccentricity *)
  
 	DVTable = Table[MinimizeUnimodalFunction[\[CapitalDelta]V[pol1, pol2, cases[[i, 1]], cases[[i, 2]], #] &, 0, cases[[i, 3]], etol], {i, 4}];
