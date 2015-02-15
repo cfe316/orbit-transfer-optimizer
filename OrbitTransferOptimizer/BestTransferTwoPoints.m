@@ -185,7 +185,7 @@ geneAng[cart1_, cart2_] := Module[{M, cartpl1, cartpl2, pol1, pol2, r, tdv, burn
 ]
 
 (* Used for geneAngGeneRad. Choose the place where e is lowest and positive.*)
-startingOmega[pol1_, pol2_] := Module[{r1, th1, r2, th2, wstart1, wstart2, ewInt},
+startingOmega[pol1_, pol2_] := Module[{r1, th1, r2, th2, wstart, wstart1, wstart2, ewInt},
 	{r1, th1} = {pol1["Position"][[1]], 0};
 	{r2, th2} = pol2["Position"];
 	{wstart1, wstart2} = Mod[{
