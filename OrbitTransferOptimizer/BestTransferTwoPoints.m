@@ -209,7 +209,7 @@ geneAngGeneRad[pol1_, pol2_] := Module[
  v1, v2, sh,
  wstart, wInt, tDV,
  wrange, wrange1, wrange2,
- wstep, m, m1, m2},
+ wstep, m, m1, m2, vc1, vc2},
 
 	(* Unpackage the coordinates. th1 should be within numerical errors of 0. Set it to zero explicity. *)
 	{r1, th1} = {pol1["Position"][[1]],0}; v1 = pol1["Velocity"]; {vr1, vth1, vz1} = v1;
