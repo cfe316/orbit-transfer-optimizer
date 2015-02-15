@@ -35,7 +35,8 @@ OrbitPlot3D[orbs_?(Length[#]==3 &)] := Block[{},
 		Arrowheads[Small],
 		Red, OrbitLine3D[orbs[[1]]], OrbitVelocityArrow3D[orbs[[1]]],
 		Green, OrbitLine3D[orbs[[2]]], OrbitVelocityArrow3D[orbs[[2]]],
-		Black, OrbitLine3D[orbs[[3]]], OrbitVelocityArrow3D[orbs[[3]]]}
+		Black, OrbitLine3D[orbs[[3]]], OrbitVelocityArrow3D[orbs[[3]]]},
+		PlotRange->{{-4,4},{-4,4},{-4,4}}
 	]
 ]
 

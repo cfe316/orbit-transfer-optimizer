@@ -119,7 +119,7 @@ restrictOrbit[kep_?(AssociationQ[#] && KeyExistsQ[#,"Orbit"] && #["Orbit"] == "N
 	Return[restrict\[Nu]Range[outputKep]];
 ]
 
-CoordinateAfterBurn[c_?(AssociationQ[#] && KeyExistsQ[#,"Coordinate"])] := 
+CoordinateAfterBurn[c_?(AssociationQ[#] && KeyExistsQ[#,"Coordinate"] &)] := 
 Block[{v, vc, t},
 	t = c["Coordinate"];
 	v = c["Velocity"];
