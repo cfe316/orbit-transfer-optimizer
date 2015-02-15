@@ -50,7 +50,7 @@ BestTransferTwoOrbits[oo1_, oo2_]:= Block[{
 	mint = MinimalBy[t, #[[3]]["Total \[CapitalDelta]V"] &] // First
 ]
 
-ProcessBurn[b_] := Block[{ob},
+ProcessBurn[b_] := Module[{ob},
 	ob = b;
 	ob["Radius"] = Norm[b["Position"]];
 	ob["\[CapitalDelta]V"] = Norm[b["VelocityChange"]];
@@ -59,6 +59,6 @@ ProcessBurn[b_] := Block[{ob},
 	ob
 ]
 
-SetAttributes[#, {Protected,ReadProtected}]& /@ Names["`*"];
+(*SetAttributes[#, {Protected,ReadProtected}]& /@ Names["`*"];*)
 
 EndPackage[];
