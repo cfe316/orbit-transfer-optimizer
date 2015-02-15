@@ -3,12 +3,16 @@
 (* ::Section:: *)
 (* Keplerian to Cartesian Elements package: Title and comments *)
 
+
 (* :Title: OrbitTransferOptimizer *)
 (* :Context: OrbitTransferOptimizer`BestTransferTwoPoints *)
 (* :Author: Jacob Schwartz (thesquarerootofjacob@gmail.com) *)
 
+
+
 (* ::Section:: *)
 (* Begin package and help *)
+
 
 BeginPackage["OrbitTransferOptimizer`BestTransferTwoPoints`",
 				{"OrbitTransferOptimizer`OrbitCoordinateTransformation`",
@@ -137,7 +141,7 @@ geneRadSameAng[cart1_, cart2_] := Module[{
 	Return[<|"Total \[CapitalDelta]V"->tDV, "Burn 1"->c1, "Burn 2"->c2 |>];
 ]
 
-oppoAng[cart1_, cart2_] := Module[{p1, p2, v1, v2, h, M, cartpl1, cartpl2, pol1, pol2, r, tdv, burn1, burn2, c1, c2},
+oppoAng[cart1_, cart2_] := Module[{p1, p2, v1, v2, h, M, cartpl1, cartpl2, pol1, pol2, r, tdv, burn1, burn2, c1, c2, prog, pole},
 
 	(* Invent a plane to solve in: *)
 	(* Pick the total angular momentum. This is generally not the best choice: sometimes it gives local maximum in Delta V*)
@@ -222,22 +226,22 @@ geneAngGeneRad[pol1_, pol2_] := Module[
 		wstart = startingOmega[pol1, pol2];
 	];
 
-	(* Interval for omega *)
+	(* Interval for omega: wInt[[1]] is for sh = 1, wInt[[2]] is for sh = -1 *)
 	wInt = Acceptable\[Omega]Interval[{r1, th1}, {r2, th2}];
 	wstep = 0.0001; (*This sets (roughly) the accuracy of the result.  0.1 milliRadian is good enough for us.*) 
 
 	(*If the two points have angular momentum in the same direction, 
 	we only need to look for orbits going in that direction.*)
 	If[Sign[vth1] == Sign[vth2] && Sign[vth1] != 0,
-		wrange = getInequalityForPoint[wInt[[(Sign[vth1] + 1)/2 + 1, 2]], wstart];
+		wrange = getInequalityForPoint[wInt[[(3 - Sign[vth1])/2, 2]], wstart];
 		m = MinimizeUnimodalFunction[\[CapitalDelta]V[pol1, pol2, #, Sign[vth1]] &, wrange[[1]] + wstep/10, wrange[[3]] - wstep/10, wstep];
 		sh = Sign[vth1];,
 
 		(*if the initial angular momenta are in different directions, look for solutions in each direction*)
 		{wrange1, wrange2} = getInequalityForPoint[wInt[[#, 2]], wstart] & /@ Range[2];
-		m1 = MinimizeUnimodalFunction[\[CapitalDelta]V[pol1, pol2, #, -1] &, wrange1[[1]] + wstep/10, wrange1[[3]] - wstep/10, wstep];
-		m2 = MinimizeUnimodalFunction[\[CapitalDelta]V[pol1, pol2, #,  1] &, wrange2[[1]] + wstep/10, wrange2[[3]] - wstep/10, wstep];
-		{m, sh} = If[ m1[[2]] < m2[[2]], {m1, -1}, {m2, 1}];
+		m1 = MinimizeUnimodalFunction[\[CapitalDelta]V[pol1, pol2, #,  1] &, wrange1[[1]] + wstep/10, wrange1[[3]] - wstep/10, wstep];
+		m2 = MinimizeUnimodalFunction[\[CapitalDelta]V[pol1, pol2, #, -1] &, wrange2[[1]] + wstep/10, wrange2[[3]] - wstep/10, wstep];
+		{m, sh} = If[ m1[[2]] < m2[[2]], {m1, 1}, {m2, -1}];
 	];
 	tDV = m[[2]];
 	{vc1, vc2} = \[CapitalDelta]VVectors[pol1, pol2, m[[1]], sh];

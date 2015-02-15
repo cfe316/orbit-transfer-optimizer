@@ -212,7 +212,7 @@ PolarFromCartesianPlanar[cartpl_?(AssociationQ[#] && KeyExistsQ[#,"Coordinate"] 
 	p   = Append[cartpl["Position"],0]; (* Useful for cross products *)
 	vel = cartpl["Velocity"];
 	r   = Sqrt[ p[[1]]^2 + p[[2]]^2 ];
-	th  = Mod[ArcTan[p[[1]], p[[2]]], 2 Pi];
+	th  = Mod[ArcTan[p[[1]], p[[2]]], 2. Pi];
 	vr  = vel.Normalize[p];
 	vth = Normalize[{0, 0, 1} \[Cross] p].vel;
 	vz  = vel[[3]]; 
