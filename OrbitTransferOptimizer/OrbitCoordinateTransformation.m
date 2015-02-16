@@ -345,56 +345,7 @@ KeplerianFromCartesian[cart_?(AssociationQ[#] && KeyExistsQ[#,"Coordinate"] && #
 	Return[<|"Coordinate"->"Keplerian", "a"->a, "e"->eMag, "i"->i, "\[CapitalOmega]"->\[CapitalOmega], 
 		"\[CurlyPi]"->(\[Omega] + \[CapitalOmega]),
 		"\[Omega]"-> \[Omega],
-		"\[Nu]" -> nu |>];
-]
-KeplerianFromCartesianBad[cart_?(AssociationQ[#] && KeyExistsQ[#,"Coordinate"] && #["Coordinate"] == "Cartesian" &)] := Module[
- {x, y, z, vx, vy, vz, 
-  r, v, R, V, 
-  a, e, i, \[CapitalOmega], \[Omega], M, \[Theta], EA, eccVector, 
-  p, hVector, h, n, argLat },
-	{x,y,z} = cart["Position"];
-	{vx,vy,vz} = cart["Velocity"];
-	R = {x, y, z};
-	V = {vx, vy, vz};
-	{r, v} = Norm[#]& /@ {R, V};
-
-	(* calculate the eccentricity *) 
-	eccVector = (V.V - 1/r) R - (R.V) V;
-	e=Norm[eccVector];
-	(* normalize the eccentricity vector *)
-	eccVector = Normalize[eccVector];
-
-	(* angular momentum per unit mass *)
-	hVector = Cross[R, V];
-	h = Norm[hVector];
-	hVector = 1/h hVector;
-
-	(* compute the semimajor axis *) 
-	a = h^2/(1-e^2);
-
-	(* compute the inclination *) 
-	i = ArcCos[hVector[[3]]];
-
-	(* compute the right ascension of ascending node *) 
-	n = Normalize[ Cross[{0,0,1}, hVector]];
-	\[CapitalOmega]=ArcCos[n[[1]]];
-	If[n[[2]]<0, \[CapitalOmega]=2*Pi-\[CapitalOmega]]; 
-
-	(* compute the argument of perigee *) 
-	\[Omega] = ArcCos[n.eccVector];
-	If[eccVector[[3]]<0, \[Omega]=2*Pi - \[Omega]];
-
-	(* compute argument of Latitude *) 
-	argLat = ArcCos[n.(1/r R)];
-	If[z<0, argLat = 2*Pi - argLat];
-
-	(*compute the true anomaly *)
-	\[Theta] = argLat - \[Omega]; 
-
-	Return[<|"Coordinate"->"Keplerian", "a"->a, "e"->e, "i"->i, "\[CapitalOmega]"->\[CapitalOmega], 
-		"\[CurlyPi]"->(\[Omega] + \[CapitalOmega]),
-		"\[Omega]"->\[Omega],
-		"\[Nu]" -> \[Theta]|>];
+		"\[Nu]" -> Re[nu] |>];
 ]
 
 End[];
