@@ -29,6 +29,19 @@ OrbitPlot3D[orbs_?(Length[#]!=3 &)] := Block[{},
 	]
 ]
 
+OrbitPlot3D[orbs_?(Length[#]==3 &), r_] := Block[{s},
+	s = 5 (r[[1]] + r[[2]]);
+	Graphics3D[{
+		Sphere[{0,0,0},r[[1]]], Opacity[0.2], Sphere[{0,0,0},r[[1]]+r[[2]]], Opacity[1],
+		Arrowheads[Small],
+		Red, OrbitLine3D[orbs[[1]]], OrbitVelocityArrow3D[orbs[[1]]],
+		Green, OrbitLine3D[orbs[[2]]], OrbitVelocityArrow3D[orbs[[2]]],
+		Black, OrbitLine3D[orbs[[3]]], OrbitVelocityArrow3D[orbs[[3]]]},
+		PlotRange->{{-s,s},{-s,s},{-s,s}}
+		, ImageSize->Large
+	]
+]
+
 OrbitPlot3D[orbs_?(Length[#]==3 &)] := Block[{},
 	Graphics3D[{
 		Point[{0,0,0}],
