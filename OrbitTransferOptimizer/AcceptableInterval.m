@@ -59,7 +59,7 @@ eIs1c = Compile[{{r1,_Real},{th1,_Real},{r2,_Real},{th2,_Real}},
 		-ArcCos[1/(r1^2+r2^2-2 r1 r2 Cos[th1-th2]) (-r1^2 Cos[th1]+r1 r2 Cos[th1]+r1 r2 Cos[th2]-r2^2 Cos[th2]+2 \[Sqrt](r1^3 r2 Sin[th1]^2 Sin[th1/2-th2/2]^2-2 r1^2 r2^2 Sin[th1] Sin[th1/2-th2/2]^2 Sin[th2]+r1 r2^3 Sin[th1/2-th2/2]^2 Sin[th2]^2))],
 		ArcCos[1/(r1^2+r2^2-2 r1 r2 Cos[th1-th2]) (-r1^2 Cos[th1]+r1 r2 Cos[th1]+r1 r2 Cos[th2]-r2^2 Cos[th2]+2 \[Sqrt](r1^3 r2 Sin[th1]^2 Sin[th1/2-th2/2]^2-2 r1^2 r2^2 Sin[th1] Sin[th1/2-th2/2]^2 Sin[th2]+r1 r2^3 Sin[th1/2-th2/2]^2 Sin[th2]^2))]
 	};
-	Sort[ Mod[ Select[ pts, Abs[-((r1-r2)/(r1 Cos[th1-#1]-r2 Cos[th2-#1]))-1.] < 10^(-10) &],2 \[Pi]]]],
+	Sort[ Mod[ DeleteDuplicates[Select[ pts, Abs[-((r1-r2)/(r1 Cos[th1-#1]-r2 Cos[th2-#1]))-1.] < 10^(-6) &], Abs[#1-#2] < 10.^(-7) &], 2. Pi]]],
 CompilationTarget->"C",RuntimeOptions->"Speed"];
 
 (*Returns the two angles of \[Omega] for which e is equal to 1. Optimized for th1 = 0 *)
@@ -76,7 +76,7 @@ eIs1cth10 = Compile[{{r1,_Real},{r2,_Real},{th2,_Real}},
 		 ArcCos[p1 (p2 + p3)]
 	};
 	(* Select the solution that fits the equation correctly. *)
-	DeleteDuplicates[Sort[ Mod[ Select[ pts, Abs[-((r1-r2)/(r1 Cos[#1]-r2 Cos[th2-#1]))-1.] < 10.^(-10) &],2. \[Pi]]], Abs[#1-#2] < 10^(-10) &]],
+	Sort[ Mod[ DeleteDuplicates[Select[ pts, Abs[-((r1-r2)/(r1 Cos[#1]-r2 Cos[th2-#1]))-1.] < 10^(-6) &], Abs[#1-#2] < 10^(-7) &], 2. Pi]]],
 CompilationTarget->"C",RuntimeOptions->"Speed"];
 
 (*Returns the interval of \[Omega] over which e is positive.*)
