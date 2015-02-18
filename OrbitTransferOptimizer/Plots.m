@@ -19,20 +19,24 @@ ClearAll@"`*";
 
 OrbitPlot3D::usage = "Plot one or many orbits";
 
+OrbitPlot3Ds::usage = "Plot one or many orbits";
 Begin["Private`"];
 
 OrbitPlot3D[orb_Association] := OrbitPlot3D[{orb}];
 
 OrbitPlot3D[orbs_?(Length[#]!=3 &)] := Block[{},
-	Graphics3D[{Point[{0,0,0}],
-		OrbitLine3D[#]& /@ orbs}
+	Graphics3D[{
+		Sphere[{0,0,0},1.5],
+		OrbitLine3D[#]& /@ orbs,
+		OrbitVelocityArrow3D[#] & /@ orbs},
+		ImageSize->Large
 	]
 ]
 
 OrbitPlot3D[orbs_?(Length[#]==3 &), r_] := Block[{s},
 	s = 5 (r[[1]] + r[[2]]);
 	Graphics3D[{
-		Sphere[{0,0,0},r[[1]]], Opacity[0.2], Sphere[{0,0,0},r[[1]]+r[[2]]], Opacity[1],
+		Sphere[{0,0,0},r[[1]]+r[[2]]],
 		Arrowheads[Small],
 		Red, OrbitLine3D[orbs[[1]]], OrbitVelocityArrow3D[orbs[[1]]],
 		Green, OrbitLine3D[orbs[[2]]], OrbitVelocityArrow3D[orbs[[2]]],
