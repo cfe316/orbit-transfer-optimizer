@@ -59,7 +59,7 @@ eIs1c = Compile[{{r1,_Real},{th1,_Real},{r2,_Real},{th2,_Real}},
 		-ArcCos[1/(r1^2+r2^2-2 r1 r2 Cos[th1-th2]) (-r1^2 Cos[th1]+r1 r2 Cos[th1]+r1 r2 Cos[th2]-r2^2 Cos[th2]+2 \[Sqrt](r1^3 r2 Sin[th1]^2 Sin[th1/2-th2/2]^2-2 r1^2 r2^2 Sin[th1] Sin[th1/2-th2/2]^2 Sin[th2]+r1 r2^3 Sin[th1/2-th2/2]^2 Sin[th2]^2))],
 		ArcCos[1/(r1^2+r2^2-2 r1 r2 Cos[th1-th2]) (-r1^2 Cos[th1]+r1 r2 Cos[th1]+r1 r2 Cos[th2]-r2^2 Cos[th2]+2 \[Sqrt](r1^3 r2 Sin[th1]^2 Sin[th1/2-th2/2]^2-2 r1^2 r2^2 Sin[th1] Sin[th1/2-th2/2]^2 Sin[th2]+r1 r2^3 Sin[th1/2-th2/2]^2 Sin[th2]^2))]
 	};
-	Sort[ Mod[ DeleteDuplicates[Select[ pts, Abs[-((r1-r2)/(r1 Cos[th1-#1]-r2 Cos[th2-#1]))-1.] < 10^(-6) &], Abs[#1-#2] < 10.^(-7) &], 2. Pi]]],
+	Sort[ Mod[ DeleteDuplicates[Select[ pts, Abs[-((r1-r2)/(r1 Cos[th1-#1]-r2 Cos[th2-#1]))-1.] < 10^(-7) &], Abs[#1-#2] < 10.^(-7) &], 2. Pi]]],
 CompilationTarget->"C",RuntimeOptions->"Speed"];
 
 (*Returns the two angles of \[Omega] for which e is equal to 1. Optimized for th1 = 0 *)
@@ -68,16 +68,35 @@ eIs1cth10 = Compile[{{r1,_Real},{r2,_Real},{th2,_Real}},
 	Block[{pts, p1, p2, p3},
 	p1 = 1/(r1^2+r2^2-2 r1 r2 Cos[th2]);
 	p2 = -r1^2 + r1 r2 + r1 r2 Cos[th2]-r2^2 Cos[th2];
-	p3 = 2 \[Sqrt](r1 r2^3 Sin[th2/2]^2 Sin[th2]^2);
+	p3 = 2 Sin[th2/2] Sin[th2]\[Sqrt](r1 r2^3 );
 	pts = {
-		-ArcCos[p1 (p2 - p3)],
-		 ArcCos[p1 (p2 - p3)],
-		-ArcCos[p1 (p2 + p3)],
-		 ArcCos[p1 (p2 + p3)]
+		-ArcCos[(p2 - p3) p1],
+		 ArcCos[(p2 - p3) p1],
+		-ArcCos[(p2 + p3) p1],
+		 ArcCos[(p2 + p3) p1]
 	};
 	(* Select the solution that fits the equation correctly. *)
-	Sort[ Mod[ DeleteDuplicates[Select[ pts, Abs[-((r1-r2)/(r1 Cos[#1]-r2 Cos[th2-#1]))-1.] < 10^(-6) &], Abs[#1-#2] < 10^(-7) &], 2. Pi]]],
+	Sort[ Mod[ DeleteDuplicates[Select[ pts, Abs[-((r1-r2)/(r1 Cos[#1]-r2 Cos[th2-#1]))-1.] < 10^(-7) &], Abs[#1-#2] < 10^(-7) &], 2. Pi]]],
 CompilationTarget->"C",RuntimeOptions->"Speed"];
+
+eIs1ep[r1o_, r2o_, th2o_] := Block[{r1, r2, th2, pts, p1, p2, p3},
+	{r1, r2, th2} = SetPrecision[#, 40]& /@ { r1o, r2o, th2o };
+	p1 = 1/(r1^2+r2^2-2 r1 r2 Cos[th2]);
+	p2 = -r1^2 + r1 r2 + r1 r2 Cos[th2]-r2^2 Cos[th2];
+	p3 = 2 Sin[th2/2] Sin[th2]\[Sqrt](r1 r2^3);
+	pts = {
+		-ArcCos[(p2 - p3) p1],
+		 ArcCos[(p2 - p3) p1],
+		-ArcCos[(p2 + p3) p1],
+		 ArcCos[(p2 + p3) p1]
+	};
+	(* Select the solution that fits the equation correctly. *)
+	Sort[
+	  Mod[
+	   Select[pts, Abs[-((r1 - r2)/(r1 Cos[#1] - r2 Cos[th2 - #1])) - 1] < 10^-16 &], 
+	  2 \[Pi]]
+	]
+]
 
 (*Returns the interval of \[Omega] over which e is positive.*)
 eIsPositiveInterval[{r1_, th1_}, {r2_, th2_}] := Block[{asymp1, asymps, eIs1}, 
@@ -96,7 +115,7 @@ eIsPositiveInterval[{r1_, 0}, {r2_, th2_}] := Block[{asymp1, asymps, eIs1},
 	asymp1 = Mod[ArcTan[r2 Sin[th2], r1 -r2 Cos[th2]], \[Pi]];
 	asymps = {asymp1, asymp1+\[Pi]};
 
-	eIs1 = eIs1cth10[r1, r2, th2];
+	eIs1 = eIs1ep[r1, r2, th2];
 	If[ eIs1[[1]] > asymps[[1]] && eIs1[[2]] < asymps[[2]],
 		Interval[{asymps[[1]],          asymps[[2]]}],
 		Interval[{asymps[[2]], 2\[Pi] + asymps[[1]]}]
@@ -254,7 +273,7 @@ Acceptable\[Omega]Interval[{r1_, 0}, {r2_, th2_}] := Block[ {asymp1, asymps, int
 	asymp1 = Mod[ArcTan[r2 Sin[th2], r1 - r2 Cos[th2]], \[Pi]];
 	asymps = {asymp1, asymp1+\[Pi]};
 
-	eIs1 = eIs1cth10[r1, r2, th2];
+	eIs1 = eIs1ep[r1, r2, th2];
 
 	(*get where P is ok*)
 	intersect = th2/2.;
