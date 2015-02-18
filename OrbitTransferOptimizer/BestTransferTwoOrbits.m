@@ -35,7 +35,7 @@ BestTransferTwoOrbits[oo1_, oo2_]:= Block[{
  minnustep, nustep1, nustep2, mint},
  
 	{o1, o2} = restrictOrbit[#]& /@ {oo1, oo2};
-	minnustep = \[Pi]/12.-0.00001;
+	minnustep = \[Pi]/12.;
 	{nul1, nuh1} = o1["\[Nu]Range"];
 	nustep1 = Min[(nuh1 - nul1)/12., minnustep];
 	{nul2, nuh2} = o2["\[Nu]Range"];
