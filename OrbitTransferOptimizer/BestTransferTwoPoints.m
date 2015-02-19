@@ -51,7 +51,7 @@ cart2_?(AssociationQ[#] && KeyExistsQ[#, "Coordinate"] && #["Coordinate"] == "Ca
 
 	{p1, p2} = #["Position"] & /@ {cart1, cart2};
 	(* If positions are in a line or not *)
-	bt = If[ Norm[p1 \[Cross] p2] < 10 $MachineEpsilon,
+	bt = If[ Chop[Norm[p1 \[Cross] p2]] == 0,
 		(* Positions are collinear *)
 		If[ p1 . p2 > 0,
 			(* Positions are on the same side *)
@@ -149,7 +149,7 @@ oppoAng[cart1_, cart2_] := Module[{p1, p2, v1, v2, h, M, cartpl1, cartpl2, pol1,
 	{v1, v2} = #["Velocity"] & /@ {cart1, cart2};
 
 	h = p1 \[Cross] v1 + p2 \[Cross] v2; 
-	If[ Norm[h] == 0, h = {0,0,1};];
+	If[ Chop[Norm[h]] == 0, h = {0,0,1};];
 
 	pole = Normalize[h];
 	prog = pole \[Cross] p1;
