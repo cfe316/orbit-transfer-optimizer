@@ -76,7 +76,7 @@ KSPHeadingFromCartesian[cart_?(AssociationQ[#] && KeyExistsQ[#,"Coordinate"] && 
 	ndv = Normalize[dv];
 	dvRad = np . dv; 
 	tdv = Norm[dv];
-	pitch = ArcSin[dvRad/tdv] / Degree;
+	pitch = If[tdv > 0, ArcSin[dvRad/tdv] / Degree, 0];
 	
 	northCelestialPole = {0,0,1};
 	eastward = Normalize[ northCelestialPole \[Cross] p ];
