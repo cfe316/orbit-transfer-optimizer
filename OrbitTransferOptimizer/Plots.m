@@ -33,14 +33,17 @@ OrbitPlot3D[orbs_?(Length[#]!=3 &)] := Block[{},
 	]
 ]
 
-OrbitPlot3D[orbs_?(Length[#]==3 &), r_] := Block[{s},
-	s = 5 (r[[1]] + r[[2]]);
+OrbitPlot3D[orbs_?(Length[#]==3 &), r_, b1_, b2_, boxsize_] := Block[{s},
+	s = boxsize/2;
 	Graphics3D[{
 		Sphere[{0,0,0},r[[1]]+r[[2]]],
 		Arrowheads[Small],
 		Red, OrbitLine3D[orbs[[1]]], OrbitVelocityArrow3D[orbs[[1]]],
-		Green, OrbitLine3D[orbs[[2]]], OrbitVelocityArrow3D[orbs[[2]]],
-		Black, OrbitLine3D[orbs[[3]]], OrbitVelocityArrow3D[orbs[[3]]]},
+		Blue, OrbitLine3D[orbs[[2]]], OrbitVelocityArrow3D[orbs[[2]]],
+		Green, OrbitLine3D[orbs[[3]]], OrbitVelocityArrow3D[orbs[[3]]],
+		Black,
+		BurnVelocityArrow3D[b1],
+		BurnVelocityArrow3D[b2]},
 		PlotRange->{{-s,s},{-s,s},{-s,s}}
 		, ImageSize->Large
 	]
@@ -72,6 +75,13 @@ OrbitVelocityArrow3D[o_?(AssociationQ[#] && KeyExistsQ[#, "Orbit"] && #["Orbit"]
 	p = cart["Position"];
 	v = Normalize[cart["Velocity"]] Max[Norm[p], 1];
 	Arrow[Line[{p, p +v}]]
+]
+
+BurnVelocityArrow3D[b_?(AssociationQ[#] && KeyExistsQ[#, "Coordinate"] && #["Coordinate"] == "Cartesian" &)] := Block[{p, dv},
+	p = b["Position"];
+	dv= b["VelocityChange"];
+	dv = Normalize[dv]; 
+	If[Norm[dv]>0, Arrow[Line[{p, p + dv}]]]
 ]
 
 End[];
