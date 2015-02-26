@@ -185,7 +185,7 @@ CartesianPlanarsFromCartesians[
 	{p1, p2} = #["Position"]& /@ {cart1, cart2};
 	{v1, v2} = #["Velocity"]& /@ {cart1, cart2};
 	p1Crossp2 = (p1 \[Cross] p2);
-	M = If[ Norm[ p1Crossp2 ] > 10 $MachineEpsilon,
+	M = If[ Chop[Norm[p1Crossp2]] != 0,
 		(* Typical case: p1 and p2 are not collinear.
 		   Rotate so that p1 and p2 lie in a plane. *)
 		Orthogonalize[{p1, p2, p1Crossp2}]
@@ -307,8 +307,8 @@ KeplerianFromCartesian[cart_?(AssociationQ[#] && KeyExistsQ[#,"Coordinate"] && #
   r, v, rMag, vMag, 
   a, e, i, \[CapitalOmega], \[Omega], M, nu, \[Theta], EA, eMag, 
   p, h, hMag, n, nMag, argLat, truLon},
-	{x,y,z} = cart["Position"];
-	{vx,vy,vz} = cart["Velocity"];
+	{x,y,z} = Chop[cart["Position"]];
+	{vx,vy,vz} = Chop[cart["Velocity"]];
 	r = {x, y, z};
 	v = {vx, vy, vz};
 	{rMag, vMag} = Norm[#]& /@ {r, v};
