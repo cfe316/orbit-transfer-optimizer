@@ -72,6 +72,8 @@ cart2_?(AssociationQ[#] && KeyExistsQ[#, "Coordinate"] && #["Coordinate"] == "Ca
 	<|"Total \[CapitalDelta]V" -> tDV, "Burn 1" -> b1, "Burn 2" -> b2 |>
 ]
 
+
+(* Positions are at the same point. There is only one 'burn'. *)
 sameRadSameAng[cart1_, cart2_] := Module[{vc, tdv},
 vc = cart2["Velocity"] - cart1["Velocity"];
 tdv = Norm[vc];
@@ -91,7 +93,8 @@ tdv = Norm[vc];
 
 
 (* Like bestOrbitTwoPointsSameTheta *)
-(* needs work *)
+(* Called when the two points are at the same angle, such that one is on top of the other (radially).
+   This probably will not ever give the best transfer but is included for completeness. *)
 geneRadSameAng[cart1_, cart2_] := Module[{
  M, cpl1, cpl2, pol1, pol2,
  r1, vr1, vth1, vz1,
@@ -141,6 +144,8 @@ geneRadSameAng[cart1_, cart2_] := Module[{
 	Return[<|"Total \[CapitalDelta]V"->tDV, "Burn 1"->c1, "Burn 2"->c2 |>];
 ]
 
+(* For when the two points are directly across from one another.
+   If the two points have the same radius, use geneAngSameRad, else geneAngGeneRad. *)
 oppoAng[cart1_, cart2_] := Module[{p1, p2, v1, v2, h, M, cartpl1, cartpl2, pol1, pol2, r, tdv, burn1, burn2, c1, c2, prog, pole},
 
 	(* Invent a plane to solve in: *)
@@ -149,7 +154,12 @@ oppoAng[cart1_, cart2_] := Module[{p1, p2, v1, v2, h, M, cartpl1, cartpl2, pol1,
 	{v1, v2} = #["Velocity"] & /@ {cart1, cart2};
 
 	h = p1 \[Cross] v1 + p2 \[Cross] v2; 
-	If[ Chop[Norm[h]] == 0, h = {0,0,1};];
+	If[ Chop[Norm[h]] == 0,
+		h = If[ Chop[Normalize[p1]] == {0,0,1} || Chop[Normalize[p1]] == {0,0,-1},
+			p1 \[Cross] v1,
+			{0,0,1}
+		];
+	];
 
 	pole = Normalize[h];
 	prog = pole \[Cross] p1;
