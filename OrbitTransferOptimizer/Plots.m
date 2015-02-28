@@ -55,14 +55,14 @@ OrbitPlot3D[orbs_?(Length[#]==3 &)] := Block[{},
 		Arrowheads[Small],
 		Red, OrbitLine3D[orbs[[1]]], OrbitVelocityArrow3D[orbs[[1]]],
 		Green, OrbitLine3D[orbs[[2]]], OrbitVelocityArrow3D[orbs[[2]]],
-		Black, OrbitLine3D[orbs[[3]]], OrbitVelocityArrow3D[orbs[[3]]]},
+		Blue, OrbitLine3D[orbs[[3]]], OrbitVelocityArrow3D[orbs[[3]]]},
 		PlotRange->{{-4,4},{-4,4},{-4,4}}
 	]
 ]
 
 OrbitLine3D[o_?(AssociationQ[#] && KeyExistsQ[#, "Orbit"] && #["Orbit"] == "Nondegenerate" &)] := Block[{Nurl, Nurh, Nus},
 	{Nurl, Nurh} = o["\[Nu]Range"];
-	Nus = Max[Abs[(Nurh - Nurl)/80], 0.05];
+	Nus = Max[Abs[(Nurh - Nurl)/160], 0.02];
 	Line[
 		Table[
 			CartesianFromKeplerian[CoordinateFromOrbit[o, Nu]]["Position"]
@@ -73,14 +73,14 @@ OrbitLine3D[o_?(AssociationQ[#] && KeyExistsQ[#, "Orbit"] && #["Orbit"] == "Nond
 OrbitVelocityArrow3D[o_?(AssociationQ[#] && KeyExistsQ[#, "Orbit"] && #["Orbit"] == "Nondegenerate" &)] := Block[{cart, p, v},
 	cart= CartesianFromKeplerian[CoordinateFromOrbit[o,0]];
 	p = cart["Position"];
-	v = Normalize[cart["Velocity"]] Max[Norm[p], 1];
+	v = Normalize[cart["Velocity"]] Sqrt[Max[Norm[p], 1]];
 	Arrow[Line[{p, p +v}]]
 ]
 
 BurnVelocityArrow3D[b_?(AssociationQ[#] && KeyExistsQ[#, "Coordinate"] && #["Coordinate"] == "Cartesian" &)] := Block[{p, dv},
 	p = b["Position"];
 	dv= b["VelocityChange"];
-	dv = Normalize[dv]; 
+	dv = Normalize[dv] Sqrt[Max[Norm[p],1]]; 
 	If[Norm[dv]>0, Arrow[Line[{p, p + dv}]]]
 ]
 
