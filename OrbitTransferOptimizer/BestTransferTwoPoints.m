@@ -25,22 +25,32 @@ BeginPackage["OrbitTransferOptimizer`BestTransferTwoPoints`",
 Unprotect@"`*";
 ClearAll@"`*";
 
-BestTransferTwoPoints::usage = "Finds the best set of two burns to transfer between two orbits around the same body. Parameters are \[Mu] of the body, then two orbits in the format:
+BestTransferTwoPoints::usage = "BestTransferTwoPoint[c1, c2]: Finds the best set of two burns to transfer between two points around the same body.
+
+Points are in the format:
+<|
+	\"Coordinate\" -> \"Cartesian\",
+	\"Position\" -> {X, Y, Z},
+	\"Velocity\" -> {vX, vY, vZ},
+|>
 
 Output is in the format:
 <|
 	\"Total \[CapitalDelta]V\" -> 0,
 	\"Burn 1\" -> <|
 		\"Coordinate\" -> \"Cartesian\",
-		\"Position\" -> {X, Y, Z}
+		\"Position\" -> {X, Y, Z},
+		\"Velocity\" -> {vX, vY, vZ},
 		\"VelocityChange\" -> {vX, vY, vZ}
 	|>,
 	\"Burn 2\" -> <|
 		\"Coordinate\" -> \"Cartesian\",
-		\"Position\" -> {X, Y, Z}
+		\"Position\" -> {X, Y, Z},
+		\"Velocity\" -> {vX, vY, vZ},
 		\"VelocityChange\" -> {vX, vY, vZ}
 	|>
 |>
+Where Velocity is the velocity before the burn.
 "
 
 Begin["Private`"];
