@@ -63,6 +63,8 @@ Output coordinate format:
 |>
 ";
 
+ModPiRange::usage = "ModPiRange[x] : output a number in [-\[Pi], \[Pi]]";
+
 Begin["Private`"];
 
 angleBetweenTwoAroundCircle[th1_, th2_] := 
@@ -107,7 +109,7 @@ restrict\[Nu]Range[kep_?(AssociationQ[#] && KeyExistsQ[#,"Orbit"] && #["Orbit"] 
 	Return[outputKep];
 ]
 
-restrictOrbit[kep_?(AssociationQ[#] && KeyExistsQ[#,"Orbit"] && #["Orbit"] == "Nondegenerate" &)]:= Block[{outputKep, e, a},
+restrictOrbit[kep_?(AssociationQ[#] && KeyExistsQ[#,"Orbit"] && #["Orbit"] == "Nondegenerate" &)]:= Block[{outputKep, e, a, O},
 	e = kep["e"];
 	If[ e == 1 , e = 1.001; ];
 	a = kep["a"];
@@ -116,6 +118,8 @@ restrictOrbit[kep_?(AssociationQ[#] && KeyExistsQ[#,"Orbit"] && #["Orbit"] == "N
 	outputKep = kep;
 	outputKep["a"] = a;
 	outputKep["e"] = e;
+	If[ kep["i"] == 0 || kep["i"] == Pi, outputKep["\[CapitalOmega]"] = 0];
+	outputKep["\[Omega]"] = kep["\[CurlyPi]"] - outputKep["\[CapitalOmega]"];
 	Return[restrict\[Nu]Range[outputKep]];
 ]
 
@@ -125,7 +129,9 @@ Block[{v, vc, t},
 	v = c["Velocity"];
 	vc = c["VelocityChange"];
 	<|"Coordinate" -> t, "Position" -> c["Position"], "Velocity" -> (v + vc)|>
-]
+];
+
+ModPiRange[x_]:= Mod[x+Pi, 2 Pi]-Pi;
 
 End[];
 
