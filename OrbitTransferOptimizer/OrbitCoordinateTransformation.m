@@ -324,14 +324,13 @@ KeplerianFromCartesian[cart_?(AssociationQ[#] && KeyExistsQ[#,"Coordinate"] && #
 	a = - 1/(2 zeta);
 
 	i = ArcCos[h[[3]]/hMag];
-	\[CapitalOmega] = If[ n[[1]]==0, 0, ArcCos[n[[1]]/nMag]];
+	\[CapitalOmega] = If[ n[[1]]==0 && n[[2]] == 0, 0, Mod[ArcTan[n[[1]],n[[2]]], 2 Pi]];
 	\[Omega] = If[ n.e ==0, 0, ArcCos[n.e /(nMag * eMag)]];
 	lonPer = If[e[[1]]==0, 0, ArcCos[ e[[1]]/eMag]];
 	nu = If[ e.r == 0, 0, ArcCos[ e.r / (eMag * rMag)]];
 	argLat = If[ n.r == 0, 0, ArcCos[ n.r / (nMag * rMag)]];
 	truLon = ArcCos[r[[1]] / rMag];
 
-	If[ n[[2]] < 0, \[CapitalOmega] = 2 Pi - \[CapitalOmega]];
 	If[ e[[3]] < 0, \[Omega] = 2 Pi - \[Omega]];
 	If[ r.v < 0, nu = 2 Pi - nu];
 	If[ e[[2]] < 0, lonPer = 2 Pi - lonPer];
