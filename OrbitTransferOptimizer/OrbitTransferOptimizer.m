@@ -10,9 +10,10 @@
 (* ::Section:: *)
 (* Begin package and help *)
 
-BeginPackage["OrbitTransferOptimizer`GUI`", {"OrbitTransferOptimizer`Plots`",
+BeginPackage["OrbitTransferOptimizer`", {"OrbitTransferOptimizer`Plots`",
 					     "OrbitTransferOptimizer`BestTransferTwoOrbits`",
 					     "OrbitTransferOptimizer`OrbitCoordinateTransformation`",
+					     "OrbitTransferOptimizer`Heading`",
 					     "OrbitTransferOptimizer`Utilities`"
 						}];
 
@@ -25,9 +26,7 @@ OrbitTransferOptimizerGUI::usage = "OrbitTransferOptimizerGUI[]: Start the gui.
 3. Optionally, restrict the range of True Anomaly to search over.
 4. Push the 'CalculateBestOrbit' button."
 
-PrettyPrint::usage = "PrettyPrint[{burn1, burn2}, transferOrbit]: Print out relevent parameters of the location of the two burns and the transfer orbit itself.";
 
-RescaleBurnWithPlanet::usage = "RescaleBurnWithPlanet[burn, \[Mu], planetRadius, DU]: given a Burn with position, velocity in units of DU and VU, rescale using the planet's \[Mu] into km and m/s.";
 
 Begin["`Private`"];
 
@@ -116,11 +115,7 @@ OrbitTransferOptimizerGUI[] := Manipulate[
  SaveDefinitions -> True
 ]
 
-
-
-
-
-
+(* PrettyPrint[{burn1, burn2}, transferOrbit]: Print out relevent parameters of the location of the two burns and the transfer orbit itself. *)
 PrettyPrint[bs_List, ot_] := Block[{
   pc, r, al, t\[CapitalDelta]V, \[CapitalDelta]Vs, sp, v, ksp, 
   vc, lvlh, all, i, \[Nu]s
@@ -128,11 +123,11 @@ PrettyPrint[bs_List, ot_] := Block[{
 	pc = NumberForm[Round[#["Position"], 0.001], {9, 3}, ExponentFunction -> (Null &)] & /@ bs;
 	\[CapitalDelta]Vs = #["\[CapitalDelta]V"] & /@ bs;
 	t\[CapitalDelta]V = \[CapitalDelta]Vs // Total;
-	\[CapitalDelta]Vs = NumberForm[#["\[CapitalDelta]V"], {5, 1}] & /@ bs;
-	sp     = NumberForm[#["Speed"]   , {6,  1}] & /@ bs;
+	\[CapitalDelta]Vs = NumberForm[#["\[CapitalDelta]V"], {7, 1}] & /@ bs;
+	sp     = NumberForm[#["Speed"]   , {7,  1}] & /@ bs;
 	r      = NumberForm[#["Radius"]  , {10, 3}, ExponentFunction -> (Null &)] & /@ bs;
 	al     = NumberForm[#["Altitude"], {10, 3}] & /@ bs;
-	v      = NumberForm[Round[#["Velocity"], 0.1], {5, 1}] & /@ bs;
+	v      = NumberForm[Round[#["Velocity"], 0.1], {6, 1}] & /@ bs;
 	vc     = NumberForm[Round[#["VelocityChange"], 0.1], {6, 1}] & /@ bs;
 	ksp    = NumberForm[Quantity[#["KSP Navball"], "Degrees"], {3, 1}] & /@ bs;
 	lvlh   = NumberForm[Round[#["LVLH Heading"], 0.1], {5, 1}] & /@ bs;
@@ -170,13 +165,25 @@ PrettyPrint[bs_List, ot_] := Block[{
 	PrependTo[all, Grid[{
 	   {Style["Total \[CapitalDelta]V", 12, Bold], ""},
 	   {"\[CapitalDelta]V", 
-	    ToString[NumberForm[t\[CapitalDelta]V, {4, 1}]] <> " m/s"},
+	    ToString[NumberForm[t\[CapitalDelta]V, {6, 1}]] <> " m/s"},
 	   {Null, Null}
 	   }, Alignment -> Left]];
 	
 	Grid[{all}\[Transpose], Alignment -> Left]
 ]
 
+ProcessBurn[b_] := Module[{ob},
+	ob = b;
+	ob["Radius"] = Norm[b["Position"]];
+	ob["Speed"] = Norm[b["Velocity"]];
+	ob["\[CapitalDelta]V"] = Norm[b["VelocityChange"]];
+	ob["KSP Navball"] = KSPHeadingFromCartesian[ob]["KSPNavball"];
+	ob["LVLH Heading"] = LVLHHeadingFromCartesian[ob]["LVLH"];
+	ob["\[Nu]"] = KeplerianFromCartesian[ob]["\[Nu]"];
+	ob
+];
+
+(* RescaleBurnWithPlanet[burn, \[Mu], planetRadius, DU]: given a Burn with position, velocity in units of DU and VU, rescale using the planet's \[Mu] into km and m/s. *)
 RescaleBurnWithPlanet[b_, \[Mu]_, plrad_, DU_] := Module[{ob, ra, TU, VU},
 	(* Time unit *)
 	TU = Sqrt[DU^3/\[Mu]];

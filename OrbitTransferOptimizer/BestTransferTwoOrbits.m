@@ -55,7 +55,6 @@ Output is in the format:
 Where Velocity is the velocity before the burn.
 ";
 
-ProcessBurn::usage = "Compute ancillary information from Burn 1 and Burn 2";
 
 Begin["Private`"];
 
@@ -70,17 +69,6 @@ BestTransferTwoOrbits[oo1_, oo2_]:= Block[{
 	,
 		nonanalyticTransfer[o1, o2]
 	]
-];
-
-ProcessBurn[b_] := Module[{ob},
-	ob = b;
-	ob["Radius"] = Norm[b["Position"]];
-	ob["Speed"] = Norm[b["Velocity"]];
-	ob["\[CapitalDelta]V"] = Norm[b["VelocityChange"]];
-	ob["KSP Navball"] = KSPHeadingFromCartesian[ob]["KSPNavball"];
-	ob["LVLH Heading"] = LVLHHeadingFromCartesian[ob]["LVLH"];
-	ob["\[Nu]"] = KeplerianFromCartesian[ob]["\[Nu]"];
-	ob
 ];
 
 nonanalyticTransfer[o1_, o2_] := Block[{
@@ -178,7 +166,6 @@ w2=o2["\[Omega]"];
 
 a1 == a2 && (e1 == 0 || w1 == w2) && e1 == e2 && (i1 == 0 || O1 == O2) && i1 == i2
 ];
-
 
 End[];
 
