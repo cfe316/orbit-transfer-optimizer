@@ -15,9 +15,9 @@
 
 
 BeginPackage["OrbitTransferOptimizer`BestTransferTwoOrbits`",
-				{"OrbitTransferOptimizer`BestTransferTwoPoints`",
+				{"OrbitTransferOptimizer`Utilities`",
+				 "OrbitTransferOptimizer`BestTransferTwoPoints`",
 				 "OrbitTransferOptimizer`OrbitCoordinateTransformation`",
-				 "OrbitTransferOptimizer`Utilities`",
 				 "OrbitTransferOptimizer`Heading`"
 				}];
 
