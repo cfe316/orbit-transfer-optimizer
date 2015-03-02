@@ -1,4 +1,4 @@
-# orbit-transfer-optimizer
+# OrbitTransferOptimizer`
  Mathematica package for computing the lowest delta-V transfer between two orbits around the same body.
 
 # Installation
