@@ -34,5 +34,69 @@ cdf.embed('orb-trans-opt.cdf', 1000, 864);
 </ol>
 <h3>For hyperbolic orbits</h3>
 <p>For hyperbolic orbits or for a semimajor axis larger than that allowed by the slider, enter the desired value into the box. The slider will turn red but it should still work. Hyperbolic orbits are one place where the &nu; limit sliders are useful, to prevent the burn from being too far away.</p>
-<p>&copy; 2015 Jacob Schwartz - All rights reserved</p>
+
+<h2>Interpretation of 'Elements' output</h2>
+<dl>
+  <dt>Total &Delta;V</dt>
+  <dd>The total velocity change in meters/second to carry out this orbital transfer.</dd>
+  <dt>Burn 1</dt>
+  <dd>The burn from the initial orbit to the transfer orbit.</dd>
+  <dt>Burn 2</dt>
+  <dd>The burn from the transfer orbit to the final orbit.</dd>
+  <dt>Orbital Speed</dt>
+  <dd>Speed immediately before the burn takes place.</dd>
+  <dt>Altitude</dt>
+  <dd>Altitude (above the surface) when the burn takes place.</dd>
+  <dt>KSP Navball</dt>
+  <dd>The heading that your navball should read when you execute the burn. The first number is the 0-360&deg; direction (north-east-south-west) and the second number is the -90 to 90 &deg; (radial in - radial out) </dd>
+  <dt>LVLH Heading</dt>
+  <dd>The velocity change of the burn in the pre-burn Local Vertical, Local Horizontal frame. Format is {Prograde, Normal, Radial}. This can be used as a sanity check.</dd>
+  <dt>Cart. Vel.</dt>	
+  <dd>The velocity (before the burn) in cartesian coordinates: {X, Y, Z}</dd>
+  <dt>Cart. &Delta;V</dt>	
+  <dd>The burn velocity change in cartesian coordinates: {X, Y, Z}</dd>
+  <dt>Transfer Orbit</dt>
+  <dd>The Keplerian elements of the transfer orbit.</dd>
+  <dt>a</dt>  <dd>Semimajor axis</dd>
+  <dt>e</dt>  <dd>eccentricity</dd>
+  <dt>i</dt>  <dd>inclination</dd>
+  <dt>&Omega;</dt>  <dd>Longitude of Ascending Node</dd>
+  <dt>&omega;</dt>  <dd>Argument of periapsis</dd>
+  <dt>Long. of Peri.</dt>  <dd>Longitude of periapsis &piv;</dd>
+  <dt>Periapsis Radius</dt>  <dd>radius to the planet's center</dd>
+  <dt>Periapsis Radius</dt>  <dd>radius to the planet's surface. 
+  Note that atmosphere and planetary surface are not taken into account during the optimizer calculation.</dd>
+</dl>
+
+<h2>Theory:</h2>
+<p>Orbits are made of collections of points (and associated velocities) in space. To find the lowest-delta-V transfer between two orbits, we iterate over points on each of the orbits.</p>
+
+<p>Assuming a massive body (such as planet) at the origin, and two given points in space, there usually* one DOF (Degree Of Freedom) to choose a conic-section orbit that passes through those points. When we associate velocities with each of those points, there is some orbit that passes through the points that requires the lowest amount of delta-V.</p>
+
+<p>*There are 2 DOF for points exactly opposite one another, for example.</p>
+
+<h2>Details</h2>
+
+<h4>Will this always find the lowest-delta-V transfer?</h4>
+
+<p>No.
+<ul>
+  <li>Some optimal orbit transfers require 3 burns, such as a bi-elliptic transfer. Changing radius, eccenticity, and inclinations probably also requires multiple burns for the lowest total delta V.</li>
+  <li>Finding the best transfer orbit when two points are directly across from each other requires searching two DOF. Rather than slowly search another DOF my program guesses (somewhat poorly) to save time.</li>
+  <li>The brute-force search over points belonging to the initial and final orbits uses 24 x 24 steps. For closed orbits this corresponds to 15 degrees of true anomaly. To search more accurately, try adjusting the ν-start and ν-end sliders to encompass less than 180 degrees.</li>
+  <li>There could be other flaws that result in a less-than-perfect two-burn transfer. Use a reasonable margin of error when Kerbal lives are at risk.</li>
+</ul></p>
+
+<h4>Will this let me rendezvous with another craft?</h4>
+<p>Not directly, but if you are not under time constraints, one you have transferred to the other craft's orbit, you can then start a rendezvous procedure.</p>
+
+<h4>What's the radius of the sphere?</h4>
+<p>The sphere corresponds to the height of the atmosphere.
+The calculator itself does not take into account atmospheres, aerobraking, or the planetary surface(!) ... 
+it is displayed as a visual indicator. To see whether the transfer orbit will intersect the atmosphere, 
+look at the Periapsis Altitude (above the surface) on the Elements tab, 
+or visually check whether the transfer orbit enter the atmosphere.</p>
+
+<p>From the Mathematica package <a href="https://github.com/cfe316/orbit-transfer-optimizer">OrbitTransferOptimizer`</a>. &copy; 2015 Jacob Schwartz under the <a href="http://www.wolfram.com/cdf/adopting-cdf/licensing-options.html">FreeCDF</a> license.</p>
+<a href="https://github.com/cfe316/orbit-transfer-optimizer"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/a6677b08c955af8400f44c6298f40e7d19cc5b2d/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f677261795f3664366436642e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png"></a>
 </html>
