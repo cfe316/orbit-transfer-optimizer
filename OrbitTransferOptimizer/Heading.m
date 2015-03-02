@@ -53,15 +53,15 @@ KSPHeading format:
 Begin["`Private`"];
 
 LVLHHeadingFromCartesian[cart_?(AssociationQ[#] && KeyExistsQ[#,"Coordinate"] && #["Coordinate"] == "Cartesian" &)] := Module[{ivNorm, radialNorm, orbitNormalNorm, vPro, vNormal, vRad},
-	ivNorm = Normalize[cart["Velocity"]];
+	ivNorm = Normalize[cart["Velocity"]]; (* The direction of the initial velocity *)
 	radialNorm = Normalize[cart["Position"]];
 	dv = cart["VelocityChange"];
 	If[Norm[ivNorm] > 0 && Norm[radialNorm \[Cross] ivNorm] > 0,
 		vPro = ivNorm . dv;
 		vRad = radialNorm . dv;
 		orbitNormalNorm = radialNorm \[Cross] ivNorm;
-		vNormal = orbitNormalNorm . dv;,
-		
+		vNormal = orbitNormalNorm . dv;
+	,
 		(* Else no initial direction can be determined *)
 		{vPro, vNormal, vRad} = {0,0,0};
 	];
@@ -69,6 +69,7 @@ LVLHHeadingFromCartesian[cart_?(AssociationQ[#] && KeyExistsQ[#,"Coordinate"] &&
 	Return[<|"Heading"->"LVLH", "LVLH"->{vPro, vNormal, vRad}|>];
 ];
 
+(* If the position is directly over the north or south pole, the HDG will return 0. *)
 KSPHeadingFromCartesian[cart_?(AssociationQ[#] && KeyExistsQ[#,"Coordinate"] && #["Coordinate"] == "Cartesian" &)] := Module[{p, dv, np, ndv, dvRad, tdv, pitch, northCelestialPole, eastward, northward, dveast, dvnorth, HDG},
 	p = cart["Position"];
 	dv  = cart["VelocityChange"];

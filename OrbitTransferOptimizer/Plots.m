@@ -19,7 +19,6 @@ ClearAll@"`*";
 
 OrbitPlot3D::usage = "Plot one or many orbits";
 
-OrbitPlot3Ds::usage = "Plot one or many orbits";
 Begin["Private`"];
 
 OrbitPlot3D[orb_Association] := OrbitPlot3D[{orb}];

@@ -3,16 +3,12 @@
 (* ::Section:: *)
 (* Keplerian to Cartesian Elements package: Title and comments *)
 
-
 (* :Title: OrbitTransferOptimizer *)
 (* :Context: OrbitTransferOptimizer`BestTransferTwoOrbits *)
 (* :Author: Jacob Schwartz (thesquarerootofjacob@gmail.com) *)
 
-
-
 (* ::Section:: *)
 (* Begin package and help *)
-
 
 BeginPackage["OrbitTransferOptimizer`BestTransferTwoOrbits`",
 				{"OrbitTransferOptimizer`Utilities`",
@@ -55,13 +51,12 @@ Output is in the format:
 Where Velocity is the velocity before the burn.
 ";
 
-
 Begin["Private`"];
 
 BestTransferTwoOrbits[oo1_, oo2_]:= Block[{
  o1, o2
 },
- 
+	(* Input sanitizing *)
 	{o1, o2} = restrictOrbit[#]& /@ {oo1, oo2};
 
 	If[analyticTransferPossible[o1, o2],
@@ -73,7 +68,7 @@ BestTransferTwoOrbits[oo1_, oo2_]:= Block[{
 
 nonanalyticTransfer[o1_, o2_] := Block[{
  t, nul1, nuh1, nul2, nuh2, 
- minnustep, nustep1, nustep2, mint},
+ minnustep, nustep1, nustep2},
  
 	minnustep = Pi /12.;
 	{nul1, nuh1} = o1["\[Nu]Range"];
@@ -87,26 +82,32 @@ nonanalyticTransfer[o1_, o2_] := Block[{
 	        CartesianFromKeplerian[CoordinateFromOrbit[o1, nu1]], 
 	        CartesianFromKeplerian[CoordinateFromOrbit[o2, nu2]]
 	        ]}, 
-	       {nu1, nul1, nuh1-nustep1/10, nustep1},
+	       {nu1, nul1, nuh1-nustep1/10, nustep1},  (* The -nustep1/10 is to prevent evaluating both -Pi and Pi which are the same point in space *)
 	       {nu2, nul2, nuh2-nustep2/10, nustep2}] 
 	    , 1];
-	mint = MinimalBy[t, #[[3]]["Total \[CapitalDelta]V"] &] // First
+	(* Select the point with lowest total deltaV. If there are many that are tied, choose the first one.*)
+	MinimalBy[t, #[[3]]["Total \[CapitalDelta]V"] &] // First
 ];
 
+(* For some pairs of orbits there may be a known solution (such as a Hohmann transfer) that is the most efficient. 
+For simplicity, this does not take into account checks of nuRange, so it actually might not be valid to do some analytic transfer.
+More thorough checks could eliminate false positives in the future versions (low priority...) *)
 analyticTransferPossible[o1_, o2_] := Block[{},
 	(orbsAreCoplanar[o1, o2] && orbsAreCircular[o1, o2]) || orbsAreIdentical[o1, o2]
 ];
 
 tryAnalyticTransfer[o1_, o2_] := Block[{w1, w2, nr1, nr2, nInt, minInt, maxInt, nu},
-	nr1 = Interval[o1["\[Nu]Range"]];
-	nr2 = Interval[o2["\[Nu]Range"]];
 	Which[
 	orbsAreIdentical[o1, o2],
+		(* The orbital elements show that the orbits are the same,
+		   but we have not checked NuRange, which could be more restricted than [-Pi, Pi].
+		   We need choose some acceptable nu for each orbit. *)
+		nr1 = Interval[o1["\[Nu]Range"]];
+		nr2 = Interval[o2["\[Nu]Range"]];
 		nInt = IntervalIntersection[nr1, nr2];
 		minInt = Min[nInt];
 		maxInt = Max[nInt];
-		(* If it's not the empty interval *)
-		If[ minInt < 2 Pi ,
+		If[ minInt < 2 Pi , (* If nInt is not the empty interval *)
 			(* preferentially choose 0 *)
 			nu = If[ IntervalMemberQ[nInt, 0], 0, RandomReal[{minInt, maxInt}]];
 			{nu, nu,
@@ -116,10 +117,15 @@ tryAnalyticTransfer[o1_, o2_] := Block[{w1, w2, nr1, nr2, nInt, minInt, maxInt, 
 			]
 			}
 		,
-			(* If the two nu intervals don't coincide, find some other points *)
+			(* Else the two nu intervals don't coincide, so fall through to brute force.
+			 (This could be done more elegantly: since the orbits are the same, ANY valid nu1 and nu2 should work. ) *)
 			nonanalyticTransfer[o1, o2]
 		],
 	orbsAreCircular[o1, o2] && orbsAreCoplanar[o1, o2],
+		(* Do a Hohmann transfer. We need to pick points from each 
+		   orbit that are 180 degrees apart from each other.
+		   Since these are circular orbits, we can choose any pair of points.
+		   Choose (somewhat arbitrarily) the angle correspoding to where the periapsis would be if w1 was 0. *)
 		{w1, w2} = ModPiRange[#["\[Omega]"]] & /@{o1, o2};
 		{-w1, -w2 + Pi,
 		BestTransferTwoPoints[
@@ -132,39 +138,44 @@ tryAnalyticTransfer[o1_, o2_] := Block[{w1, w2, nr1, nr2, nInt, minInt, maxInt, 
 	]
 ]
 
+(* Returns true when both orbits are in the same plane,
+   but not if they are in opposite directions (like i1==0 and i2==Pi)...
+   because in that case I don't know any nice analytic solutions, we just brute force it.  *)
 orbsAreCoplanar[o1_, o2_] := Block[{
 i1, O1,
 i2, O2},
+	i1=o1["i"];
+	i2=o2["i"];
+	O1=o1["\[CapitalOmega]"];
+	O2=o2["\[CapitalOmega]"];
 
-i1=o1["i"];
-i2=o2["i"];
-O1=o1["\[CapitalOmega]"];
-O2=o2["\[CapitalOmega]"];
-
-i1==i2 && ( i1 == 0 || O1 == O2 )
-
+	i1==i2 && ( ( i1 == 0 || i1 == Pi) || O1 == O2 )
 ];
 
+(* Returns true if both orbits are circular. *)
 orbsAreCircular[o1_, o2_] := Block[{},
 	o1["e"] == 0 && o2["e"] == 0
 ];
 
+(* Returns true if the orbits are identical.
+ This can be if all the corresponding elements are equal,
+ or, if both orbits are in the same plane and w1=w2 and e1=e2,
+ or, if the orbits are circular, in the same plane i=0 or i=180, and a1=a2 (O and w are irrelevant then)*)
 orbsAreIdentical[o1_, o2_] := Block[{
 a1, e1, i1, O1, w1,
 a2, e2, i2, O2, w2},
+	a1=o1["a"];
+	a2=o2["a"];
+	e1=o1["e"];
+	e2=o2["e"];
+	i1=o1["i"];
+	i2=o2["i"];
+	O1=o1["\[CapitalOmega]"];
+	O2=o2["\[CapitalOmega]"];
+	w1=o1["\[Omega]"];
+	w2=o2["\[Omega]"];
 
-a1=o1["a"];
-a2=o2["a"];
-e1=o1["e"];
-e2=o2["e"];
-i1=o1["i"];
-i2=o2["i"];
-O1=o1["\[CapitalOmega]"];
-O2=o2["\[CapitalOmega]"];
-w1=o1["\[Omega]"];
-w2=o2["\[Omega]"];
-
-a1 == a2 && (e1 == 0 || w1 == w2) && e1 == e2 && (i1 == 0 || O1 == O2) && i1 == i2
+	a1 == a2 && (e1 == 0 || w1 == w2) && e1 == e2 && ((i1 == 0 || i1 == Pi) || O1 == O2) && i1 == i2
 ];
 
 End[];

@@ -1,18 +1,14 @@
 (* ::Package:: *)
 
 (* ::Section:: *)
-(* Keplerian to Cartesian Elements package: Title and comments *)
-
+(* Best Orbital Transfer between two Points Package: Title and comments *)
 
 (* :Title: OrbitTransferOptimizer *)
 (* :Context: OrbitTransferOptimizer`BestTransferTwoPoints *)
 (* :Author: Jacob Schwartz (thesquarerootofjacob@gmail.com) *)
 
-
-
 (* ::Section:: *)
 (* Begin package and help *)
-
 
 BeginPackage["OrbitTransferOptimizer`BestTransferTwoPoints`",
 				{"OrbitTransferOptimizer`OrbitCoordinateTransformation`",
@@ -51,7 +47,7 @@ Output is in the format:
 	|>
 |>
 Where Velocity is the velocity before the burn.
-"
+";
 
 Begin["Private`"];
 
@@ -80,8 +76,7 @@ cart2_?(AssociationQ[#] && KeyExistsQ[#, "Coordinate"] && #["Coordinate"] == "Ca
 	b1 = bt["Burn 1"];
 	b2 = bt["Burn 2"];
 	<|"Total \[CapitalDelta]V" -> tDV, "Burn 1" -> b1, "Burn 2" -> b2 |>
-]
-
+];
 
 (* Positions are at the same point. There is only one 'burn'. *)
 sameRadSameAng[cart1_, cart2_] := Module[{vc, tdv},
@@ -99,10 +94,8 @@ tdv = Norm[vc];
 			"VelocityChange" -> {0.,0.,0.}
 		|>
 |>
-]
+];
 
-
-(* Like bestOrbitTwoPointsSameTheta *)
 (* Called when the two points are at the same angle, such that one is on top of the other (radially).
    This probably will not ever give the best transfer but is included for completeness. *)
 geneRadSameAng[cart1_, cart2_] := Module[{
@@ -152,14 +145,15 @@ geneRadSameAng[cart1_, cart2_] := Module[{
 	{cpl1, cpl2} = CartesianPlanarFromPolar[#] & /@ {burn1, burn2};
 	{c1, c2} = CartesianFromCartesianPlanar[Inverse[M], #] & /@ {cpl1, cpl2};
 	Return[<|"Total \[CapitalDelta]V"->tDV, "Burn 1"->c1, "Burn 2"->c2 |>];
-]
+];
 
 (* For when the two points are directly across from one another.
    If the two points have the same radius, use geneAngSameRad, else geneAngGeneRad. *)
 oppoAng[cart1_, cart2_] := Module[{p1, p2, v1, v2, h, M, cartpl1, cartpl2, pol1, pol2, r, tdv, burn1, burn2, c1, c2, prog, pole},
 
 	(* Invent a plane to solve in: *)
-	(* Pick the total angular momentum. This is generally not the best choice: sometimes it gives local maximum in Delta V*)
+	(* Pick the plane that contains the total angular momentum.
+	   This is generally not the best choice: sometimes it gives local maximum in Delta V *)
 	{p1, p2} = #["Position"] & /@ {cart1, cart2};
 	{v1, v2} = #["Velocity"] & /@ {cart1, cart2};
 
@@ -191,7 +185,7 @@ oppoAng[cart1_, cart2_] := Module[{p1, p2, v1, v2, h, M, cartpl1, cartpl2, pol1,
 	{cartpl1, cartpl2} = CartesianPlanarFromPolar[#] & /@ {burn1, burn2};
 	{c1, c2} = CartesianFromCartesianPlanar[Inverse[M], #] & /@ {cartpl1, cartpl2};
 	Return[<|"Total \[CapitalDelta]V"->tdv, "Burn 1"->c1, "Burn 2"->c2 |>];
-]
+];
 
 geneAng[cart1_, cart2_] := Module[{M, cartpl1, cartpl2, pol1, pol2, r, tdv, burn1, burn2, c1, c2},
 	{M, cartpl1, cartpl2} = CartesianPlanarsFromCartesians[cart1, cart2];
@@ -206,9 +200,9 @@ geneAng[cart1_, cart2_] := Module[{M, cartpl1, cartpl2, pol1, pol2, r, tdv, burn
 	{cartpl1, cartpl2} = CartesianPlanarFromPolar[#] & /@ {burn1, burn2};
 	{c1, c2} = CartesianFromCartesianPlanar[Inverse[M], #] & /@ {cartpl1, cartpl2};
 	Return[<|"Total \[CapitalDelta]V"->tdv, "Burn 1"->c1, "Burn 2"->c2 |>];
-]
+];
 
-(* Used for geneAngGeneRad. Choose the place where e is lowest and positive.*)
+(* Used for geneAngGeneRad. Choose the w where e is lowest and positive.*)
 startingOmega[pol1_, pol2_] := Module[{r1, th1, r2, th2, wstart, wstart1, wstart2, ewInt},
 	{r1, th1} = {pol1["Position"][[1]], 0};
 	{r2, th2} = pol2["Position"];
@@ -225,7 +219,7 @@ startingOmega[pol1_, pol2_] := Module[{r1, th1, r2, th2, wstart, wstart1, wstart
 			]
 		];
 	Return[wstart];
-]
+];
 
 geneAngGeneRad[pol1_, pol2_] := Module[
 {r1, th1, vr1, vth1, vz1,
@@ -263,7 +257,7 @@ geneAngGeneRad[pol1_, pol2_] := Module[
 		m2 = MinimizeUnimodalFunction[\[CapitalDelta]V[pol1, pol2, #, -1] &, wrange2[[1]] + wstep/10, wrange2[[3]] - wstep/10, wstep];
 		{m, sh} = If[ m1[[2]] < m2[[2]], {m1, 1}, {m2, -1}];
 	];
-	tDV = m[[2]];
+	tDV = m[[2]]; (* The total delta V *)
 	{vc1, vc2} = \[CapitalDelta]VVectors[pol1, pol2, m[[1]], sh];
 	<|	"Total \[CapitalDelta]V" -> tDV,
 		"Burn 1"-> <|   "Coordinate"->"Polar",
@@ -277,7 +271,7 @@ geneAngGeneRad[pol1_, pol2_] := Module[
 				"VelocityChange"->vc2
 			|>
 	|>
-]
+];
 
 geneAngSameRad[pol1_, pol2_] := Module[
 {r1, th1, vr1, vth1, vz1,
@@ -338,7 +332,7 @@ geneAngSameRad[pol1_, pol2_] := Module[
 				"VelocityChange"->vc2
 			|>
 	|>
-]
+];
 
 End[];
 

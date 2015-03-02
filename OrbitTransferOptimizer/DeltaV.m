@@ -15,9 +15,9 @@ BeginPackage["OrbitTransferOptimizer`DeltaV`"];
 Unprotect@"`*";
 ClearAll@"`*";
 
-\[CapitalDelta]V::usage = "Given two points in Polar coordinates, \[Omega], and h, and (for points of the same radius) \[Epsilon], return the total \[CapitalDelta]V of the indicated orbital transfer";
+\[CapitalDelta]V::usage = "Given two points in Polar coordinates, an argument of periapsis \[Omega], and h, and (for points of the same radius) \[Epsilon], return the total \[CapitalDelta]V of the indicated orbital transfer";
 
-\[CapitalDelta]VVectors::usage = "Given two points in Polar coordinates, \[Omega], h, and (for points of the same radius) \[Epsilon], get the velocity changes as vectors at the first and second points."; 
+\[CapitalDelta]VVectors::usage = "Given two points in Polar coordinates, an argument of periapsis \[Omega], h, and (for points of the same radius) \[Epsilon], get the velocity changes as vectors at the first and second points."; 
 
 Begin["`Private`"];
 
@@ -56,6 +56,8 @@ dVcs = Compile[{
 	], CompilationTarget -> "C", RuntimeOptions -> {"Speed", "EvaluateSymbolically" -> False}
 ];
 
+(* Return the delta V of a transfer depending on a given argument of periapsis (w), orbit direction (h), and eccentricity (e). 
+   Used when the two points have the same radius. *)
 \[CapitalDelta]V[pol1_, pol2_, w_, h_, e_] := Module[
 	{r,  th1, vr1, vth1, vz1,
 	 r2, th2, vr2, vth2, vz2,
