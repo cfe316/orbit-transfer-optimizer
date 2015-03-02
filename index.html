@@ -1,10 +1,38 @@
+<!doctype html>
 <html>
+<head>
+	<meta charset="UTF-8">
+</head>
 <h1>Orbit Transfer Optimizer</h1>
 <script type="text/javascript" src="http://www.wolfram.com/cdf-player/plugin/v2.1/cdfplugin.js"></script>
 <script type="text/javascript">
 var cdf = new cdfplugin();
-cdf.setDefaultContent('<a href="http://www.wolfram.com/cdf-player/"><img  src="orb-trans-opt.png"></a><p>Linux users please download the <a href="orb-trans-opt-standalone.cdf"> standalone version</a></p>');
-cdf.embed('orb-trans-opt.cdf', 957, 864);
+cdf.setDefaultContent('<a href="http://www.wolfram.com/cdf-player/"><img  src="orb-trans-opt.png"></a><p>Download the <a href="orb-trans-opt-standalone.cdf"> standalone version</a> if the browser cdf player does not work for you. </p>');
+cdf.embed('orb-trans-opt.cdf', 1000, 864);
 </script>
-<h2>Instructions</h2>
+<h2>Purpose</h2>
+<p>Find the best way to transfer from one orbit around a body to another orbit around the same body, using two burns (one intermediate orbit).</p>
+<h2>How To Use</h2>
+<ol>
+	<li><p>Select the desired planet / moon / star. This has no effect on the geometry of the best transfer orbit; only on the magnitudes of values like km and m/s. (more bodies may be added if users ask nicely)</p></li>
+	<li><p> Enter in the initial orbit of the spacecraft. This can be obtained from Kerbal Engineer Redux, for example. The initial orbit will appear in red.
+<ul>
+	<li>a: semimajor axis in km</li>
+	<li>e: eccentricity</li>
+	<li>i: inclination in Degrees</li>
+	<li>&Omega;: longitude of ascending node in Degrees</li>
+	<li>&piv;: <a href="http://en.wikipedia.org/wiki/Longitude_of_the_periapsis">longitude of periapsis</a> in Degrees</li>
+	<li>&nu; start and &nu; end: sliders can be used to adjust the range of true anomaly that the program will search</li>
+</ul>
+</li>
+</p>
+<li><p>Enter in the desired final orbit for the spacecraft. The final orbit will appear in blue.</p></li>
+<li><p>Push 'Calculate Best Orbit'</p></li>
+<li><p>See the transfer orbit appear in green on the Orbit view. The black arrows show the location of the inital and final burns (but not their magnitude). (The arrows may not be visible because they are coincident with the other arrows.)</p></li>
+<li><p>To see information about the two burns required, and of the transfer orbit, click the Elements tab.</p></li>
+<li><p>Use the ViewBox slider to zoom in and out if needed</p></li>
+</ol>
+<h3>For hyperbolic orbits</h3>
+<p>For hyperbolic orbits or for a semimajor axis larger than that allowed by the slider, enter the desired value into the box. The slider will turn red but it should still work. Hyperbolic orbits are one place where the &nu; limit sliders are useful, to prevent the burn from being too far away.</p>
+<p>&copy; 2015 Jacob Schwartz - All rights reserved</p>
 </html>
