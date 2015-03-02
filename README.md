@@ -15,7 +15,7 @@ The GUI is the same as at http://cfe316.github.io/orbit-transfer-optimizer. See 
 # Theory:
 Orbits are made of collections of points (and associated velocities) in space. To find the lowest-delta-V transfer between two orbits, we iterate over points on each of the orbits.
 
-Assuming a massive body (such as planet) at the origin, and two given points in space, there usually* one DOF (Degree Of Freedom) to choose a conic-section orbit that passes through those points. When we associate velocities with each of those points, there is some orbit that passes through the points that requires the lowest amount of delta-V.
+Assuming a massive body (such as planet) at the origin, and two given points in space, there usually* is only one DOF (Degree Of Freedom) to choose a conic-section orbit that passes through those points. When we associate velocities with each of those points, there is some orbit that passes through the points that requires the lowest amount of delta-V.
  
 *There are 2 DOF for points exactly opposite one another, for example.
 
