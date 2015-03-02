@@ -28,7 +28,7 @@ No.
 * The brute-force search over points belonging to the initial and final orbits uses 24 x 24 steps. For closed orbits this corresponds to 15 degrees of true anomaly. To search more accurately, try adjusting the &nu;-start and &nu;-end sliders to encompass less than 180 degrees.
 * There could be other flaws that result in a less-than-perfect two-burn transfer. Use a reasonable margin of error when Kerbal lives are at risk.
 
-### Why use Longitude of Periapsis &piv; rather than Argument of Periapsis &omega; ?
+#### Why use Longitude of Periapsis &piv; rather than Argument of Periapsis &omega; ?
 Kerbal engineer gives Longitude of PE &piv;. To convert from &omega; remember that &piv; = &Omega; + &omega;.
 
 #### Mathematica symbols exposed
