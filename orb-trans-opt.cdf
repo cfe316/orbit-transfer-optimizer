@@ -23,10 +23,10 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[      1064,         20]
-NotebookDataLength[    129513,       2507]
-NotebookOptionsPosition[    129973,       2499]
-NotebookOutlinePosition[    130515,       2522]
-CellTagsIndexPosition[    130472,       2519]
+NotebookDataLength[    130412,       2523]
+NotebookOptionsPosition[    130872,       2515]
+NotebookOutlinePosition[    131414,       2538]
+CellTagsIndexPosition[    131371,       2535]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
@@ -34,21 +34,24 @@ Notebook[{
 Cell[BoxData[
  TagBox[
   StyleBox[
-   DynamicModuleBox[{$CellContext`a1$$ = 700, $CellContext`a2$$ = 
-    900, $CellContext`boxSize$$ = 10000, $CellContext`e1$$ = 
-    0, $CellContext`e2$$ = 0, $CellContext`fot$$ = {0, 0, 
+   DynamicModuleBox[{$CellContext`a1$$ = 1000, $CellContext`a2$$ = 
+    2000, $CellContext`boxSize$$ = 5000, $CellContext`e1$$ = 
+    0, $CellContext`e2$$ = 0, $CellContext`fot$$ = {0, Pi, 
      Association[
-     "Total \[CapitalDelta]V" -> 0.11507, "Burn 1" -> 
+     "Total \[CapitalDelta]V" -> 0.23267769515830777`, "Burn 1" -> 
       Association[
-       "Coordinate" -> "Cartesian", "Position" -> {0.738768, 0.738768, 0}, 
-        "Velocity" -> {-0.691788, 0.69178, 0}, 
-        "VelocityChange" -> {-0.04196, 0.0419669, 0}], "Burn 2" -> 
+       "Coordinate" -> "Cartesian", 
+        "Position" -> {1.4945962871239036`, 0., 0.}, 
+        "Velocity" -> {0., 0.8179712708891431, 0.}, 
+        "VelocityChange" -> {-4.143705749094444*^-6, 0.1265405959853111, 0.}],
+       "Burn 2" -> 
       Association[
-       "Coordinate" -> "Cartesian", "Position" -> {-0.94984, -0.94984, 0}, 
-        "Velocity" -> {0.570699, -0.570693, 0}, 
-        "VelocityChange" -> {
-         0.0394007, -0.03940666, 0}]]}, $CellContext`i1$$ = 
-    0, $CellContext`i2$$ = 0, $CellContext`pl$$ = 1, $CellContext`view$$ = 
+       "Coordinate" -> "Cartesian", 
+        "Position" -> {-2.989192574247807, 3.660705118087614*^-16, 0.}, 
+        "Velocity" -> {-4.14370574921659*^-6, -0.4722559334372272, 0.}, 
+        "VelocityChange" -> {4.143705749145758*^-6, -0.10613709902426433`, 
+         0.}]]}, $CellContext`i1$$ = 0, $CellContext`i2$$ = 
+    0, $CellContext`pl$$ = 5, $CellContext`view$$ = 
     "Orbit", $CellContext`\[Nu]e1s$$ = 180, $CellContext`\[Nu]e2s$$ = 
     180, $CellContext`\[Nu]s1s$$ = -180, $CellContext`\[Nu]s2s$$ = -180, \
 $CellContext`\[Omega]1$$ = 0, $CellContext`\[CapitalOmega]1$$ = 
@@ -58,9 +61,11 @@ $CellContext`\[Omega]1$$ = 0, $CellContext`\[CapitalOmega]1$$ =
     1, Typeset`name$$ = "\"untitled\"", Typeset`specs$$ = {{
       Hold[
        Style["Planet", 12, Bold]], Manipulate`Dump`ThisIsNotAControl}, {{
-       Hold[$CellContext`pl$$], 1, ""}, {
-      1 -> "Kerbin", 2 -> "Mun", 3 -> "Duna", 4 -> "Eve", 5 -> "Jool", 6 -> 
-       "Kerbol", 7 -> "Earth"}}, {
+       Hold[$CellContext`pl$$], 5, ""}, {
+      1 -> "Kerbol", 2 -> "Moho", 3 -> "Eve", 4 -> "  Gilly", 5 -> "Kerbin", 
+       6 -> "  Mun", 7 -> "  Minmus", 8 -> "Duna", 9 -> "  Ike", 10 -> "Dres",
+        11 -> "Jool", 12 -> "  Laythe", 13 -> "  Vall", 14 -> "  Tylo", 15 -> 
+       "  Bop", 16 -> "  Pol", 17 -> "Eeloo", 50 -> "Earth"}}, {
       Hold[
        Style["Initial Orbit", 12, Bold]], 
       Manipulate`Dump`ThisIsNotAControl}, {{
@@ -110,13 +115,13 @@ $CellContext`\[Nu]s2s$$, $CellContext`\[Nu]e2s$$}, $CellContext`pl$$])}]& ]}, \
        Hold[$CellContext`boxSize$$], 10000, "ViewBox (km)"}, 1000, 100000}}, 
     Typeset`size$$ = {576., {310., 315.}}, Typeset`update$$ = 0, 
     Typeset`initDone$$, Typeset`skipInitDone$$ = 
-    False, $CellContext`pl$33590$$ = False, $CellContext`a1$33591$$ = 
-    0, $CellContext`e1$33592$$ = 0, $CellContext`i1$33593$$ = 
-    0, $CellContext`\[CapitalOmega]1$33594$$ = 
-    0, $CellContext`\[Omega]1$33595$$ = 0, $CellContext`\[Nu]s1s$33596$$ = 
-    0, $CellContext`\[Nu]e1s$33597$$ = 0, $CellContext`a2$33598$$ = 
-    0, $CellContext`e2$33599$$ = 0, $CellContext`i2$33600$$ = 
-    0, $CellContext`view$33601$$ = False}, 
+    False, $CellContext`pl$10698$$ = False, $CellContext`a1$10703$$ = 
+    0, $CellContext`e1$10704$$ = 0, $CellContext`i1$10705$$ = 
+    0, $CellContext`\[CapitalOmega]1$10706$$ = 
+    0, $CellContext`\[Omega]1$10707$$ = 0, $CellContext`\[Nu]s1s$10708$$ = 
+    0, $CellContext`\[Nu]e1s$10709$$ = 0, $CellContext`a2$10710$$ = 
+    0, $CellContext`e2$10711$$ = 0, $CellContext`i2$10712$$ = 
+    0, $CellContext`view$10713$$ = False}, 
     DynamicBox[Manipulate`ManipulateBoxes[
      1, StandardForm, 
       "Variables" :> {$CellContext`a1$$ = 700, $CellContext`a2$$ = 
@@ -135,25 +140,25 @@ $CellContext`\[Nu]s2s$$, $CellContext`\[Nu]e2s$$}, $CellContext`pl$$])}]& ]}, \
              "Velocity" -> {0.570699, -0.570693, 0}, 
              "VelocityChange" -> {
               0.0394007, -0.03940666, 0}]]}, $CellContext`i1$$ = 
-        0, $CellContext`i2$$ = 0, $CellContext`pl$$ = 1, $CellContext`view$$ = 
+        0, $CellContext`i2$$ = 0, $CellContext`pl$$ = 5, $CellContext`view$$ = 
         "Orbit", $CellContext`\[Nu]e1s$$ = 180, $CellContext`\[Nu]e2s$$ = 
         180, $CellContext`\[Nu]s1s$$ = -180, $CellContext`\[Nu]s2s$$ = -180, \
 $CellContext`\[Omega]1$$ = 0, $CellContext`\[CapitalOmega]1$$ = 
         0, $CellContext`\[Omega]2$$ = 0, $CellContext`\[CapitalOmega]2$$ = 0},
        "ControllerVariables" :> {
-        Hold[$CellContext`pl$$, $CellContext`pl$33590$$, False], 
-        Hold[$CellContext`a1$$, $CellContext`a1$33591$$, 0], 
-        Hold[$CellContext`e1$$, $CellContext`e1$33592$$, 0], 
-        Hold[$CellContext`i1$$, $CellContext`i1$33593$$, 0], 
+        Hold[$CellContext`pl$$, $CellContext`pl$10698$$, False], 
+        Hold[$CellContext`a1$$, $CellContext`a1$10703$$, 0], 
+        Hold[$CellContext`e1$$, $CellContext`e1$10704$$, 0], 
+        Hold[$CellContext`i1$$, $CellContext`i1$10705$$, 0], 
         Hold[$CellContext`\[CapitalOmega]1$$, \
-$CellContext`\[CapitalOmega]1$33594$$, 0], 
-        Hold[$CellContext`\[Omega]1$$, $CellContext`\[Omega]1$33595$$, 0], 
-        Hold[$CellContext`\[Nu]s1s$$, $CellContext`\[Nu]s1s$33596$$, 0], 
-        Hold[$CellContext`\[Nu]e1s$$, $CellContext`\[Nu]e1s$33597$$, 0], 
-        Hold[$CellContext`a2$$, $CellContext`a2$33598$$, 0], 
-        Hold[$CellContext`e2$$, $CellContext`e2$33599$$, 0], 
-        Hold[$CellContext`i2$$, $CellContext`i2$33600$$, 0], 
-        Hold[$CellContext`view$$, $CellContext`view$33601$$, False]}, 
+$CellContext`\[CapitalOmega]1$10706$$, 0], 
+        Hold[$CellContext`\[Omega]1$$, $CellContext`\[Omega]1$10707$$, 0], 
+        Hold[$CellContext`\[Nu]s1s$$, $CellContext`\[Nu]s1s$10708$$, 0], 
+        Hold[$CellContext`\[Nu]e1s$$, $CellContext`\[Nu]e1s$10709$$, 0], 
+        Hold[$CellContext`a2$$, $CellContext`a2$10710$$, 0], 
+        Hold[$CellContext`e2$$, $CellContext`e2$10711$$, 0], 
+        Hold[$CellContext`i2$$, $CellContext`i2$10712$$, 0], 
+        Hold[$CellContext`view$$, $CellContext`view$10713$$, False]}, 
       "OtherVariables" :> {
        Typeset`show$$, Typeset`bookmarkList$$, Typeset`bookmarkMode$$, 
         Typeset`animator$$, Typeset`animvar$$, Typeset`name$$, 
@@ -162,16 +167,12 @@ $CellContext`\[CapitalOmega]1$33594$$, 0],
       Block[{$CellContext`o1, $CellContext`o2, $CellContext`ot, \
 $CellContext`plot, $CellContext`pb1, $CellContext`pb2, $CellContext`col, \
 $CellContext`\[Nu]s1, $CellContext`\[Nu]e1, $CellContext`\[Nu]s2, \
-$CellContext`\[Nu]e2, $CellContext`planetData, $CellContext`planet, \
-$CellContext`plRadius, $CellContext`pl\[Mu], $CellContext`plDU, \
-$CellContext`plTU, $CellContext`plVU}, $CellContext`planetData = {{
-           3530., 600., 70}, {65.1, 200., 0.01}, {301., 320., 50}, {8170, 700,
-            90}, {283000, 6000, 200}, {1.17 10^6, 261600, 1}, {
-           398600.441, 6371, 1}}; $CellContext`planet = 
-         Part[$CellContext`planetData, $CellContext`pl$$]; $CellContext`plDU = 
-         Part[$CellContext`planet, 2] + 
-          Part[$CellContext`planet, 
-            3]; {$CellContext`\[Nu]s1, $CellContext`\[Nu]e1} = 
+$CellContext`\[Nu]e2, $CellContext`planet, $CellContext`plRadius, \
+$CellContext`pl\[Mu], $CellContext`plDU, $CellContext`plTU, \
+$CellContext`plVU}, $CellContext`planet = \
+$CellContext`CelestialBodyData[$CellContext`pl$$]; $CellContext`plDU = \
+$CellContext`planet["Radius"] + $CellContext`planet[
+           "Atm height"]; {$CellContext`\[Nu]s1, $CellContext`\[Nu]e1} = 
          Sort[{$CellContext`\[Nu]s1s$$, $CellContext`\[Nu]e1s$$}]; \
 {$CellContext`\[Nu]s2, $CellContext`\[Nu]e2} = 
          Sort[{$CellContext`\[Nu]s2s$$, $CellContext`\[Nu]e2s$$}]; \
@@ -199,33 +200,37 @@ $CellContext`o1 = $CellContext`restrictOrbit[
              $CellContext`CoordinateAfterBurn[
               Part[$CellContext`fot$$, 3][
               "Burn 1"]]]]]; $CellContext`plot = \
-$CellContext`OrbitPlot3D[{$CellContext`o1, $CellContext`o2, $CellContext`ot}, 
-           Part[$CellContext`planet, 
-             Span[2, 3]]/$CellContext`plDU, 
+$CellContext`OrbitPlot3D[{$CellContext`o1, $CellContext`o2, $CellContext`ot}, {
+             $CellContext`planet["Radius"], 
+             $CellContext`planet["Atm height"]}/$CellContext`plDU, 
            Part[$CellContext`fot$$, 3]["Burn 1"], 
            Part[$CellContext`fot$$, 3][
            "Burn 2"], $CellContext`boxSize$$/$CellContext`plDU]; \
 {$CellContext`pb1, $CellContext`pb2} = 
          Map[$CellContext`RescaleBurnWithPlanet[
             $CellContext`ProcessBurn[#], 
-            Part[$CellContext`planet, 1], 
-            Part[$CellContext`planet, 2], $CellContext`plDU]& , {
+            $CellContext`planet["\[Mu]"], 
+            $CellContext`planet["Radius"], $CellContext`plDU]& , {
             Part[$CellContext`fot$$, 3]["Burn 1"], 
             Part[$CellContext`fot$$, 3]["Burn 2"]}]; $CellContext`ot = 
          KeyDrop[$CellContext`ot, {"\[Nu]Range", "Orbit"}]; TimesBy[
           $CellContext`ot["a"], $CellContext`plDU]; $CellContext`ot[
           "Periapsis Radius"] = $CellContext`ot["a"] (1 - $CellContext`ot[
            "e"]); $CellContext`ot[
-          "Periapsis Altitude"] = $CellContext`ot["Periapsis Radius"] - 
-          Part[$CellContext`planet, 
-           2]; $CellContext`col = $CellContext`PrettyPrint[{$CellContext`pb1, \
-$CellContext`pb2}, $CellContext`ot]; 
+          "Periapsis Altitude"] = $CellContext`ot[
+           "Periapsis Radius"] - $CellContext`planet[
+          "Radius"]; $CellContext`col = \
+$CellContext`PrettyPrint[{$CellContext`pb1, $CellContext`pb2}, \
+$CellContext`ot]; 
         If[$CellContext`view$$ == 
           "Orbit", $CellContext`plot, $CellContext`col]], "Specifications" :> {
         Style[
-        "Planet", 12, Bold], {{$CellContext`pl$$, 1, ""}, {
-         1 -> "Kerbin", 2 -> "Mun", 3 -> "Duna", 4 -> "Eve", 5 -> "Jool", 6 -> 
-          "Kerbol", 7 -> "Earth"}}, 
+        "Planet", 12, Bold], {{$CellContext`pl$$, 5, ""}, {
+         1 -> "Kerbol", 2 -> "Moho", 3 -> "Eve", 4 -> "  Gilly", 5 -> 
+          "Kerbin", 6 -> "  Mun", 7 -> "  Minmus", 8 -> "Duna", 9 -> "  Ike", 
+          10 -> "Dres", 11 -> "Jool", 12 -> "  Laythe", 13 -> "  Vall", 14 -> 
+          "  Tylo", 15 -> "  Bop", 16 -> "  Pol", 17 -> "Eeloo", 50 -> 
+          "Earth"}}, 
         Style[
         "Initial Orbit", 12, Bold], {{$CellContext`a1$$, 700, "a"}, 200., 
          5000., Appearance -> "Open", 
@@ -293,7 +298,25 @@ $CellContext`\[Nu]s2s$$, $CellContext`\[Nu]e2s$$}, $CellContext`pl$$])}]& ]}, \
      SingleEvaluation->True],
     Deinitialization:>None,
     DynamicModuleValues:>{},
-    Initialization:>({$CellContext`restrictOrbit[
+    Initialization:>({$CellContext`CelestialBodyData[
+         Pattern[$CellContext`n, 
+          Blank[]]] := Block[{$CellContext`row}, $CellContext`row = Part[
+            Select[$CellContext`data, Part[#, 1] == $CellContext`n& ], 1]; 
+         Return[
+           Association[
+           "Name" -> Part[$CellContext`row, 2], "Radius" -> 
+            Part[$CellContext`row, 3], "\[Mu]" -> Part[$CellContext`row, 4], 
+            "Atm height" -> Part[$CellContext`row, 5]]]; 
+         Null], $CellContext`data = {{1, "Kerbol", 261600, 1.17233*^9, 1}, {
+         2, "Moho", 250, 169., 1}, {3, "Eve", 700, 8170., 96.708}, {
+         4, "  Gilly", 13, 0.00829, 1}, {5, "Kerbin", 600, 3530., 69.077}, {
+         6, "  Mun", 200, 65.1, 1}, {7, "  Minmus", 60, 1.77, 1}, {
+         8, "Duna", 320, 301., 41.446}, {9, "  Ike", 130, 18.6, 1}, {
+         10, "Dres", 138, 21.5, 1}, {11, "Jool", 6000, 283000., 138.155}, {
+         12, "  Laythe", 500, 1960., 55.262}, {13, "  Vall", 300, 207., 1}, {
+         14, "  Tylo", 600, 2830., 1}, {15, "  Bop", 65, 2.49, 1}, {
+         16, "  Pol", 44, 0.722, 1}, {17, "Eeloo", 210, 74.4, 1}, {
+         50, "Earth", 6371, 398600.441, 60}}, $CellContext`restrictOrbit[
          PatternTest[
           Pattern[$CellContext`kep, 
            Blank[]], And[
@@ -410,7 +433,8 @@ $CellContext`rMag)]]; $CellContext`argLat =
             Dot[$CellContext`n, $CellContext`r]/($CellContext`nMag \
 $CellContext`rMag)]]; $CellContext`truLon = 
           ArcCos[Part[$CellContext`r, 1]/$CellContext`rMag]; 
-         If[Part[$CellContext`e, 3] < 0, $CellContext`\[Omega] = 
+         If[
+          Part[$CellContext`e, 3] < 0, $CellContext`\[Omega] = 
            2 Pi - $CellContext`\[Omega]]; 
          If[Dot[$CellContext`r, $CellContext`v] < 0, $CellContext`nu = 
            2 Pi - $CellContext`nu]; 
@@ -430,9 +454,7 @@ $CellContext`rMag)]]; $CellContext`truLon =
             "\[CapitalOmega]" -> $CellContext`\[CapitalOmega], 
             "\[CurlyPi]" -> $CellContext`\[Omega] + $CellContext`\
 \[CapitalOmega], "\[Omega]" -> $CellContext`\[Omega], "\[Nu]" -> 
-            Re[$CellContext`nu]]]; 
-         Null], $CellContext`zeta = -0.4187543839075061, $CellContext`lonPer = 
-       0.785361368221314, $CellContext`CoordinateAfterBurn[
+            Re[$CellContext`nu]]]; Null], $CellContext`CoordinateAfterBurn[
          PatternTest[
           Pattern[$CellContext`c, 
            Blank[]], And[
@@ -543,24 +565,23 @@ $CellContext`X, $CellContext`Y, $CellContext`Z, $CellContext`vX, \
 $CellContext`vY, $CellContext`vZ, $CellContext`\[Mu] = 
           1}, $CellContext`w = $CellContext`\[CurlyPi] - $CellContext`Om; \
 $CellContext`IHAT = {
-           Cos[$CellContext`Om] Cos[$CellContext`w] - (Sin[$CellContext`Om] 
-             Sin[$CellContext`w]) Cos[$CellContext`i], 
-            Sin[$CellContext`Om] 
-             Cos[$CellContext`w] + (Cos[$CellContext`Om] Sin[$CellContext`w]) 
-             Cos[$CellContext`i], Sin[$CellContext`w] 
+           Cos[$CellContext`Om] Cos[$CellContext`w] - Sin[$CellContext`Om] 
+            Sin[$CellContext`w] Cos[$CellContext`i], 
+            Sin[$CellContext`Om] Cos[$CellContext`w] + 
+            Cos[$CellContext`Om] Sin[$CellContext`w] Cos[$CellContext`i], 
+            Sin[$CellContext`w] 
             Sin[$CellContext`i]}; $CellContext`JHAT = {(-Cos[$CellContext`Om])
-               Sin[$CellContext`w] - (Sin[$CellContext`Om] 
-             Cos[$CellContext`w]) 
-            Cos[$CellContext`i], (-Sin[$CellContext`Om]) 
-             Sin[$CellContext`w] + (Cos[$CellContext`Om] Cos[$CellContext`w]) 
-             Cos[$CellContext`i], Cos[$CellContext`w] 
+               Sin[$CellContext`w] - Sin[$CellContext`Om] Cos[$CellContext`w] 
+            Cos[$CellContext`i], (-Sin[$CellContext`Om]) Sin[$CellContext`w] + 
+            Cos[$CellContext`Om] Cos[$CellContext`w] Cos[$CellContext`i], 
+            Cos[$CellContext`w] 
             Sin[$CellContext`i]}; $CellContext`r = $CellContext`a ((
              1 - $CellContext`e^2)/(
             1 + $CellContext`e 
              Cos[$CellContext`v])); {$CellContext`X, $CellContext`Y, \
-$CellContext`Z} = ($CellContext`r 
-             Cos[$CellContext`v]) $CellContext`IHAT + ($CellContext`r 
-             Sin[$CellContext`v]) $CellContext`JHAT; {$CellContext`vX, \
+$CellContext`Z} = $CellContext`r 
+            Cos[$CellContext`v] $CellContext`IHAT + $CellContext`r 
+            Sin[$CellContext`v] $CellContext`JHAT; {$CellContext`vX, \
 $CellContext`vY, $CellContext`vZ} = 
           Sqrt[$CellContext`\[Mu]/($CellContext`a (1 - $CellContext`e^2))] ((-
               Sin[$CellContext`v]) $CellContext`IHAT + ($CellContext`e + 
@@ -613,8 +634,7 @@ $CellContext`b["Position"]; $CellContext`dv = $CellContext`b[
            Arrow[
             
             Line[{$CellContext`p, $CellContext`p + $CellContext`dv}]]]], \
-$CellContext`dv = {
-        0.0394007, -0.03940666, 0}, $CellContext`RescaleBurnWithPlanet[
+$CellContext`RescaleBurnWithPlanet[
          Pattern[$CellContext`b, 
           Blank[]], 
          Pattern[$CellContext`\[Mu], 
@@ -704,7 +724,6 @@ $CellContext`vRad}, $CellContext`ivNorm = Normalize[
               Cross[$CellContext`radialNorm, $CellContext`ivNorm]] > 
             0], $CellContext`vPro = 
             Dot[$CellContext`ivNorm, $CellContext`dv]; $CellContext`vRad = 
-            
             Dot[$CellContext`radialNorm, $CellContext`dv]; \
 $CellContext`orbitNormalNorm = 
             Cross[$CellContext`radialNorm, $CellContext`ivNorm]; \
@@ -865,17 +884,12 @@ $CellContext`\[CapitalDelta]Vs = Map[NumberForm[
          Pattern[$CellContext`pl, 
           Blank[]]] := 
        Block[{$CellContext`\[Nu]s1, $CellContext`\[Nu]e1, \
-$CellContext`\[Nu]s2, $CellContext`\[Nu]e2, $CellContext`planetData, \
-$CellContext`planet, $CellContext`plRadius, $CellContext`pl\[Mu], \
-$CellContext`plDU, $CellContext`plTU, $CellContext`plVU}, \
-$CellContext`planetData = {{3530., 600., 70}, {65.1, 200., 0.01}, {
-            301., 320., 50}, {8170, 700, 90}, {283000, 6000, 200}, {
-            1.17 10^6, 261600, 1}, {
-            398600.441, 6371, 1}}; $CellContext`planet = 
-          Part[$CellContext`planetData, $CellContext`pl]; $CellContext`plDU = 
-          Part[$CellContext`planet, 2] + 
-           Part[$CellContext`planet, 
-             3]; {$CellContext`\[Nu]s1, $CellContext`\[Nu]e1} = 
+$CellContext`\[Nu]s2, $CellContext`\[Nu]e2, $CellContext`planet, \
+$CellContext`plRadius, $CellContext`pl\[Mu], $CellContext`plDU, \
+$CellContext`plTU, $CellContext`plVU}, $CellContext`planet = \
+$CellContext`CelestialBodyData[$CellContext`pl]; $CellContext`plDU = \
+$CellContext`planet["Radius"] + $CellContext`planet[
+            "Atm height"]; {$CellContext`\[Nu]s1, $CellContext`\[Nu]e1} = 
           Sort[{$CellContext`\[Nu]s1s, $CellContext`\[Nu]e1s}]; \
 {$CellContext`\[Nu]s2, $CellContext`\[Nu]e2} = 
           Sort[{$CellContext`\[Nu]s2s, $CellContext`\[Nu]e2s}]; \
@@ -924,15 +938,17 @@ $CellContext`orbsAreCoplanar[
           Blank[]], 
          Pattern[$CellContext`o2$, 
           Blank[]]] := 
-       Block[{FE`i1$$3, $CellContext`O1, FE`i2$$3, $CellContext`O2}, 
-         FE`i1$$3 = $CellContext`o1$["i"]; 
-         FE`i2$$3 = $CellContext`o2$["i"]; $CellContext`O1 = $CellContext`o1$[
+       Block[{$CellContext`i1$$, $CellContext`O1, $CellContext`i2$$, \
+$CellContext`O2}, $CellContext`i1$$ = $CellContext`o1$[
+           "i"]; $CellContext`i2$$ = $CellContext`o2$[
+           "i"]; $CellContext`O1 = $CellContext`o1$[
            "\[CapitalOmega]"]; $CellContext`O2 = $CellContext`o2$[
-           "\[CapitalOmega]"]; And[FE`i1$$3 == FE`i2$$3, 
-           Or[FE`i1$$3 == 0, $CellContext`O1 == $CellContext`O2]]], 
-       Attributes[$CellContext`o1$] = {Temporary}, 
-       Attributes[$CellContext`o2$] = {Temporary}, FE`i1$$3 = 0, FE`i2$$3 = 
-       0, $CellContext`orbsAreCircular[
+           "\[CapitalOmega]"]; And[$CellContext`i1$$ == $CellContext`i2$$, 
+           Or[
+            
+            Or[$CellContext`i1$$ == 0, $CellContext`i1$$ == 
+             Pi], $CellContext`O1 == $CellContext`O2]]], \
+$CellContext`orbsAreCircular[
          Pattern[$CellContext`o1, 
           Blank[]], 
          Pattern[$CellContext`o2, 
@@ -943,64 +959,72 @@ $CellContext`orbsAreCoplanar[
           Blank[]], 
          Pattern[$CellContext`o2$, 
           Blank[]]] := 
-       Block[{FE`a1$$3, FE`e1$$3, FE`i1$$3, $CellContext`O1, $CellContext`w1, 
-          FE`a2$$3, FE`e2$$3, FE`i2$$3, $CellContext`O2, $CellContext`w2}, 
-         FE`a1$$3 = $CellContext`o1$["a"]; FE`a2$$3 = $CellContext`o2$["a"]; 
-         FE`e1$$3 = $CellContext`o1$["e"]; FE`e2$$3 = $CellContext`o2$["e"]; 
-         FE`i1$$3 = $CellContext`o1$["i"]; 
-         FE`i2$$3 = $CellContext`o2$["i"]; $CellContext`O1 = $CellContext`o1$[
+       Block[{$CellContext`a1$$, $CellContext`e1$$, $CellContext`i1$$, \
+$CellContext`O1, $CellContext`w1, $CellContext`a2$$, $CellContext`e2$$, \
+$CellContext`i2$$, $CellContext`O2, $CellContext`w2}, $CellContext`a1$$ = \
+$CellContext`o1$["a"]; $CellContext`a2$$ = $CellContext`o2$[
+           "a"]; $CellContext`e1$$ = $CellContext`o1$[
+           "e"]; $CellContext`e2$$ = $CellContext`o2$[
+           "e"]; $CellContext`i1$$ = $CellContext`o1$[
+           "i"]; $CellContext`i2$$ = $CellContext`o2$[
+           "i"]; $CellContext`O1 = $CellContext`o1$[
            "\[CapitalOmega]"]; $CellContext`O2 = $CellContext`o2$[
            "\[CapitalOmega]"]; $CellContext`w1 = $CellContext`o1$[
            "\[Omega]"]; $CellContext`w2 = $CellContext`o2$["\[Omega]"]; 
-         And[FE`a1$$3 == FE`a2$$3, 
-           Or[FE`e1$$3 == 0, $CellContext`w1 == $CellContext`w2], FE`e1$$3 == 
-           FE`e2$$3, 
-           Or[FE`i1$$3 == 0, $CellContext`O1 == $CellContext`O2], FE`i1$$3 == 
-           FE`i2$$3]], FE`a1$$3 = 700, FE`e1$$3 = 0, FE`a2$$3 = 900, FE`e2$$3 = 
-       0, $CellContext`tryAnalyticTransfer[
+         And[$CellContext`a1$$ == $CellContext`a2$$, 
+           
+           Or[$CellContext`e1$$ == 
+            0, $CellContext`w1 == $CellContext`w2], $CellContext`e1$$ == \
+$CellContext`e2$$, 
+           Or[
+            
+            Or[$CellContext`i1$$ == 0, $CellContext`i1$$ == 
+             Pi], $CellContext`O1 == $CellContext`O2], $CellContext`i1$$ == \
+$CellContext`i2$$]], $CellContext`tryAnalyticTransfer[
          Pattern[$CellContext`o1, 
           Blank[]], 
          Pattern[$CellContext`o2, 
           Blank[]]] := 
        Block[{$CellContext`w1, $CellContext`w2, $CellContext`nr1, \
 $CellContext`nr2, $CellContext`nInt, $CellContext`minInt, \
-$CellContext`maxInt, $CellContext`nu}, $CellContext`nr1 = Interval[
-            $CellContext`o1["\[Nu]Range"]]; $CellContext`nr2 = Interval[
-            $CellContext`o2["\[Nu]Range"]]; Which[
-           $CellContext`orbsAreIdentical[$CellContext`o1, $CellContext`o2], \
-$CellContext`nInt = 
-            IntervalIntersection[$CellContext`nr1, $CellContext`nr2]; \
+$CellContext`maxInt, $CellContext`nu}, 
+         Which[
+          $CellContext`orbsAreIdentical[$CellContext`o1, $CellContext`o2], \
+$CellContext`nr1 = Interval[
+             $CellContext`o1["\[Nu]Range"]]; $CellContext`nr2 = Interval[
+             $CellContext`o2["\[Nu]Range"]]; $CellContext`nInt = 
+           IntervalIntersection[$CellContext`nr1, $CellContext`nr2]; \
 $CellContext`minInt = Min[$CellContext`nInt]; $CellContext`maxInt = 
-            Max[$CellContext`nInt]; 
-           If[$CellContext`minInt < 2 Pi, $CellContext`nu = If[
-                IntervalMemberQ[$CellContext`nInt, 0], 0, 
-                
-                RandomReal[{$CellContext`minInt, $CellContext`maxInt}]]; \
+           Max[$CellContext`nInt]; 
+          If[$CellContext`minInt < 2 Pi, $CellContext`nu = If[
+               IntervalMemberQ[$CellContext`nInt, 0], 0, 
+               
+               RandomReal[{$CellContext`minInt, $CellContext`maxInt}]]; \
 {$CellContext`nu, $CellContext`nu, 
-               $CellContext`BestTransferTwoPoints[
-                $CellContext`CartesianFromKeplerian[
-                 $CellContext`CoordinateFromOrbit[$CellContext`o1, \
+              $CellContext`BestTransferTwoPoints[
+               $CellContext`CartesianFromKeplerian[
+                $CellContext`CoordinateFromOrbit[$CellContext`o1, \
 $CellContext`nu]], 
-                $CellContext`CartesianFromKeplerian[
-                 $CellContext`CoordinateFromOrbit[$CellContext`o2, \
+               $CellContext`CartesianFromKeplerian[
+                $CellContext`CoordinateFromOrbit[$CellContext`o2, \
 $CellContext`nu]]]}, 
-             $CellContext`nonanalyticTransfer[$CellContext`o1, \
+            $CellContext`nonanalyticTransfer[$CellContext`o1, \
 $CellContext`o2]], 
-           And[
-            $CellContext`orbsAreCircular[$CellContext`o1, $CellContext`o2], 
-            $CellContext`orbsAreCoplanar[$CellContext`o1, $CellContext`o2]], \
+          And[
+           $CellContext`orbsAreCircular[$CellContext`o1, $CellContext`o2], 
+           $CellContext`orbsAreCoplanar[$CellContext`o1, $CellContext`o2]], \
 {$CellContext`w1, $CellContext`w2} = Map[$CellContext`ModPiRange[
-               #[
-               "\[Omega]"]]& , {$CellContext`o1, $CellContext`o2}]; \
+              #[
+              "\[Omega]"]]& , {$CellContext`o1, $CellContext`o2}]; \
 {-$CellContext`w1, -$CellContext`w2 + Pi, 
-             $CellContext`BestTransferTwoPoints[
-              $CellContext`CartesianFromKeplerian[
-               $CellContext`CoordinateFromOrbit[$CellContext`o1, \
+            $CellContext`BestTransferTwoPoints[
+             $CellContext`CartesianFromKeplerian[
+              $CellContext`CoordinateFromOrbit[$CellContext`o1, \
 -$CellContext`w1]], 
-              $CellContext`CartesianFromKeplerian[
-               $CellContext`CoordinateFromOrbit[$CellContext`o2, \
+             $CellContext`CartesianFromKeplerian[
+              $CellContext`CoordinateFromOrbit[$CellContext`o2, \
 -$CellContext`w2 + Pi]]]}, True, 
-           $CellContext`nonanalyticTransfer[$CellContext`o1, \
+          $CellContext`nonanalyticTransfer[$CellContext`o1, \
 $CellContext`o2]]], $CellContext`BestTransferTwoPoints[
          PatternTest[
           Pattern[$CellContext`cart1, 
@@ -1394,7 +1418,6 @@ $CellContext`pol2}]; $CellContext`maxoe = Max[
               Max[$CellContext`maxoe 2, 1]}, {
              Pi/2, -1, 1}}, {{$CellContext`wb, $CellContext`d1, 
               1}, {$CellContext`wb, $CellContext`d2, 
-              
               Max[$CellContext`maxoe 2, 
                1]}, {$CellContext`wf, $CellContext`d1, ((-1)/
                Cos[$CellContext`th1 - $CellContext`wf]) 
@@ -1492,8 +1515,8 @@ $CellContext`h^2; $CellContext`e = Re[
                 
                 And[$CellContext`r < $CellContext`a, $CellContext`\
 \[ScriptCapitalE] < 0], $CellContext`\[ScriptCapitalE] >= 0], $CellContext`th,
-                Pi + $CellContext`th], $CellContext`th - (
-               Sign[$CellContext`vr] Sign[$CellContext`vth]) 
+                Pi + $CellContext`th], $CellContext`th - 
+              Sign[$CellContext`vr] Sign[$CellContext`vth] 
               ArcCos[($CellContext`h^2 - $CellContext`r)/($CellContext`r \
 $CellContext`e)]]], 2 Pi]; 
          If[$CellContext`e == 0, $CellContext`e = 
@@ -1555,10 +1578,10 @@ $CellContext`vz2} = $CellContext`pol2[
             1 + $CellContext`e 
              Cos[$CellContext`th1 - $CellContext`w])]; $CellContext`v = 
           Sqrt[2/$CellContext`r - (
-             1 - $CellContext`e^2)/$CellContext`p]; $CellContext`vth = (
-            Sign[$CellContext`h] $CellContext`v) 
-           Cos[$CellContext`alA]; $CellContext`vrA = (
-            Sign[$CellContext`h] $CellContext`v) 
+             1 - $CellContext`e^2)/$CellContext`p]; $CellContext`vth = 
+          Sign[$CellContext`h] $CellContext`v 
+           Cos[$CellContext`alA]; $CellContext`vrA = 
+          Sign[$CellContext`h] $CellContext`v 
            Sin[$CellContext`alA]; $CellContext`vrB = -$CellContext`vrA; \
 $CellContext`DV1 = 
           Sqrt[($CellContext`vth - $CellContext`vth1)^2 + ($CellContext`vrA - \
@@ -1622,45 +1645,46 @@ $CellContext`vth1, $CellContext`vz1, $CellContext`r2, $CellContext`th2, \
 $CellContext`vr2, $CellContext`vth2, $CellContext`vz2, $CellContext`w, \
 $CellContext`h}, 
           
-          Block[{Compile`$5, Compile`$8, Compile`$9, Compile`$11, Compile`$12,
-             Compile`$26, Compile`$51, Compile`$54, Compile`$63, Compile`$64}, 
+          Block[{Compile`$2, Compile`$3, Compile`$4, Compile`$6, Compile`$7, 
+            Compile`$19, Compile`$42, Compile`$43, Compile`$52, Compile`$53}, 
+           
            
            Block[{$CellContext`p, $CellContext`e, $CellContext`a, \
 $CellContext`alA, $CellContext`alB, $CellContext`vA, $CellContext`vB, \
 $CellContext`vrA, $CellContext`vthA, $CellContext`vrB, $CellContext`vthB, \
 $CellContext`DV1, $CellContext`DV2}, $CellContext`p = (
-              Compile`$5 = -$CellContext`w; 
-              Compile`$8 = $CellContext`th1 + Compile`$5; 
-              Compile`$9 = Cos[Compile`$8]; 
-              Compile`$11 = $CellContext`th2 + Compile`$5; 
-              Compile`$12 = 
-               Cos[Compile`$11]; -((((-$CellContext`r1) $CellContext`r2) 
-                  Compile`$9 + ($CellContext`r1 $CellContext`r2) 
-                  Compile`$12)/($CellContext`r1 Compile`$9 - $CellContext`r2 
-                Compile`$12))); $CellContext`e = (
-              Compile`$26 = -$CellContext`w; -(($CellContext`r1 - \
+              Compile`$2 = -$CellContext`w; 
+              Compile`$3 = $CellContext`th1 + Compile`$2; 
+              Compile`$4 = Cos[Compile`$3]; 
+              Compile`$6 = $CellContext`th2 + Compile`$2; 
+              Compile`$7 = 
+               Cos[Compile`$6]; -(((-$CellContext`r1) $CellContext`r2 
+                  Compile`$4 + $CellContext`r1 $CellContext`r2 
+                  Compile`$7)/($CellContext`r1 Compile`$4 - $CellContext`r2 
+                Compile`$7))); $CellContext`e = (
+              Compile`$19 = -$CellContext`w; -(($CellContext`r1 - \
 $CellContext`r2)/($CellContext`r1 
-                 Cos[$CellContext`th1 + Compile`$26] - $CellContext`r2 
-                Cos[$CellContext`th2 + Compile`$26]))); $CellContext`a = (1/
+                 Cos[$CellContext`th1 + Compile`$19] - $CellContext`r2 
+                Cos[$CellContext`th2 + Compile`$19]))); $CellContext`a = (1/
                2) ($CellContext`p/(1 + $CellContext`e) + $CellContext`p/(
                 1 - $CellContext`e)); $CellContext`alA = (
-              Compile`$51 = -$CellContext`w; 
-              Compile`$54 = $CellContext`th1 + Compile`$51; 
-              ArcTan[($CellContext`e Sin[Compile`$54])/(
-                1 + $CellContext`e Cos[Compile`$54])]); $CellContext`alB = (
-              Compile`$63 = -$CellContext`w; 
-              Compile`$64 = $CellContext`th2 + Compile`$63; 
-              ArcTan[($CellContext`e Sin[Compile`$64])/(
-                1 + $CellContext`e Cos[Compile`$64])]); $CellContext`vA = 
+              Compile`$42 = -$CellContext`w; 
+              Compile`$43 = $CellContext`th1 + Compile`$42; 
+              ArcTan[($CellContext`e Sin[Compile`$43])/(
+                1 + $CellContext`e Cos[Compile`$43])]); $CellContext`alB = (
+              Compile`$52 = -$CellContext`w; 
+              Compile`$53 = $CellContext`th2 + Compile`$52; 
+              ArcTan[($CellContext`e Sin[Compile`$53])/(
+                1 + $CellContext`e Cos[Compile`$53])]); $CellContext`vA = 
              Sqrt[2/$CellContext`r1 - 1/$CellContext`a]; $CellContext`vB = 
-             Sqrt[2/$CellContext`r2 - 1/$CellContext`a]; $CellContext`vthA = (
-               Sign[$CellContext`h] $CellContext`vA) 
-              Cos[$CellContext`alA]; $CellContext`vrA = (
-               Sign[$CellContext`h] $CellContext`vA) 
-              Sin[$CellContext`alA]; $CellContext`vthB = (
-               Sign[$CellContext`h] $CellContext`vB) 
-              Cos[$CellContext`alB]; $CellContext`vrB = (
-               Sign[$CellContext`h] $CellContext`vB) 
+             Sqrt[2/$CellContext`r2 - 1/$CellContext`a]; $CellContext`vthA = 
+             Sign[$CellContext`h] $CellContext`vA 
+              Cos[$CellContext`alA]; $CellContext`vrA = 
+             Sign[$CellContext`h] $CellContext`vA 
+              Sin[$CellContext`alA]; $CellContext`vthB = 
+             Sign[$CellContext`h] $CellContext`vB 
+              Cos[$CellContext`alB]; $CellContext`vrB = 
+             Sign[$CellContext`h] $CellContext`vB 
               Sin[$CellContext`alB]; $CellContext`DV1 = 
              Sqrt[($CellContext`vthA - $CellContext`vth1)^2 + \
 ($CellContext`vrA - $CellContext`vr1)^2 + $CellContext`vz1^2]; \
@@ -1670,24 +1694,24 @@ $CellContext`DV2 =
 $CellContext`DV1 + $CellContext`DV2]]], Evaluate, 
          LibraryFunction[
          "/Users/Jacob/Library/Mathematica/ApplicationData/CCompilerDriver/\
-BuildFolder/pu174532-43299/compiledFunction3.dylib", 
-          "compiledFunction3", {{Real, 0, "Constant"}, {
+BuildFolder/pu174532-71015/compiledFunction0.dylib", 
+          "compiledFunction0", {{Real, 0, "Constant"}, {
            Real, 0, "Constant"}, {Real, 0, "Constant"}, {
            Real, 0, "Constant"}, {Real, 0, "Constant"}, {
            Real, 0, "Constant"}, {Real, 0, "Constant"}, {
            Real, 0, "Constant"}, {Real, 0, "Constant"}, {
            Real, 0, "Constant"}, {Real, 0, "Constant"}, {
            Real, 0, "Constant"}}, Real]], 
-       Attributes[Compile`$5] = {Temporary}, 
-       Attributes[Compile`$8] = {Temporary}, 
-       Attributes[Compile`$9] = {Temporary}, 
-       Attributes[Compile`$11] = {Temporary}, 
-       Attributes[Compile`$12] = {Temporary}, 
-       Attributes[Compile`$26] = {Temporary}, 
-       Attributes[Compile`$51] = {Temporary}, 
-       Attributes[Compile`$54] = {Temporary}, 
-       Attributes[Compile`$63] = {Temporary}, 
-       Attributes[Compile`$64] = {
+       Attributes[Compile`$2] = {Temporary}, 
+       Attributes[Compile`$3] = {Temporary}, 
+       Attributes[Compile`$4] = {Temporary}, 
+       Attributes[Compile`$6] = {Temporary}, 
+       Attributes[Compile`$7] = {Temporary}, 
+       Attributes[Compile`$19] = {Temporary}, 
+       Attributes[Compile`$42] = {Temporary}, 
+       Attributes[Compile`$43] = {Temporary}, 
+       Attributes[Compile`$52] = {Temporary}, 
+       Attributes[Compile`$53] = {
         Temporary}, $CellContext`\[CapitalDelta]VVectors[
          Pattern[$CellContext`pol1, 
           Blank[]], 
@@ -1710,10 +1734,10 @@ $CellContext`vz1} = $CellContext`pol1[
 $CellContext`pol2[
            "Position"]; {$CellContext`vr2, $CellContext`vth2, \
 $CellContext`vz2} = $CellContext`pol2[
-           "Velocity"]; $CellContext`p = -((((-$CellContext`r1) \
-$CellContext`r2) 
-              Cos[$CellContext`th1 - $CellContext`w] + ($CellContext`r1 \
-$CellContext`r2) Cos[$CellContext`th2 - $CellContext`w])/($CellContext`r1 
+           "Velocity"]; $CellContext`p = -(((-$CellContext`r1) \
+$CellContext`r2 
+              Cos[$CellContext`th1 - $CellContext`w] + $CellContext`r1 \
+$CellContext`r2 Cos[$CellContext`th2 - $CellContext`w])/($CellContext`r1 
              Cos[$CellContext`th1 - $CellContext`w] - $CellContext`r2 
             Cos[$CellContext`th2 - $CellContext`w])); $CellContext`e = \
 -(($CellContext`r1 - $CellContext`r2)/($CellContext`r1 
@@ -1728,14 +1752,14 @@ $CellContext`r2) Cos[$CellContext`th2 - $CellContext`w])/($CellContext`r1
             1 + $CellContext`e 
              Cos[$CellContext`th2 - $CellContext`w])]; $CellContext`vA = 
           Sqrt[2/$CellContext`r1 - 1/$CellContext`a]; $CellContext`vB = 
-          Sqrt[2/$CellContext`r2 - 1/$CellContext`a]; $CellContext`vthA = (
-            Sign[$CellContext`h] $CellContext`vA) 
-           Cos[$CellContext`alA]; $CellContext`vrA = (
-            Sign[$CellContext`h] $CellContext`vA) 
-           Sin[$CellContext`alA]; $CellContext`vthB = (
-            Sign[$CellContext`h] $CellContext`vB) 
-           Cos[$CellContext`alB]; $CellContext`vrB = (
-            Sign[$CellContext`h] $CellContext`vB) 
+          Sqrt[2/$CellContext`r2 - 1/$CellContext`a]; $CellContext`vthA = 
+          Sign[$CellContext`h] $CellContext`vA 
+           Cos[$CellContext`alA]; $CellContext`vrA = 
+          Sign[$CellContext`h] $CellContext`vA 
+           Sin[$CellContext`alA]; $CellContext`vthB = 
+          Sign[$CellContext`h] $CellContext`vB 
+           Cos[$CellContext`alB]; $CellContext`vrB = 
+          Sign[$CellContext`h] $CellContext`vB 
            Sin[$CellContext`alB]; $CellContext`DV1 = {$CellContext`vrA - \
 $CellContext`vr1, $CellContext`vthA - $CellContext`vth1, -$CellContext`vz1}; \
 $CellContext`DV2 = {-($CellContext`vrB - $CellContext`vr2), \
@@ -1770,11 +1794,10 @@ $CellContext`vz2} = $CellContext`pol2[
             1 + $CellContext`e 
              Cos[$CellContext`th1 - $CellContext`w])]; $CellContext`v = 
           Sqrt[2/$CellContext`r - (
-             1 - $CellContext`e^2)/$CellContext`p]; $CellContext`vth = (
-            Sign[$CellContext`h] $CellContext`v) 
-           Cos[$CellContext`alA]; $CellContext`vrA = (
-            Sign[$CellContext`h] $CellContext`v) 
-           
+             1 - $CellContext`e^2)/$CellContext`p]; $CellContext`vth = 
+          Sign[$CellContext`h] $CellContext`v 
+           Cos[$CellContext`alA]; $CellContext`vrA = 
+          Sign[$CellContext`h] $CellContext`v 
            Sin[$CellContext`alA]; $CellContext`vrB = -$CellContext`vrA; \
 $CellContext`DV1 = {$CellContext`vrA - $CellContext`vr1, $CellContext`vth - \
 $CellContext`vth1, -$CellContext`vz1}; $CellContext`DV2 = {-($CellContext`vrB - \
@@ -1952,13 +1975,13 @@ $CellContext`pts, $CellContext`p1, $CellContext`p2, $CellContext`p3}, \
           Map[SetPrecision[#, 
              40]& , {$CellContext`r1o, $CellContext`r2o, $CellContext`th2o}]; \
 $CellContext`p1 = 
-          1/($CellContext`r1^2 + $CellContext`r2^2 - ((
-             2 $CellContext`r1) $CellContext`r2) 
+          1/($CellContext`r1^2 + $CellContext`r2^2 - 
+           2 $CellContext`r1 $CellContext`r2 
            Cos[$CellContext`th2]); $CellContext`p2 = -$CellContext`r1^2 + \
-$CellContext`r1 $CellContext`r2 + ($CellContext`r1 $CellContext`r2) 
+$CellContext`r1 $CellContext`r2 + $CellContext`r1 $CellContext`r2 
             Cos[$CellContext`th2] - $CellContext`r2^2 
-           Cos[$CellContext`th2]; $CellContext`p3 = ((2 
-             Sin[$CellContext`th2/2]) Sin[$CellContext`th2]) 
+           Cos[$CellContext`th2]; $CellContext`p3 = 
+          2 Sin[$CellContext`th2/2] Sin[$CellContext`th2] 
            Sqrt[$CellContext`r1 $CellContext`r2^3]; $CellContext`pts = {-
             ArcCos[($CellContext`p2 - $CellContext`p3) $CellContext`p1], 
             ArcCos[($CellContext`p2 - $CellContext`p3) $CellContext`p1], -
@@ -2105,75 +2128,70 @@ $CellContext`th2},
 $CellContext`th2}, 
           
           Block[{$CellContext`pts}, $CellContext`pts = {-
-              ArcCos[(1/($CellContext`r1^2 + $CellContext`r2^2 - ((
-                   2 $CellContext`r1) $CellContext`r2) 
+              ArcCos[(1/($CellContext`r1^2 + $CellContext`r2^2 - 
+                 2 $CellContext`r1 $CellContext`r2 
                  Cos[$CellContext`th1 - $CellContext`th2])) \
-((-$CellContext`r1^2) 
-                  Cos[$CellContext`th1] + ($CellContext`r1 $CellContext`r2) 
-                  Cos[$CellContext`th1] + ($CellContext`r1 $CellContext`r2) 
+((-$CellContext`r1^2) Cos[$CellContext`th1] + $CellContext`r1 $CellContext`r2 
+                  Cos[$CellContext`th1] + $CellContext`r1 $CellContext`r2 
                   Cos[$CellContext`th2] - $CellContext`r2^2 
                  Cos[$CellContext`th2] - 2 
-                 Sqrt[(($CellContext`r1^3 $CellContext`r2) 
-                    Sin[$CellContext`th1]^2) 
-                    Sin[$CellContext`th1/2 - $CellContext`th2/2]^2 - ((((
-                    2 $CellContext`r1^2) $CellContext`r2^2) 
-                    Sin[$CellContext`th1]) 
-                    Sin[$CellContext`th1/2 - $CellContext`th2/2]^2) 
-                   Sin[$CellContext`th2] + (($CellContext`r1 \
-$CellContext`r2^3) Sin[$CellContext`th1/2 - $CellContext`th2/2]^2) 
+                 Sqrt[$CellContext`r1^3 $CellContext`r2 
+                    Sin[$CellContext`th1]^2 
+                    Sin[$CellContext`th1/2 - $CellContext`th2/2]^2 - 
+                   2 $CellContext`r1^2 $CellContext`r2^2 
+                   Sin[$CellContext`th1] 
+                   Sin[$CellContext`th1/2 - $CellContext`th2/2]^2 
+                   Sin[$CellContext`th2] + $CellContext`r1 $CellContext`r2^3 
+                    Sin[$CellContext`th1/2 - $CellContext`th2/2]^2 
                     Sin[$CellContext`th2]^2])], 
               
-              ArcCos[(1/($CellContext`r1^2 + $CellContext`r2^2 - ((
-                  2 $CellContext`r1) $CellContext`r2) 
+              ArcCos[(1/($CellContext`r1^2 + $CellContext`r2^2 - 
+                2 $CellContext`r1 $CellContext`r2 
                 Cos[$CellContext`th1 - $CellContext`th2])) \
-((-$CellContext`r1^2) 
-                 Cos[$CellContext`th1] + ($CellContext`r1 $CellContext`r2) 
-                 Cos[$CellContext`th1] + ($CellContext`r1 $CellContext`r2) 
+((-$CellContext`r1^2) Cos[$CellContext`th1] + $CellContext`r1 $CellContext`r2 
+                 Cos[$CellContext`th1] + $CellContext`r1 $CellContext`r2 
                  Cos[$CellContext`th2] - $CellContext`r2^2 
                 Cos[$CellContext`th2] - 2 
-                Sqrt[(($CellContext`r1^3 $CellContext`r2) 
-                    Sin[$CellContext`th1]^2) 
-                   Sin[$CellContext`th1/2 - $CellContext`th2/2]^2 - ((((
-                    2 $CellContext`r1^2) $CellContext`r2^2) 
-                    Sin[$CellContext`th1]) 
-                   Sin[$CellContext`th1/2 - $CellContext`th2/2]^2) 
-                  Sin[$CellContext`th2] + (($CellContext`r1 $CellContext`r2^3)
-                     Sin[$CellContext`th1/2 - $CellContext`th2/2]^2) 
+                Sqrt[$CellContext`r1^3 $CellContext`r2 
+                   Sin[$CellContext`th1]^2 
+                   Sin[$CellContext`th1/2 - $CellContext`th2/2]^2 - 
+                  2 $CellContext`r1^2 $CellContext`r2^2 Sin[$CellContext`th1] 
+                  Sin[$CellContext`th1/2 - $CellContext`th2/2]^2 
+                  Sin[$CellContext`th2] + $CellContext`r1 $CellContext`r2^3 
+                   Sin[$CellContext`th1/2 - $CellContext`th2/2]^2 
                    Sin[$CellContext`th2]^2])], -
-              ArcCos[(1/($CellContext`r1^2 + $CellContext`r2^2 - ((
-                   2 $CellContext`r1) $CellContext`r2) 
+              ArcCos[(1/($CellContext`r1^2 + $CellContext`r2^2 - 
+                 2 $CellContext`r1 $CellContext`r2 
                  Cos[$CellContext`th1 - $CellContext`th2])) \
-((-$CellContext`r1^2) 
-                  Cos[$CellContext`th1] + ($CellContext`r1 $CellContext`r2) 
-                  Cos[$CellContext`th1] + ($CellContext`r1 $CellContext`r2) 
+((-$CellContext`r1^2) Cos[$CellContext`th1] + $CellContext`r1 $CellContext`r2 
+                  Cos[$CellContext`th1] + $CellContext`r1 $CellContext`r2 
                   Cos[$CellContext`th2] - $CellContext`r2^2 
                  Cos[$CellContext`th2] + 
-                 2 Sqrt[(($CellContext`r1^3 $CellContext`r2) 
-                    Sin[$CellContext`th1]^2) 
-                    Sin[$CellContext`th1/2 - $CellContext`th2/2]^2 - ((((
-                    2 $CellContext`r1^2) $CellContext`r2^2) 
-                    Sin[$CellContext`th1]) 
-                    Sin[$CellContext`th1/2 - $CellContext`th2/2]^2) 
-                    Sin[$CellContext`th2] + (($CellContext`r1 \
-$CellContext`r2^3) Sin[$CellContext`th1/2 - $CellContext`th2/2]^2) 
+                 2 Sqrt[$CellContext`r1^3 $CellContext`r2 
+                    Sin[$CellContext`th1]^2 
+                    Sin[$CellContext`th1/2 - $CellContext`th2/2]^2 - 
+                    2 $CellContext`r1^2 $CellContext`r2^2 
+                    Sin[$CellContext`th1] 
+                    Sin[$CellContext`th1/2 - $CellContext`th2/2]^2 
+                    Sin[$CellContext`th2] + $CellContext`r1 $CellContext`r2^3 
+                    Sin[$CellContext`th1/2 - $CellContext`th2/2]^2 
                     Sin[$CellContext`th2]^2])], 
-              ArcCos[(
-                1/($CellContext`r1^2 + $CellContext`r2^2 - ((
-                  2 $CellContext`r1) $CellContext`r2) 
+              
+              ArcCos[(1/($CellContext`r1^2 + $CellContext`r2^2 - 
+                2 $CellContext`r1 $CellContext`r2 
                 Cos[$CellContext`th1 - $CellContext`th2])) \
-((-$CellContext`r1^2) 
-                 Cos[$CellContext`th1] + ($CellContext`r1 $CellContext`r2) 
-                 Cos[$CellContext`th1] + ($CellContext`r1 $CellContext`r2) 
+((-$CellContext`r1^2) Cos[$CellContext`th1] + $CellContext`r1 $CellContext`r2 
+                 Cos[$CellContext`th1] + $CellContext`r1 $CellContext`r2 
                  Cos[$CellContext`th2] - $CellContext`r2^2 
                 Cos[$CellContext`th2] + 
-                2 Sqrt[(($CellContext`r1^3 $CellContext`r2) 
-                    Sin[$CellContext`th1]^2) 
-                    Sin[$CellContext`th1/2 - $CellContext`th2/2]^2 - ((((
-                    2 $CellContext`r1^2) $CellContext`r2^2) 
-                    Sin[$CellContext`th1]) 
-                    Sin[$CellContext`th1/2 - $CellContext`th2/2]^2) 
-                   Sin[$CellContext`th2] + (($CellContext`r1 \
-$CellContext`r2^3) Sin[$CellContext`th1/2 - $CellContext`th2/2]^2) 
+                2 Sqrt[$CellContext`r1^3 $CellContext`r2 
+                    Sin[$CellContext`th1]^2 
+                    Sin[$CellContext`th1/2 - $CellContext`th2/2]^2 - 
+                   2 $CellContext`r1^2 $CellContext`r2^2 
+                   Sin[$CellContext`th1] 
+                   Sin[$CellContext`th1/2 - $CellContext`th2/2]^2 
+                   Sin[$CellContext`th2] + $CellContext`r1 $CellContext`r2^3 
+                    Sin[$CellContext`th1/2 - $CellContext`th2/2]^2 
                     Sin[$CellContext`th2]^2])]}; Sort[
              Mod[
               DeleteDuplicates[
@@ -2185,8 +2203,8 @@ $CellContext`r2^3) Sin[$CellContext`th1/2 - $CellContext`th2/2]^2)
                Abs[# - #2] < 1.*^-7& ], 6.283185307179586]]]], Evaluate, 
          LibraryFunction[
          "/Users/Jacob/Library/Mathematica/ApplicationData/CCompilerDriver/\
-BuildFolder/pu174532-43299/compiledFunction4.dylib", 
-          "compiledFunction4", {{Real, 0, "Constant"}, {
+BuildFolder/pu174532-71015/compiledFunction1.dylib", 
+          "compiledFunction1", {{Real, 0, "Constant"}, {
            Real, 0, "Constant"}, {Real, 0, "Constant"}, {
            Real, 0, "Constant"}}, {
           Real, 1}]], $CellContext`Acceptable\[Omega]Interval[{
@@ -2196,8 +2214,8 @@ BuildFolder/pu174532-43299/compiledFunction4.dylib",
            Blank[]], Pi}] := 
        Module[{$CellContext`lim, $CellContext`p1, $CellContext`p2, \
 $CellContext`eIsLt1, $CellContext`i1, $CellContext`i2}, $CellContext`p1 = 
-          1/($CellContext`r1^2 + $CellContext`r2^2 + (
-             2 $CellContext`r1) $CellContext`r2); $CellContext`p2 = \
+          1/($CellContext`r1^2 + $CellContext`r2^2 + 
+           2 $CellContext`r1 $CellContext`r2); $CellContext`p2 = \
 -$CellContext`r1^2 + $CellContext`r2^2; $CellContext`lim = 
           ArcCos[$CellContext`p1 $CellContext`p2]; 
          If[$CellContext`r1 < $CellContext`r2, $CellContext`eIsLt1 = 
@@ -2225,7 +2243,6 @@ $CellContext`intersect, $CellContext`goesUpAtIntersect, \
 $CellContext`condition1, $CellContext`eIs1, $CellContext`ppos, \
 $CellContext`i, $CellContext`epos, $CellContext`egt1, $CellContext`elt1, \
 $CellContext`hPosOk, $CellContext`hNegOk}, $CellContext`asymp1 = Mod[
-            
             ArcTan[$CellContext`r2 
              Sin[$CellContext`th2], $CellContext`r1 - $CellContext`r2 
              Cos[$CellContext`th2]], 
@@ -2323,7 +2340,6 @@ $CellContext`r2) Sin[$CellContext`th1 - $CellContext`th2] >
               Pi}]]; $CellContext`ppos = 
           IntervalUnion[$CellContext`condition1 - 
             Pi, $CellContext`condition1, $CellContext`condition1 + 
-            
             Pi]; $CellContext`i = \
 $CellContext`createIntervalsFromPointsBetweenAsymptotes[$CellContext`eIs1, \
 $CellContext`asymps]; $CellContext`egt1 = 
@@ -2437,6 +2453,7 @@ $CellContext`burn1, $CellContext`burn2, $CellContext`c1, $CellContext`c2}, \
 {$CellContext`M, $CellContext`cartpl1, $CellContext`cartpl2} = \
 $CellContext`CartesianPlanarsFromCartesians[$CellContext`cart1, \
 $CellContext`cart2]; {$CellContext`pol1, $CellContext`pol2} = 
+          
           Map[$CellContext`PolarFromCartesianPlanar[#]& , \
 {$CellContext`cartpl1, $CellContext`cartpl2}]; $CellContext`r = If[Part[
               $CellContext`pol1["Position"], 1] == Part[
@@ -2463,8 +2480,7 @@ $CellContext`cartpl2}]; Return[
           Blank[]]] := 
        Block[{$CellContext`t, $CellContext`nul1, $CellContext`nuh1, \
 $CellContext`nul2, $CellContext`nuh2, $CellContext`minnustep, \
-$CellContext`nustep1, $CellContext`nustep2, $CellContext`mint}, \
-$CellContext`minnustep = 
+$CellContext`nustep1, $CellContext`nustep2}, $CellContext`minnustep = 
           Pi/12.; {$CellContext`nul1, $CellContext`nuh1} = $CellContext`o1[
            "\[Nu]Range"]; $CellContext`nustep1 = 
           Min[($CellContext`nuh1 - $CellContext`nul1)/
@@ -2483,10 +2499,10 @@ $CellContext`nu2]]]}, {$CellContext`nu1, $CellContext`nul1, $CellContext`nuh1 - 
 $CellContext`nustep1/
               10, $CellContext`nustep1}, {$CellContext`nu2, \
 $CellContext`nul2, $CellContext`nuh2 - $CellContext`nustep2/
-              10, $CellContext`nustep2}], 1]; $CellContext`mint = First[
-            
-            MinimalBy[$CellContext`t, Part[#, 3][
-             "Total \[CapitalDelta]V"]& ]]], $CellContext`ModPiRange[
+              10, $CellContext`nustep2}], 1]; First[
+           
+           MinimalBy[$CellContext`t, Part[#, 3][
+            "Total \[CapitalDelta]V"]& ]]], $CellContext`ModPiRange[
          Pattern[$CellContext`x, 
           Blank[]]] := Mod[$CellContext`x + Pi, 2 Pi] - Pi}; 
      Typeset`initDone$$ = True),
@@ -2521,11 +2537,11 @@ CellTagsIndex->{}
 *)
 (*NotebookFileOutline
 Notebook[{
-Cell[1464, 33, 128505, 2464, 839, "Output"]
+Cell[1464, 33, 129404, 2480, 839, "Output"]
 }
 ]
 *)
 
 (* End of internal cache information *)
 
-(* NotebookSignature vxpuvoawPR@MVDKUxo9RuDCu *)
+(* NotebookSignature 0uDbTlV4xhQarBgeoQN5Oqwc *)
