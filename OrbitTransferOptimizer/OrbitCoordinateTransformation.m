@@ -149,7 +149,7 @@ CoordinateFromOrbit[o_?(AssociationQ[#] && KeyExistsQ[#,"Orbit"] && #["Orbit"] =
 OrbitFromCoordinate[k_?(AssociationQ[#] && KeyExistsQ[#,"Coordinate"] && #["Coordinate"] == "Keplerian" &)] := Block[{o},
 	o = KeyDrop[k, {"Coordinate", "\[Nu]"}];
 	o["Orbit"] = "Nondegenerate";
-	OrbitTransferOptimizer`Utilities`restrictOrbit[o]
+	restrictOrbit[o]
 ]
 
 (* Based on Bruce Shapiro's code:  http://biomathman.com/pair/orbit.nb *)

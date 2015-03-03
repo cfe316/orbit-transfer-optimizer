@@ -14,7 +14,8 @@ BeginPackage["OrbitTransferOptimizer`", {"OrbitTransferOptimizer`Plots`",
 					     "OrbitTransferOptimizer`BestTransferTwoOrbits`",
 					     "OrbitTransferOptimizer`OrbitCoordinateTransformation`",
 					     "OrbitTransferOptimizer`Heading`",
-					     "OrbitTransferOptimizer`Utilities`"
+					     "OrbitTransferOptimizer`Utilities`",
+					     "OrbitTransferOptimizer`CelestialBodyData`"
 						}];
 
 Unprotect@"`*";
@@ -24,29 +25,20 @@ OrbitTransferOptimizerGUI::usage = "OrbitTransferOptimizerGUI[]: Start the gui.
 1. Choose a planet.
 2. Enter initial and final orbital elements.
 3. Optionally, restrict the range of True Anomaly to search over.
-4. Push the 'CalculateBestOrbit' button."
-
-
+4. Push the 'CalculateBestOrbit' button.";
 
 Begin["`Private`"];
 
 OrbitTransferOptimizerGUI[] := Manipulate[
  Block[{o1, o2, ot, plot, pb1, pb2, 
-   col, \[Nu]s1, \[Nu]e1, \[Nu]s2, \[Nu]e2, planetData, planet, 
+   col, \[Nu]s1, \[Nu]e1, \[Nu]s2, \[Nu]e2, planet, 
    plRadius, pl\[Mu], plDU, plTU, plVU},
   
   (*From https://docs.google.com/spreadsheet/ccc?key= 0AuySrGPsDeq2dFdaS19xc2lobGc2aWNXUkJsZlVtWFE#gid=1 *)
   (* \[Mu], radius, atmosphere cutoff altitude *)
   
-  planetData = {{3530., 600., 70},
-    {65.1, 200., 0.01},
-    {301., 320., 50},
-    {8170, 700, 90},
-    {283000, 6000, 200},
-    {1.17 10^6, 261600, 1},
-    {398600.441, 6371, 1}};
-  planet = planetData[[pl]];
-  plDU = planet[[2]] + planet[[3]]; (* atmosphere cutoff radius *)
+  planet = CelestialBodyData[pl];
+  plDU = planet["Radius"] + planet["Atm height"]; (* atmosphere cutoff radius *)
   
   {\[Nu]s1, \[Nu]e1} = Sort[{\[Nu]s1s, \[Nu]e1s}];
   {\[Nu]s2, \[Nu]e2} = Sort[{\[Nu]s2s, \[Nu]e2s}];
@@ -63,14 +55,13 @@ OrbitTransferOptimizerGUI[] := Manipulate[
      "\[Nu]Range" -> {\[Nu]s2 Degree, \[Nu]e2 Degree}|>];
   
   ot = restrictOrbit[ OrbitFromCoordinate[ KeplerianFromCartesian[CoordinateAfterBurn[fot[[3]]["Burn 1"]]]]];
-  plot = OrbitPlot3D[{o1, o2, ot}, planet[[2 ;; 3]]/plDU, 
-    fot[[3]]["Burn 1"], fot[[3]]["Burn 2"], boxSize/plDU];
-  {pb1, pb2} = RescaleBurnWithPlanet[ProcessBurn[#], planet[[1]], planet[[2]], plDU] & /@ {fot[[3]]["Burn 1"], fot[[3]]["Burn 2"]};
+  plot = OrbitPlot3D[{o1, o2, ot}, {planet["Radius"], planet["Atm height"]}/plDU, fot[[3]]["Burn 1"], fot[[3]]["Burn 2"], boxSize/plDU];
+  {pb1, pb2} = RescaleBurnWithPlanet[ProcessBurn[#], planet["\[Mu]"], planet["Radius"], plDU] & /@ {fot[[3]]["Burn 1"], fot[[3]]["Burn 2"]};
   
   ot = KeyDrop[ot, {"\[Nu]Range", "Orbit"}];
   ot["a"] *= plDU ;
   ot["Periapsis Radius"] = (ot["a"]) (1 - ot["e"]);
-  ot["Periapsis Altitude"] = ot["Periapsis Radius"] - planet[[2]];
+  ot["Periapsis Altitude"] = ot["Periapsis Radius"] - planet["Radius"];
   
   col = PrettyPrint[{pb1, pb2}, ot];
   
@@ -78,8 +69,7 @@ OrbitTransferOptimizerGUI[] := Manipulate[
   ],
  
  Style["Planet", 12, Bold],
- {{pl, 1, ""}, {1 -> "Kerbin", 2 -> "Mun", 3 -> "Duna", 4 -> "Eve", 
-   5 -> "Jool", 6 -> "Kerbol", 7 -> "Earth"}},
+ {{pl, 5, ""}, CelestialBodyList[]},
  Style["Initial Orbit", 12, Bold],
  {{a1, 700, "a"}, 200., 5000., Appearance -> "Open", AppearanceElements -> {"InputField"}},
  {{e1, 0, "e"}, 0, .99, Appearance -> "Open", AppearanceElements -> {"InputField"}},
@@ -199,21 +189,11 @@ RescaleBurnWithPlanet[b_, \[Mu]_, plrad_, DU_] := Module[{ob, ra, TU, VU},
 
 f[{a1_, e1_, i1_, \[CapitalOmega]1_, \[Omega]1_, \[Nu]s1s_, \[Nu]e1s_}, {a2_, e2_, i2_, \[CapitalOmega]2_, \[Omega]2_, \[Nu]s2s_, \[Nu]e2s_}, pl_] := 
   Block[{\[Nu]s1, \[Nu]e1, \[Nu]s2, \[Nu]e2, 
-  planetData, planet, plRadius, pl\[Mu], 
+  planet, plRadius, pl\[Mu], 
   plDU, plTU, plVU},
    
-	(*From https://docs.google.com/spreadsheet/ccc?key= 0AuySrGPsDeq2dFdaS19xc2lobGc2aWNXUkJsZlVtWFE#gid=1 *)
-	(* \[Mu], radius, atmosphere cutoff altitude *)
-	
-	planetData = {{3530., 600., 70},
-	  {65.1, 200., 0.01},
-	  {301., 320., 50},
-	  {8170, 700, 90},
-	  {283000, 6000, 200},
-	  {1.17 10^6, 261600, 1},
-	  {398600.441, 6371, 1}};
-	planet = planetData[[pl]];
-	plDU = planet[[2]] + planet[[3]]; (* atmosphere cutoff radius *)
+	planet = CelestialBodyData[pl];
+	plDU = planet["Radius"] + planet["Atm height"]; (* atmosphere cutoff radius *)
 	
 	
 	{\[Nu]s1, \[Nu]e1} = Sort[{\[Nu]s1s, \[Nu]e1s}];
