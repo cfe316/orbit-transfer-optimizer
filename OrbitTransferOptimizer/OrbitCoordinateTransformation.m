@@ -180,7 +180,8 @@ Block[{ a=kep["a"], e=kep["e"], i=kep["i"], Om=kep["\[CapitalOmega]"], \[CurlyPi
 
 CartesianPlanarsFromCartesians[
 	cart1_?(AssociationQ[#] && KeyExistsQ[#,"Coordinate"] && #["Coordinate"] == "Cartesian" &), 
-	cart2_?(AssociationQ[#] && KeyExistsQ[#,"Coordinate"] && #["Coordinate"] == "Cartesian" &)] := Module[{M, p1, p2, v1, v2, p1Crossp2, orbNorm, prograde},
+	cart2_?(AssociationQ[#] && KeyExistsQ[#,"Coordinate"] && #["Coordinate"] == "Cartesian" &)] := Module[
+	{M, p1, p2, v1, v2, cartpl1, cartpl2, p1Crossp2, orbNorm, prograde},
 
 	{p1, p2} = #["Position"]& /@ {cart1, cart2};
 	{v1, v2} = #["Velocity"]& /@ {cart1, cart2};
@@ -280,7 +281,7 @@ PlanarKeplerianFromPolar[pol_?(AssociationQ[#] && KeyExistsQ[#,"Coordinate"] && 
 	|>
 ]
 
-ConstrainKeplerian[kep_?(AssociationQ[#] && KeyExistsQ[#,"Coordinate"] && #["Coordinate"] == "Keplerian" &)] := Module[{outputKep, a,e},
+ConstrainKeplerian[kep_?(AssociationQ[#] && KeyExistsQ[#,"Coordinate"] && #["Coordinate"] == "Keplerian" &)] := Module[{outputKep, a,e, vlimit},
 	outputKep = <| "Coordinate"->"Keplerian" |>;
 	outputKep["i"] = Mod[kep["i"], Pi];
 	Map[(outputKep[#] = Mod[kep[#],2 Pi]) &,{"\[CapitalOmega]", "\[CurlyPi]", "\[Nu]"}];
@@ -306,7 +307,7 @@ KeplerianFromCartesian[cart_?(AssociationQ[#] && KeyExistsQ[#,"Coordinate"] && #
  {x, y, z, vx, vy, vz, 
   r, v, rMag, vMag, 
   a, e, i, \[CapitalOmega], \[Omega], M, nu, \[Theta], EA, eMag, 
-  p, h, hMag, n, nMag, argLat, truLon},
+  p, h, hMag, n, nMag, argLat, truLon, lonPer, zeta},
 	{x,y,z} = Chop[cart["Position"]];
 	{vx,vy,vz} = Chop[cart["Velocity"]];
 	r = {x, y, z};
