@@ -15,13 +15,65 @@ BeginPackage["OrbitTransferOptimizer`OrbitCoordinateTransformation`", {"OrbitTra
 Unprotect@"`*";
 ClearAll@"`*";
 
-CoordinateFromOrbit::usage = "Transform an Orbit into a Keplerian Coordinate with a specific true anomaly.";
-OrbitFromCoordinate::usage = "Transform an Keplerian Coordinate into an Orbit .";
+CoordinateFromOrbit::usage = "CoordinateFromOrbit[kep, \[Nu]]: Transform a Keplerian Orbit into a Keplerian Coordinate with a specific true anomaly.
+
+Note: there is no bounds checking on \[Nu] from the function call.
+
+Nondegenerate Orbit format:
+<|
+	\"Orbit\"->\"Nondegenerate\",
+	\"a\"-> Semi-major axis,
+	\"e\"-> Eccentricity,
+	\"i\"-> Inclination,
+	\"\[CapitalOmega]\"-> Longitude of ascending node,
+	\"\[CurlyPi]\"-> Longitude of periapsis,
+	\"\[Nu]Range\"-> Acceptable range of nu.  
+|>
+
+Keplerian coordinate format:
+<|
+	\"Coordinate\"->\"Keplerian\",
+	\"a\"-> Semi-major axis,
+	\"e\"-> Eccentricity,
+	\"i\"-> Inclination,
+	\"\[CapitalOmega]\"-> Longitude of ascending node,
+	\"\[CurlyPi]\"-> Longitude of periapsis,
+	\"\[Nu]\"-> True anomaly (from function call)
+|>
+
+";
+
+OrbitFromCoordinate::usage = "OrbitFromCoordinate[kep]: Transform an Keplerian Coordinate into an Orbit.
+
+The \[Nu] key is dropped and a \[NuRange] key is created with correct (maximal) bounds.
+
+Keplerian coordinate format:
+<|
+	\"Coordinate\"->\"Keplerian\",
+	\"a\"-> Semi-major axis,
+	\"e\"-> Eccentricity,
+	\"i\"-> Inclination,
+	\"\[CapitalOmega]\"-> Longitude of ascending node,
+	\"\[CurlyPi]\"-> Longitude of periapsis,
+	\"\[Nu]\"-> True anomaly (from function call)
+|>
+
+Nondegenerate Orbit format:
+<|
+	\"Orbit\"->\"Nondegenerate\",
+	\"a\"-> Semi-major axis,
+	\"e\"-> Eccentricity,
+	\"i\"-> Inclination,
+	\"\[CapitalOmega]\"-> Longitude of ascending node,
+	\"\[CurlyPi]\"-> Longitude of periapsis,
+	\"\[Nu]Range\"-> Acceptable range of nu.  
+|>
+";
 
 CartesianFromKeplerian::usage = 
 "Transform a Keplerian coordinate into a Cartesian coordinate. Does not support parabolic orbits. Assumes that \[Mu] = 1.
 
-Keplerian orbit format:
+Keplerian coordinate format:
 <|
 	\"Coordinate\"->\"Keplerian\",
 	\"a\"-> Semi-major axis,
@@ -40,7 +92,7 @@ Cartesian Coordinate Format:
 |>
 ";
 
-CartesianPlanarsFromCartesians::usage = "Transform a pair of Cartesian (X,Y,Z), (vX,vY,vZ) coordinates into a cartesian-planar coordinate where both of them have z=0, and the first coordinate lies on the x axis. Returns {M, plcart1, plcart2} where M is the transformation matrix that does this coordinate change.
+CartesianPlanarsFromCartesians::usage = "CartesianPlanarsFromCartesians[cart1, cart2]: Transform a pair of Cartesian (X,Y,Z), (vX,vY,vZ) coordinates into a cartesian-planar coordinate where both of them have z=0, and the first coordinate lies on the x axis. Returns {M, plcart1, plcart2} where M is the transformation matrix that does this coordinate change.
 
 Cartesian coordinate format:
 <|
@@ -57,7 +109,7 @@ CartesianPlanar coordinate format:
 |>
 ";
 
-PolarFromCartesianPlanar::usage = "Transform a CartesianPlanar (x, y), (vx, vy, vz) coordinate into a Polar (r, \[Theta]), (vr, v\[Theta], vz) coordinate.
+PolarFromCartesianPlanar::usage = "PolarFromCartesianPlanar[cartpl]: Transform a CartesianPlanar (x, y), (vx, vy, vz) coordinate into a Polar (r, \[Theta]), (vr, v\[Theta], vz) coordinate.
 
 CartesianPlanar coordinate format:
 <|
@@ -74,7 +126,7 @@ Polar coordinate format:
 |>
 ";
 
-CartesianPlanarFromPolar::usage = "Transform a Polar (r, \[Theta]), (vr, v\[Theta], vz) coordinate into a CartesianPlanar (x, y), (vx, vy, vz) coordinate.
+CartesianPlanarFromPolar::usage = "CartesianPlanarFromPolar[pol]: Transform a Polar (r, \[Theta]), (vr, v\[Theta], vz) coordinate into a CartesianPlanar (x, y), (vx, vy, vz) coordinate.
 
 Polar coordinate format:
 <|
@@ -93,7 +145,7 @@ CartesianPlanar coordinate format:
 |>
 ";
 
-CartesianFromCartesianPlanar::usage = "Rotates a CartesianPlanar coordinate into Cartesian via a supplied transformation matrix.
+CartesianFromCartesianPlanar::usage = "CartesianFromCartesianPlanar[M, cart]: Rotates a CartesianPlanar coordinate into Cartesian via a supplied transformation matrix M.
 
 CartesianPlanar coordinate format:
 <|
@@ -112,7 +164,25 @@ Cartesian Coordinate Format:
 |>
 ";
 
-KeplerianFromCartesian::usage = "Given a CartesianPoint...";
+KeplerianFromCartesian::usage = "KeplerianFromCartesian[cart]: Given a Cartesian coordinate, returns it as a Keplerian coordinate.
+Cartesian Coordinate Format:
+<|
+	\"Coordinate\"->\"Cartesian\",
+	\"Position\" -> {X, Y, Z},
+	\"Velocity\" -> {vX, vY, vZ}
+|>
+
+Keplerian coordinate format:
+<|
+	\"Coordinate\"->\"Keplerian\",
+	\"a\"-> Semi-major axis,
+	\"e\"-> Eccentricity,
+	\"i\"-> Inclination,
+	\"\[CapitalOmega]\"-> Longitude of ascending node,
+	\"\[CurlyPi]\"-> Longitude of periapsis,
+	\"\[Nu]\"-> True anomaly
+|>
+";
 
 PlanarKeplerianFromPolar::usage = "Given a polar coordinate point,
 
@@ -135,7 +205,19 @@ Output Format:
 |>
 ";
 
-ConstrainKeplerian::usage = "Make sure that a Keplerian coordinate has correct and nondegenerate values.";
+ConstrainKeplerian::usage = "ConstrainKeplerian[kep]: Make sure that a Keplerian Coordinate has correct and nondegenerate values.
+Keplerian coordinate format:
+
+<|
+	\"Coordinate\"->\"Keplerian\",
+	\"a\"-> Semi-major axis,
+	\"e\"-> Eccentricity,
+	\"i\"-> Inclination,
+	\"\[CapitalOmega]\"-> Longitude of ascending node,
+	\"\[CurlyPi]\"-> Longitude of periapsis,
+	\"\[Nu]\"-> True anomaly
+|>
+";
 
 Begin["Private`"];
 
