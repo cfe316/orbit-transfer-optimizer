@@ -46,12 +46,12 @@ OrbitTransferOptimizerGUI[] := Manipulate[
   o1 = restrictOrbit[<|"Orbit" -> "Nondegenerate", "a" -> a1/plDU, 
      "e" -> e1, "i" -> i1 Degree, 
      "\[CapitalOmega]" -> \[CapitalOmega]1 Degree, 
-     "\[CurlyPi]" -> \[Omega]1 Degree, 
+     "\[Omega]" -> \[Omega]1 Degree, 
      "\[Nu]Range" -> {\[Nu]s1 Degree, \[Nu]e1 Degree}|>];
   o2 = restrictOrbit[<|"Orbit" -> "Nondegenerate", "a" -> a2/plDU, 
      "e" -> e2, "i" -> i2 Degree, 
      "\[CapitalOmega]" -> \[CapitalOmega]2 Degree, 
-     "\[CurlyPi]" -> \[Omega]2 Degree, 
+     "\[Omega]" -> \[Omega]2 Degree, 
      "\[Nu]Range" -> {\[Nu]s2 Degree, \[Nu]e2 Degree}|>];
   
   ot = restrictOrbit[ OrbitFromCoordinate[ KeplerianFromCartesian[CoordinateAfterBurn[fot[[3]]["Burn 1"]]]]];
@@ -75,14 +75,14 @@ OrbitTransferOptimizerGUI[] := Manipulate[
  {{e1, 0, "e"}, 0, .99, Appearance -> "Open", AppearanceElements -> {"InputField"}},
  {{i1, 0, "i"}, 0, 180, Appearance -> "Open", AppearanceElements -> {"InputField"}},
  {{\[CapitalOmega]1, 0, "\[CapitalOmega]"}, 0, 360, Appearance -> "Open", AppearanceElements -> {"InputField"}},
- {{\[Omega]1, 0, "\[CurlyPi]"}, 0, 360, Appearance -> "Open", AppearanceElements -> {"InputField"}},
+ {{\[Omega]1, 0, "\[Omega]"}, 0, 360, Appearance -> "Open", AppearanceElements -> {"InputField"}},
  {{\[Nu]s1s, -180, "\[Nu] start"}, -180, 180, AppearanceElements -> {"InputField"}},
  {{\[Nu]e1s, 180, "\[Nu] end"}, -180, 180, AppearanceElements -> {"InputField"}},
  Style["Final Orbit", 12, Bold], {{a2, 900, "a"}, 200., 5000., Appearance -> "Open", AppearanceElements -> {"InputField"}},
  {{e2, 0, "e"}, 0, .99, Appearance -> "Open", AppearanceElements -> {"InputField"}},
  {{i2, 0, "i"}, 0, 180, Appearance -> "Open", AppearanceElements -> {"InputField"}},
  {{\[CapitalOmega]2, 0, "\[CapitalOmega]"}, 0, 360, Appearance -> "Open", AppearanceElements -> {"InputField"}},
- {{\[Omega]2, 0, "\[CurlyPi]"}, 0, 360, Appearance -> "Open", AppearanceElements -> {"InputField"}},
+ {{\[Omega]2, 0, "\[Omega]"}, 0, 360, Appearance -> "Open", AppearanceElements -> {"InputField"}},
  {{\[Nu]s2s, -180, "\[Nu] start"}, -180, 180, AppearanceElements -> {"InputField"}},
  {{\[Nu]e2s, 180, "\[Nu] end"}, -180, 180, AppearanceElements -> {"InputField"}},
  
@@ -147,7 +147,6 @@ PrettyPrint[bs_List, ot_] := Block[{
 	   {"i",                           NumberForm[ Round[Quantity[ot["i"]/Degree, "Degrees"], 0.01], {3, 1}]},
 	   {"\[CapitalOmega]",             NumberForm[ Round[Quantity[ot["\[CapitalOmega]"]/Degree, "Degrees"], 0.01], {3, 1}]},
 	   {"\[Omega]",                    NumberForm[ Round[Quantity[ot["\[Omega]"]/Degree, "Degrees"], 0.01], {3, 1}]},
-	   {"Long. of Peri.",              NumberForm[ Round[Quantity[ot["\[CurlyPi]"]/Degree, "Degrees"], 0.01], {3, 1}]},
 	   {"Periapsis Radius",   ToString[NumberForm[ot["Periapsis Radius"], {10, 3}]] <> " km"},
 	   {"Periapsis Altitude", ToString[NumberForm[ot["Periapsis Altitude"], {10, 3}]] <> " km"}
 	   }, Alignment -> Left]];
@@ -205,7 +204,7 @@ f[{a1_, e1_, i1_, \[CapitalOmega]1_, \[Omega]1_, \[Nu]s1s_, \[Nu]e1s_}, {a2_, e2
 		"e" -> e1,
 		"i" -> i1 Degree, 
 		"\[CapitalOmega]" -> \[CapitalOmega]1 Degree, 
-		"\[CurlyPi]" -> \[Omega]1 Degree, 
+		"\[Omega]" -> \[Omega]1 Degree, 
 		"\[Nu]Range" -> {\[Nu]s1s Degree, \[Nu]e1s Degree}
 	|>,
 	<|
@@ -214,7 +213,7 @@ f[{a1_, e1_, i1_, \[CapitalOmega]1_, \[Omega]1_, \[Nu]s1s_, \[Nu]e1s_}, {a2_, e2
 		"e" -> e2, 
 		"i" -> i2 Degree,
 		"\[CapitalOmega]" -> \[CapitalOmega]2 Degree, 
-		"\[CurlyPi]" -> \[Omega]2 Degree, 
+		"\[Omega]" -> \[Omega]2 Degree, 
 		"\[Nu]Range" -> {\[Nu]s2s Degree, \[Nu]e2s Degree}
 	|>
 	]

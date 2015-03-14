@@ -28,7 +28,7 @@ Finds the best set of two burns to transfer between two orbits around the same b
 	\"e\"->eccentricity,
 	\"i\"->inclination (defined from 0 to \[Pi]),
 	\"\[CapitalOmega]\"->longitudeOfAscendingNode,
-	\"\[CurlyPi]\"->longitudeOfPeriapsis,
+	\"\[Omega]\"->argumentOfPeriapsis,
 |>
 , with an optional key \"\[Nu]Range\"->{\[Nu]Min,\[Nu]Max} to specify that only some regions of each orbit should be searched. If no \[Nu]Range is specified, the default is -\[Pi] to \[Pi].
 

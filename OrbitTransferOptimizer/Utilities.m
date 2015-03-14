@@ -25,9 +25,9 @@ Input:
 <| \"Orbit\"->\"Nondegenerate\",
 	\"a\"->semimajoraxis,
 	\"e\"->eccentricity,
-	\"i\"->inclination
-	\"\[CapitalOmega]\"->longitudeOfAscendingNode
-	\"\[CurlyPi]\"->longitudeOfPeriapsis
+	\"i\"->inclination,
+	\"\[CapitalOmega]\"->longitudeOfAscendingNode,
+	\"\[Omega]\"->argumentOfPeriapsis
 |>
 With an optional key \"\[Nu]Range\"->{\[Nu]Min,\[Nu]Max} to specify that only some regions of each orbit should be searched. If no \[Nu]Range is specified, the default is -\[Pi] to \[Pi].
 
@@ -35,9 +35,9 @@ Output:
 <| \"Orbit\"->\"Nondegenerate\",
 	\"a\"->semimajoraxis,
 	\"e\"->eccentricity,
-	\"i\"->inclination
-	\"\[CapitalOmega]\"->longitudeOfAscendingNode
-	\"\[CurlyPi]\"->longitudeOfPeriapsis
+	\"i\"->inclination,
+	\"\[CapitalOmega]\"->longitudeOfAscendingNode,
+	\"\[Omega]\"->longitudeOfAscendingNode,
 	\"\[Nu]Range\"->{\[Nu]Min,\[Nu]Max}
 |>
 
@@ -119,7 +119,6 @@ restrictOrbit[kep_?(AssociationQ[#] && KeyExistsQ[#,"Orbit"] && #["Orbit"] == "N
 	outputKep["a"] = a;
 	outputKep["e"] = e;
 	If[ kep["i"] == 0 || kep["i"] == Pi, outputKep["\[CapitalOmega]"] = 0];
-	outputKep["\[Omega]"] = kep["\[CurlyPi]"] - outputKep["\[CapitalOmega]"];
 	Return[restrict\[Nu]Range[outputKep]];
 ]
 

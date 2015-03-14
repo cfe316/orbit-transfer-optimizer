@@ -26,7 +26,7 @@ Nondegenerate Orbit format:
 	\"e\"-> Eccentricity,
 	\"i\"-> Inclination,
 	\"\[CapitalOmega]\"-> Longitude of ascending node,
-	\"\[CurlyPi]\"-> Longitude of periapsis,
+	\"\[Omega]\"-> Argument of Periapsis,
 	\"\[Nu]Range\"-> Acceptable range of nu.  
 |>
 
@@ -37,7 +37,7 @@ Keplerian coordinate format:
 	\"e\"-> Eccentricity,
 	\"i\"-> Inclination,
 	\"\[CapitalOmega]\"-> Longitude of ascending node,
-	\"\[CurlyPi]\"-> Longitude of periapsis,
+	\"\[Omega]\"-> Argument of Periapsis,
 	\"\[Nu]\"-> True anomaly (from function call)
 |>
 
@@ -54,7 +54,7 @@ Keplerian coordinate format:
 	\"e\"-> Eccentricity,
 	\"i\"-> Inclination,
 	\"\[CapitalOmega]\"-> Longitude of ascending node,
-	\"\[CurlyPi]\"-> Longitude of periapsis,
+	\"\[Omega]\"-> Argument of Periapsis,
 	\"\[Nu]\"-> True anomaly (from function call)
 |>
 
@@ -65,7 +65,7 @@ Nondegenerate Orbit format:
 	\"e\"-> Eccentricity,
 	\"i\"-> Inclination,
 	\"\[CapitalOmega]\"-> Longitude of ascending node,
-	\"\[CurlyPi]\"-> Longitude of periapsis,
+	\"\[Omega]\"-> Argument of periapsis,
 	\"\[Nu]Range\"-> Acceptable range of nu.  
 |>
 ";
@@ -80,7 +80,7 @@ Keplerian coordinate format:
 	\"e\"-> Eccentricity,
 	\"i\"-> Inclination,
 	\"\[CapitalOmega]\"-> Longitude of ascending node,
-	\"\[CurlyPi]\"-> Longitude of periapsis,
+	\"\[Omega]\"-> Argument of periapsis,
 	\"\[Nu]\"-> True anomaly
 |>
 
@@ -179,7 +179,7 @@ Keplerian coordinate format:
 	\"e\"-> Eccentricity,
 	\"i\"-> Inclination,
 	\"\[CapitalOmega]\"-> Longitude of ascending node,
-	\"\[CurlyPi]\"-> Longitude of periapsis,
+	\"\[Omega]\"-> Argument of ascending node,
 	\"\[Nu]\"-> True anomaly
 |>
 ";
@@ -214,7 +214,7 @@ Keplerian coordinate format:
 	\"e\"-> Eccentricity,
 	\"i\"-> Inclination,
 	\"\[CapitalOmega]\"-> Longitude of ascending node,
-	\"\[CurlyPi]\"-> Longitude of periapsis,
+	\"\[Omega]\"-> Argument of periapsis,
 	\"\[Nu]\"-> True anomaly
 |>
 ";
@@ -226,19 +226,17 @@ CoordinateFromOrbit[o_?(AssociationQ[#] && KeyExistsQ[#,"Orbit"] && #["Orbit"] =
 	kep["Coordinate"] = "Keplerian";
 	kep["\[Nu]"] = \[Nu];
 	kep
-]
+];
 
 OrbitFromCoordinate[k_?(AssociationQ[#] && KeyExistsQ[#,"Coordinate"] && #["Coordinate"] == "Keplerian" &)] := Block[{o},
 	o = KeyDrop[k, {"Coordinate", "\[Nu]"}];
 	o["Orbit"] = "Nondegenerate";
 	restrictOrbit[o]
-]
+];
 
 (* Based on Bruce Shapiro's code:  http://biomathman.com/pair/orbit.nb *)
 CartesianFromKeplerian[kep_?(AssociationQ[#] && KeyExistsQ[#,"Coordinate"] && #["Coordinate"] == "Keplerian" &)] :=
-Block[{ a=kep["a"], e=kep["e"], i=kep["i"], Om=kep["\[CapitalOmega]"], \[CurlyPi] = kep["\[CurlyPi]"], w, v=kep["\[Nu]"], IHAT, JHAT, r,X,Y,Z,vX,vY,vZ,\[Mu]=1},
-	w = \[CurlyPi] - Om;
-
+Block[{ a=kep["a"], e=kep["e"], i=kep["i"], Om=kep["\[CapitalOmega]"], w = kep["\[Omega]"], v=kep["\[Nu]"], IHAT, JHAT, r,X,Y,Z,vX,vY,vZ,\[Mu]=1},
 	(* IHAT and JHAT are unit vectors in the plane of the orbit: They are not the ihat and jhat vectors in the (X,Y,Z) frame! IHAT points toward perigee; JHAT is normal and in the plane of the orbit
 	*)
 	IHAT= {
@@ -366,7 +364,7 @@ PlanarKeplerianFromPolar[pol_?(AssociationQ[#] && KeyExistsQ[#,"Coordinate"] && 
 ConstrainKeplerian[kep_?(AssociationQ[#] && KeyExistsQ[#,"Coordinate"] && #["Coordinate"] == "Keplerian" &)] := Module[{outputKep, a,e, vlimit},
 	outputKep = <| "Coordinate"->"Keplerian" |>;
 	outputKep["i"] = Mod[kep["i"], Pi];
-	Map[(outputKep[#] = Mod[kep[#],2 Pi]) &,{"\[CapitalOmega]", "\[CurlyPi]", "\[Nu]"}];
+	Map[(outputKep[#] = Mod[kep[#],2 Pi]) &,{"\[CapitalOmega]", "\[Omega]", "\[Nu]"}];
 
 	(* No parabolic orbits. Converting them to an elliptic orbit is my judgement call. Later an error could be implemented instead. *)
 	a = kep["a"];
