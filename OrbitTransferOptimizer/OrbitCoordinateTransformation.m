@@ -45,7 +45,7 @@ Keplerian coordinate format:
 
 OrbitFromCoordinate::usage = "OrbitFromCoordinate[kep]: Transform an Keplerian Coordinate into an Orbit.
 
-The \[Nu] key is dropped and a \[NuRange] key is created with correct (maximal) bounds.
+The \[Nu] key is dropped and a \[Nu]Range key is created with correct (maximal) bounds.
 
 Keplerian coordinate format:
 <|
