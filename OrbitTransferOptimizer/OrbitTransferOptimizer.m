@@ -96,13 +96,14 @@ OrbitTransferOptimizerGUI[] := Manipulate[
        "Velocity" -> {0.570699, -0.570693, 0}, 
        "VelocityChange" -> {0.0394007, -0.03940666, 0}|>|>}, ""}, {"f"}, 
   ButtonBar[{"Calculate Best Orbit" :> (fot = 
-        f[{N[a1], e1, i1 , \[CapitalOmega]1, \[Omega]1, \[Nu]s1s, \[Nu]e1s}, {N[ a2], e2, i2, \[CapitalOmega]2, \[Omega]2, \[Nu]s2s, \[Nu]e2s}, pl])}] &},
+        f[{N[a1], e1, i1 , \[CapitalOmega]1, \[Omega]1, \[Nu]s1s, \[Nu]e1s}, {N[ a2], e2, i2, \[CapitalOmega]2, \[Omega]2, \[Nu]s2s, \[Nu]e2s}, pl])}, Method->"Queued"] &},
  
  
  {{view, "Orbit", "View:"}, {"Orbit", "Elements"}},
  {{boxSize, 10000, "ViewBox (km)"}, 1000, 100000},
  AppearanceElements -> None, 
- SaveDefinitions -> True
+ SaveDefinitions -> True,
+ SynchronousUpdating -> False
 ]
 
 (* PrettyPrint[{burn1, burn2}, transferOrbit]: Print out relevent parameters of the location of the two burns and the transfer orbit itself. *)
