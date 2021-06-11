@@ -22,6 +22,14 @@ MinimizeUnimodalFunction::usage =
 	"Finds the local min of the function between 'low' and 'high' 
 	to tolerance 'tol'. Only works if there is one local min in
 	the interval. Output is min and then f(min).";
+GoldenRatioSearchExact::usage = 
+	"The same thing as MinimizeUnimodalFunction except it uses precise values of phi"
+
+DualParallelMinimizeUnimodalFunction::usage =
+	"Finds the local min of a function between the 'low' and 'high'
+	to within a width of 'tol'. Only works if these is one local min in
+	the interval.
+	Output is min and then f(min).";
 
 Begin["`Private`"];
 
@@ -80,8 +88,72 @@ GoldenRatioSearch[func_, ilow_, ihigh_, tol_] :=
 	r1 = (Sqrt[5.] - 1.)/2.;
 	r2 = r1^2;
 	h = high - low;
-	Ya = func[high];
-	Yb = func[low];
+	Yb = func[high];
+	Ya = func[low];
+	c = low + r2 h;
+	d = low + r1 h;
+	Yc = func[c];
+	Yd = func[d];
+	While[ h > tol,
+		If[ Yc < Yd,
+			high = d;
+			Yb = Yd;
+			d = c;
+			Yd = Yc;
+			h = high - low;
+			c = low + r2 h;
+			Yc = func[c];
+			,
+			low = c;
+			Ya = Yc;
+			c = d;
+			Yc = Yd;
+			h = high - low;
+			d = low + r1 h;
+			Yd = func[d];
+		];
+	];
+	p = low;
+	Yp = Ya;
+	If [ Yb < Ya, p=high; Yp=Yb];
+	{p,Yp}
+]
+
+initialPattern[n_] := Array[# / (n + 1) &, n]
+standardPattern[n_?EvenQ] := Drop[initialPattern[n + 1], {Ceiling[(n + 1)/2]}]
+
+(* This method is a generalization of GoldenRatioSearch for two parallel
+function evaluations.*)
+DualParallelMinimizeUnimodalFunction[func_, ilow_, ihigh_, tol_] :=
+	Block[{n, low, high, h, p, ipts, lowestindex, allpts, center, newpts},
+	n = 2;
+	h = ihigh - ilow;
+	{low, high} = ParallelMap[{#, func[#]} &, {ilow,ihigh}];
+	ipts = ParallelMap[{#, func[#]} & ,low[[1]] + h * initialPattern[n]];
+	lowestindex = Ordering[ipts[[All,2]]][[1]];
+	allpts = Sort[Join[{low},{high},ipts]];
+	{low, center, high} = Take[allpts,{lowestindex,lowestindex+2}];
+	h = high[[1]] - low[[1]];
+	While[ h > tol,
+		newpts = ParallelMap[{#, func[#]} &, low[[1]] + h * standardPattern[n]];
+		pts = Sort[{center}~Join~newpts];
+		lowestindex = Ordering[pts[[All,2]]][[1]];
+		allpts = Join[{low},pts,{high}];
+		{low, center, high} = Take[allpts,{lowestindex,lowestindex+2}];
+		h = high[[1]] - low[[1]];
+	];
+	p = low;
+	If [high[[2]] < low[[2]], p = high];
+	p
+]
+
+GoldenRatioSearchExact[func_, ilow_, ihigh_, tol_] :=
+	Block[{ low = ilow, high = ihigh, c, d, h, r1, r2, Ya, Yb, Yc, Yd, p, Yp},
+	r1 = N[(Sqrt[5] - 1)/2,100];
+	r2 = r1^2;
+	h = high - low;
+	Yb = func[high];
+	Ya = func[low];
 	c = low + r2 h;
 	d = low + r1 h;
 	Yc = func[c];
