@@ -70,7 +70,7 @@ nonanalyticTransfer[o1_, o2_] := Block[{
  t, nul1, nuh1, nul2, nuh2, 
  minnustep, nustep1, nustep2},
  
-	minnustep = Pi /12.;
+	minnustep = Pi /24.;
 	{nul1, nuh1} = o1["\[Nu]Range"];
 	nustep1 = Min[(nuh1 - nul1)/12., minnustep];
 	{nul2, nuh2} = o2["\[Nu]Range"];
